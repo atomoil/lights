@@ -45,16 +45,16 @@ void loop() {
       sw = !sw;
 
       if (sw == true) {
-        rVal = random(0, 255);
-        gVal = random(0, 255);
+        rVal = 40; //random(0, 255);
+        gVal = 255; //random(0, 255);
         bVal = random(0, 255);
 
         for (int dot = 0; dot < NUM_LEDS; dot++)
         {
           leds[ dot ].setRGB( rVal, bVal, gVal );
           ledChange[ dot ] = (dot % 10) + 1;
-          ledValues[ dot ] = 250;
-          ledTimings[ dot ] = 1; //dot+1;
+          ledValues[ dot ] = 125;
+          ledTimings[ dot ] = (dot % 4) +1;
         }
         FastLED.show();
       } else {
@@ -93,7 +93,7 @@ void seq() {
       }
       //CRGB color = CRGB( rVal, bVal, gVal );
       //color.fadeToBlackBy( dotValue );
-      CHSV color = CHSV( rVal, bVal, dotValue );
+      CHSV color = CHSV( rVal, gVal, dotValue );
 
   
       leds[ dot ] = color;
