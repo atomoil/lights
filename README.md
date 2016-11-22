@@ -1,1 +1,1 @@
-# lights
+# lights - AP102c LED strip
