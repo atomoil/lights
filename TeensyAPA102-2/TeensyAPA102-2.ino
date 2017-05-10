@@ -88,8 +88,8 @@ void seq() {
       ledValues[ dot ] = dotValue;
     }
   }
-   counter += 1;
-   if (counter > 255)(counter = 0);
+  counter += 1;
+  if (counter > 255)(counter = 0);
   FastLED.show();
 
 }

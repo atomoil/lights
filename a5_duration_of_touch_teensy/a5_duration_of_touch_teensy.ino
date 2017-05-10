@@ -1,7 +1,10 @@
 int rVal, gVal, bVal;
 #include "FastLED.h"
 // How many leds in your strip?
-#define NUM_LEDS 30
+#define NUM_LEDS 55
+// How sensitive should it be?
+#define TOUCH_SENSITIVITY 1095
+
 
 // For led chips like Neopixels, which have a data line, ground, and power, you just
 // need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
@@ -14,8 +17,9 @@ int rVal, gVal, bVal;
 #define READ_TOUCH_PIN 15
 
 // actual lights logic...
-#define 
-
+#define TOUCH_DURATION_FOR_NORMAL 500
+#define TOUCH_DURATION_DIVIDE 100.0
+#define TOUCH_DURATION_DAMPENING 50.0
 
 bool flag, oldFlag;
 bool sw, animateLeds, notTouching = false;
@@ -30,16 +34,7 @@ int ledPaletteId[NUM_LEDS];
 #define PALETTE_SATURATION 1
 
 int palette[][2] = { {40,255}, {80,255}, {120,255} };
-
-/*
-#define LED_INCREMENT 0
-#define LED_VALUE 1
-#define LED_FRAME 2
-#define LED_MINVALUE 3
-#define LED_MAXVALUE 4
-#define LED_PALETTE 5
-//int ledSettings[][];
-*/
+int totalPalettes = 3;
 
 int counter = 0;
 int touchDuration = 0;
@@ -47,7 +42,7 @@ int touchDuration = 0;
 void setup() {
   Serial.begin(9600);
   //analogWriteResolution(12); // 12 bit resolution
-  analogWrite(DAC_PIN, 4095); //sensitivity
+  analogWrite(DAC_PIN, TOUCH_SENSITIVITY); //sensitivity
   pinMode(BOARD_LED_PIN, OUTPUT);
   pinMode(ENABLE_TOUCH_PIN, OUTPUT);
   pinMode(READ_TOUCH_PIN, INPUT);
@@ -58,8 +53,10 @@ void setup() {
 
 void loop() {
   notTouching = digitalRead(READ_TOUCH_PIN);
+  
 
   if (notTouching == false) {
+    Serial.println("ON");
     if (oldFlag == false){
       touchDuration = 0;
     } else {
@@ -67,6 +64,7 @@ void loop() {
     }
     flag = true;
   } else {
+    Serial.println("OFF");
     flag = false;
   }
 
@@ -92,7 +90,7 @@ void loop() {
 
       if (sw == true) { // actually turn the lights on!
 
-        if (touchDuration < 5){
+        if (touchDuration < TOUCH_DURATION_FOR_NORMAL){
           
           // if they only briefly touch then turn light full on!
           for (int dot = 0; dot < NUM_LEDS; dot++)
@@ -110,10 +108,10 @@ void loop() {
           for (int dot = 0; dot < NUM_LEDS; dot++)
           {
             //leds[ dot ].setRGB( rVal, bVal, gVal ); // this isn't right here - should set to initial colours!
-            ledIncrement[ dot ] = ((dot % 10) + 1)/min(1,(touchDuration/100.0));
-            ledValues[ dot ] = 125;
+            ledIncrement[ dot ] = (((dot % 10) + 1)/min(1,(touchDuration/TOUCH_DURATION_DIVIDE)))/TOUCH_DURATION_DAMPENING;
+            ledValues[ dot ] = 0;
             ledHowOftenToTrigger[ dot ] = (dot % 4) +1;
-            ledPaletteId[ dot ] = 0;
+            ledPaletteId[ dot ] = (dot % totalPalettes);
           }
           seq();
 
@@ -135,7 +133,7 @@ void loop() {
 
   if (animateLeds == true)( seq() );
 
-  delay(10);
+  delay(1);
 }//end loop
 
 void seq() {
@@ -147,8 +145,8 @@ void seq() {
       int paletteId = ledPaletteId[ dot ];
       //dotValue += dotChange;
       dotValue = dotValue + dotChange;
-      if (dotValue <= 1) {
-        dotValue = 1.0;
+      if (dotValue <= 0) {
+        dotValue = 0.0;
         dotChange = abs( dotChange );
         // increment palette
         paletteId += 1;
