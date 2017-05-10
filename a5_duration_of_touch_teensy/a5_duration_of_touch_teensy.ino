@@ -1,5 +1,3 @@
-#include <ADCTouch.h>
-int ref0, ref1;     //reference values to remove offset
 int rVal, gVal, bVal;
 #include "FastLED.h"
 // How many leds in your strip?
@@ -8,11 +6,19 @@ int rVal, gVal, bVal;
 // For led chips like Neopixels, which have a data line, ground, and power, you just
 // need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
-#define DATA_PIN 11
-#define CLOCK_PIN 12
+#define DATA_PIN 21
+#define CLOCK_PIN 20
+#define DAC_PIN A12 //sets sensitivity of touch chip high val = low sens.
+#define BOARD_LED_PIN 13
+#define ENABLE_TOUCH_PIN 14
+#define READ_TOUCH_PIN 15
+
+// actual lights logic...
+#define 
+
 
 bool flag, oldFlag;
-bool sw, animateLeds = false;
+bool sw, animateLeds, notTouching = false;
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 float ledIncrement[NUM_LEDS];
@@ -39,20 +45,21 @@ int counter = 0;
 int touchDuration = 0;
 
 void setup() {
-
   Serial.begin(9600);
-  ref0 = ADCTouch.read(A0, 500);
-  ref1 = ADCTouch.read(A1, 500);
-  FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
+  //analogWriteResolution(12); // 12 bit resolution
+  analogWrite(DAC_PIN, 4095); //sensitivity
+  pinMode(BOARD_LED_PIN, OUTPUT);
+  pinMode(ENABLE_TOUCH_PIN, OUTPUT);
+  pinMode(READ_TOUCH_PIN, INPUT);
+  FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
+  delay(500);
+  digitalWrite(ENABLE_TOUCH_PIN, HIGH); // enable MTCH101 touch sens 
 }
 
 void loop() {
-  int value0 = ADCTouch.read(A0);
-  int value1 = ADCTouch.read(A1);
-  value0 -= ref0;
-  value1 -= ref1;
+  notTouching = digitalRead(READ_TOUCH_PIN);
 
-  if (value0 > 40) {
+  if (notTouching == false) {
     if (oldFlag == false){
       touchDuration = 0;
     } else {
@@ -128,7 +135,7 @@ void loop() {
 
   if (animateLeds == true)( seq() );
 
-  delay(1);
+  delay(10);
 }//end loop
 
 void seq() {
