@@ -3,7 +3,7 @@ int rVal, gVal, bVal;
 // How many leds in your strip?
 #define NUM_LEDS 55
 // How sensitive should it be?
-#define TOUCH_SENSITIVITY 1095
+#define TOUCH_SENSITIVITY 4095
 
 
 // For led chips like Neopixels, which have a data line, ground, and power, you just
@@ -17,9 +17,11 @@ int rVal, gVal, bVal;
 #define READ_TOUCH_PIN 15
 
 // actual lights logic...
-#define TOUCH_DURATION_FOR_NORMAL 500
+#define TOUCH_DURATION_FOR_NORMAL 1000
 #define TOUCH_DURATION_DIVIDE 100.0
 #define TOUCH_DURATION_DAMPENING 50.0
+
+#define MINIMUM_LIGHT_BRIGHTNESS -40.0
 
 bool flag, oldFlag;
 bool sw, animateLeds, notTouching = false;
@@ -33,8 +35,8 @@ int ledPaletteId[NUM_LEDS];
 #define PALETTE_HUE 0
 #define PALETTE_SATURATION 1
 
-int palette[][2] = { {40,255}, {80,255}, {120,255} };
-int totalPalettes = 3;
+int palette[][2] = { {40,255}, {80,255}, {120,255}, {140,255}, {180,255} };
+int totalPalettes = 5;
 
 int counter = 0;
 int touchDuration = 0;
@@ -70,7 +72,7 @@ void loop() {
 
   if (oldFlag != flag) {
     if (flag == true){  // touch down
-      animateLeds = false;
+      animateLeds = false; // stop the animation
       if (sw == false){ // get ready to turn the lights on
         for (int dot = 0; dot < NUM_LEDS; dot++)
         {
@@ -145,12 +147,12 @@ void seq() {
       int paletteId = ledPaletteId[ dot ];
       //dotValue += dotChange;
       dotValue = dotValue + dotChange;
-      if (dotValue <= 0) {
-        dotValue = 0.0;
+      if (dotValue <= MINIMUM_LIGHT_BRIGHTNESS) {
+        dotValue = MINIMUM_LIGHT_BRIGHTNESS;
         dotChange = abs( dotChange );
         // increment palette
         paletteId += 1;
-        if (paletteId > 2){
+        if (paletteId > (totalPalettes-1)){
           paletteId = 0;
         }
         ledPaletteId[ dot ] = paletteId;
