@@ -39,7 +39,19 @@ elapsedMillis timeHold;
 const int deltaUpdate = 60;// update led array values
 elapsedMillis timeUpdate;
 
-// -- State
+elapsedMillis timeElapsedInState;
+
+
+// -- Colour Palettes
+
+#define PALETTE_HUE 0
+#define PALETTE_SATURATION 1
+
+int palette[][2] = { {40,255}, {80,255}, {120,255}, {140,255}, {180,255} };
+int totalPalettes = 5;
+
+
+// -- App State
 #define STATE_INACTIVE 0
 #define STATE_TOUCH_ON 1
 #define STATE_ON_BRIGHT 2
@@ -47,19 +59,34 @@ elapsedMillis timeUpdate;
 #define STATE_TOUCH_OFF 4
 int currentState = STATE_INACTIVE;
 
+
+// -- Dot State
 struct LightDot {
   int led;
-  float increment;
   float currentValue;
-  float triggerFreq;
-  float colourId;
+  float increment;
+  float minimumValue;
+  float maximumValue;
+  int colourId;
+  int hue;
+  int sat;
 };
 
-LightDot lights[] = {
-  {0, 0.1, 0, 3, 0},
-  {1, 0.1, 0, 3, 0}
-};
+LightDot lights[NUM_LEDS];
 
+void initData(){
 
+  int i;
+  for (i = 0; i < NUM_LEDS; i = i + 1){
+    // Serial.print ("LED: ");
+    // Serial.println(i); // for example
+    float minValue = 0.0;
+    float maxValue = 255.0;
+    int hue = 80;
+    int sat = 255;
+    LightDot light = {i, 0.0, 0.0, minValue, maxValue, 0, hue, sat };
+    lights[i] = light;
+  }
 
+}
 

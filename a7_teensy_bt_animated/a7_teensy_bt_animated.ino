@@ -1,5 +1,6 @@
 #include "init.h"
 
+
 void setup() {
   Wire.setSCL(16); Wire.setSDA(17); Wire.begin();
   Serial.begin(9600);  //setup of Serial module, 115200 bits/second
@@ -8,6 +9,8 @@ void setup() {
   filt = touchRead(sensPin);      //set filt for t=1
   sBias = touchRead(sensPin); nBias = touchRead(noisePin);
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
+  // create the light structs
+  initData();  
 }
 
 void loop() {
@@ -37,6 +40,7 @@ void loop() {
     timeSw = 0;
   }
 
+/*
   if (timeHold >= deltaHold) { //do stuff once a second
     
 
@@ -50,37 +54,12 @@ void loop() {
     timeHold = 0;
     
   }
-  
+  */
   // --- update LED arrays 60mS ---//
   if (timeUpdate >= deltaUpdate){
+    
+    updateLightDots();
 
-    switch( currentState ) {
-      case STATE_INACTIVE:
-        ledsOFF();
-        break;
-      case STATE_TOUCH_ON:
-        
-        break;
-      case STATE_ON_BRIGHT:
-
-        break;
-        
-      case STATE_ON_ANIMATED:
-        seqLEDS();
-        break;
-        
-      case STATE_TOUCH_OFF:
-
-        break;
-      
-    }
-     /*
-     if (sw == true){
-     seqLEDS();
-     }else{
-    ledsOFF();
-     }
-     */
      FastLED.show();
      timeUpdate = 0;
   }
@@ -93,53 +72,54 @@ void ledsOFF(){
     {
       leds[ dot ] = CRGB::Black;
     }
+
+  
 }
 
-void updateLEDS(){
-    rVal = random(0, 255);
-    gVal = random(0, 255);
-    bVal = random(0, 255);
-        for (int dot = 0; dot < NUM_LEDS; dot++)
-    {
-      leds[ dot ].setRGB( rVal, bVal, gVal );
-      ledChange[ dot ] = (dot % 10) + 1;
-      ledValues[ dot ] = 250;
-      ledTimings[ dot ] = 1; //dot+1;
-      //delay(1);
+void updateLightDots(){
+  //Serial.print(">> ");
+  // loop through all of the dots
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    // update the dot
+    dot.currentValue = dot.currentValue + dot.increment;
+    // check for hitting boundaries
+    if ((dot.increment < 0) && (dot.currentValue < dot.minimumValue)){
+      // if we're heading down and have hit the bottom
+      dot.currentValue = dot.minimumValue;
+      dot.increment = abs( dot.increment );
+      // if we're animating, then recycle the dot
+      dotIsReadyForNextCycle( dot );
+    } else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue){
+      // if we've heading up and have hit the top
+      dot.currentValue = dot.maximumValue;
+      dot.increment = -abs( dot.increment );
     }
-   // delay(100);
-   // FastLED.show();
-  }//update`leds
-
-void seqLEDS() {
-  for (int dot = 0; dot < NUM_LEDS; dot++) {
-    int currentVal = counter % ledTimings[dot];
-    if (currentVal == 0) {
-      int dotChange = ledChange[ dot ];
-      int dotValue = ledValues[ dot ];
-      //dotValue += dotChange;
-      dotValue = dotValue + dotChange;
-      if (dotValue <= 1) {
-        dotValue = 1;
-        dotChange = abs( dotChange );
-      } else if (dotValue >= 255) {
-        dotValue = 255;
-        dotChange = -abs( dotChange );
-      }
-      //CRGB color = CRGB( rVal, bVal, gVal );
-      //color.fadeToBlackBy( dotValue );
-      CHSV color = CHSV( rVal, bVal, dotValue );
-
-      leds[ dot ] = color;
-      ledChange[ dot ] = dotChange;
-      ledValues[ dot ] = dotValue;
+    lights[ d ] = dot;
+    //Serial.print("{");
+    //Serial.print(dot.currentValue);
+    //Serial.print(", ");
+    //Serial.print(dot.increment);
+    //Serial.print("} ");
+    
+    // apply the colour to the LED
+    // value < 0 means off, greater than 255 is on 
+    // keep colour within bounds as dot can go higher and lower (to stay on or off for longer)
+    if (dot.currentValue > 0){
+      int val = min( 255, dot.currentValue );
+      CHSV colour = CHSV( dot.hue, dot.sat, val );
+      //CHSV colour = CHSV( 125, 255, val );
+      leds[ dot.led ] = colour;
+    } else {
+      leds[ dot.led ] = CRGB::Black;
     }
   }
-   counter += 1;
-   if (counter > 255)(counter = 0);
- // FastLED.show();
-//delay(10);
-}//seq
+  //Serial.println(". ");
+}
+
+void dotIsReadyForNextCycle(LightDot dot){
+  
+}
 
 void getTouch() {
   sens = touchRead(sensPin) - sBias;
@@ -160,9 +140,13 @@ void getTouch() {
   if (isTouch != oldTouch && isTouch == true) { // flip switch if change and on low->high touch
     sw = !sw;
     // mutate the state, mate...
-    // currentState
+    
     digitalWrite(ledPin, sw);
     // setLED();
+  }
+
+  if (isTouch != oldTouch){
+    changeState();
   }
   oldTouch = isTouch;
 
@@ -175,7 +159,115 @@ void getTouch() {
 
 void changeState(){
   
+  Serial.print("changeState from ");
+  Serial.print( currentState );
+  
+  switch( currentState ) {
+    case STATE_INACTIVE:
+      allLightsBreathing();
+      currentState = STATE_TOUCH_ON;
+      break;
+      
+    case STATE_TOUCH_ON:
+      if (timeElapsedInState < 1000){
+        allLightsOn();
+        currentState = STATE_ON_BRIGHT;
+      } else {
+        allLightsAnimating(timeElapsedInState);
+        currentState = STATE_ON_ANIMATED;
+      }
+      break;
+      
+    case STATE_ON_BRIGHT:
+    case STATE_ON_ANIMATED:
+      allLightsFadeDown();
+      currentState = STATE_TOUCH_OFF;
+      break;
+      
+    case STATE_TOUCH_OFF:
+      allLightsOff();
+      currentState = STATE_INACTIVE;
+      break;
+    
+  }
+  
+  timeElapsedInState = 0;
+  
+  Serial.print(" to ");
+  Serial.println( currentState );
+
 }
+
+void allLightsOn(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.hue = 55;
+    dot.sat = 255;
+    dot.currentValue = 255.0;
+    dot.increment = 0.0;
+    dot.minimumValue = 255.0;
+    dot.maximumValue = 255.0;
+    lights[ d ] = dot;
+  }
+  Serial.println("[on]");
+}
+
+void allLightsOff(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.currentValue = -1;
+    dot.increment = 0.0;
+    dot.minimumValue = -10.0;
+    dot.maximumValue = -1.0;
+    lights[ d ] = dot;
+  }
+  Serial.println("[off]");
+}
+
+void allLightsFadeDown(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.increment = -5.0;
+    dot.minimumValue = -10.0;
+    dot.maximumValue = -1.0;
+    lights[ d ] = dot;
+  }
+  Serial.println("[fade]");
+}
+
+void allLightsBreathing(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.hue = 125;
+    dot.sat = 125;
+    dot.currentValue = 125.0;
+    dot.increment = 2.5;
+    dot.minimumValue = 80.0;
+    dot.maximumValue = 125.0;
+    lights[ d ] = dot;
+  }
+  Serial.println("[breathing]");
+}
+
+void allLightsAnimating(float timeElapsed){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    
+    int colourInPalette = (d % totalPalettes);
+    dot.hue = palette[ colourInPalette ][ PALETTE_HUE ];
+    dot.sat = palette[ colourInPalette ][ PALETTE_SATURATION ];
+    // set hue & sat from palette
+    dot.currentValue = 10.0;
+    dot.increment = ((d % 10)+1) / (timeElapsed / 1000.0);
+    dot.minimumValue = -100.0;
+    dot.maximumValue = 255.0;
+    lights[ d ] = dot;
+  }
+  Serial.println("[animating:");
+  Serial.print(timeElapsed);
+  Serial.println("]");
+}
+
 
 void setLED() {
   int i;
