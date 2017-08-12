@@ -173,7 +173,7 @@ void changeState(){
         allLightsOn();
         currentState = STATE_ON_BRIGHT;
       } else {
-        allLightsAnimating(timeElapsedInState);
+        allLightsAnimating(timeElapsedInState - 1000);
         currentState = STATE_ON_ANIMATED;
       }
       break;
@@ -227,7 +227,7 @@ void allLightsOff(){
 void allLightsFadeDown(){
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
-    dot.increment = -5.0;
+    dot.increment = -8.0;
     dot.minimumValue = -10.0;
     dot.maximumValue = -1.0;
     lights[ d ] = dot;
@@ -249,22 +249,35 @@ void allLightsBreathing(){
   Serial.println("[breathing]");
 }
 
-void allLightsAnimating(float timeElapsed){
+void allLightsAnimating(float timeElapsedIn){
+
+  float timeElapsed = timeElapsedIn / 50.0;
+  float margin = (timeElapsed / 100.0);
+  
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
-    
+
+    // set the initial colour
     int colourInPalette = (d % totalPalettes);
+    dot.colourId = colourInPalette;
     dot.hue = palette[ colourInPalette ][ PALETTE_HUE ];
     dot.sat = palette[ colourInPalette ][ PALETTE_SATURATION ];
-    // set hue & sat from palette
-    dot.currentValue = 10.0;
-    dot.increment = ((d % 10)+1) / (timeElapsed / 1000.0);
-    dot.minimumValue = -100.0;
-    dot.maximumValue = 255.0;
+    // set initial current value - make some on, some off and some in between
+    dot.currentValue = (d % 4) * (255 / 4.0);
+    // make increment vary 
+    float durationToReach = timeElapsed + ((d % 10) * margin);
+    dot.increment = 1 / (durationToReach / deltaUpdate);
+    // set varying minimum and maximum
+    dot.minimumValue = -10.0 - (((d+2) % 5) * 10 );
+    dot.maximumValue = 255.0 + (((d+3) % 4) * 10 );
+    // reassign the dot to the array
     lights[ d ] = dot;
   }
   Serial.println("[animating:");
   Serial.print(timeElapsed);
+  Serial.print("/");
+  float showNum = 1 / ((timeElapsed + ((2 % 10) * margin)) / deltaUpdate);
+  Serial.print(showNum);
   Serial.println("]");
 }
 
