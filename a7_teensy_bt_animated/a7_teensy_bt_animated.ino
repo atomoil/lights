@@ -96,11 +96,6 @@ void updateLightDots(){
       dot.increment = -abs( dot.increment );
     }
     lights[ d ] = dot;
-    //Serial.print("{");
-    //Serial.print(dot.currentValue);
-    //Serial.print(", ");
-    //Serial.print(dot.increment);
-    //Serial.print("} ");
     
     // apply the colour to the LED
     // value < 0 means off, greater than 255 is on 
