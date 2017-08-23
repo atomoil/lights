@@ -18,21 +18,40 @@ void loop() {
     sData = Serial.read();
   }
 
+  String ssData;
+  //sData = '';
   if (btSerial.available() > 0) { //bluetooth serial
-    sData = btSerial.read();
+    ssData = btSerial.readString();
+    /*
+    while(btSerial.available() > 0){
+      sData += btSerial.read();
+    }
+    */
+    Serial.print("got BT ");
+    Serial.println(ssData);
   }
 
   //on
-  if (sData == '8') {
-    sw = !sw;
-    digitalWrite(ledPin, sw);
-    setLED();
+  if (ssData == "on") {
+    allLightsOn();
+  }
+
+  if (ssData == "off") {
+    allLightsOff();
+  }
+
+  if (ssData == "anim:slow"){
+    allLightsAnimating(10000);
+  }
+
+  if (ssData == "anim:fast"){
+    allLightsAnimating(100);
   }
 
   if (sData == '9') {
     getRTC();
   }
-   sData = ' ';
+  sData = ' ';
    
   // --- touch stuff---//
   if (timeSw >= deltaSw) { // scan for touch  every deltaSw mS
@@ -89,11 +108,12 @@ void updateLightDots(){
       dot.currentValue = dot.minimumValue;
       dot.increment = abs( dot.increment );
       // if we're animating, then recycle the dot
-      dotIsReadyForNextCycle( dot );
+      dotHasReachedLowestValue( dot );
     } else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue){
       // if we've heading up and have hit the top
       dot.currentValue = dot.maximumValue;
       dot.increment = -abs( dot.increment );
+      dotHasReachedHighestValue( dot );
     }
     lights[ d ] = dot;
     
@@ -112,9 +132,14 @@ void updateLightDots(){
   //Serial.println(". ");
 }
 
-void dotIsReadyForNextCycle(LightDot dot){
+void dotHasReachedLowestValue(LightDot dot){
   
 }
+
+void dotHasReachedHighestValue(LightDot dot){
+  
+}
+
 
 void getTouch() {
   sens = touchRead(sensPin) - sBias;
