@@ -86,14 +86,6 @@ void loop() {
 }//loop
 
 //-------- Functions --------//
-void ledsOFF(){
-     for (int dot = 0; dot < NUM_LEDS; dot++)
-    {
-      leds[ dot ] = CRGB::Black;
-    }
-
-  
-}
 
 void updateLightDots(){
   //Serial.print(">> ");
@@ -157,16 +149,16 @@ void getTouch() {
     holdCount = 0;
   }
 
+  // this is old - Ian, what's the digitalWrite doing?
   if (isTouch != oldTouch && isTouch == true) { // flip switch if change and on low->high touch
     sw = !sw;
     // mutate the state, mate...
     
     digitalWrite(ledPin, sw);
-    // setLED();
   }
 
   if (isTouch != oldTouch){
-    changeState();
+    nextTouchState();
   }
   oldTouch = isTouch;
 
@@ -177,7 +169,7 @@ void getTouch() {
   //  Serial.println(filt);
 }
 
-void changeState(){
+void nextTouchState(){
   
   Serial.print("changeState from ");
   Serial.print( currentState );
@@ -185,28 +177,24 @@ void changeState(){
   switch( currentState ) {
     case STATE_INACTIVE:
       allLightsBreathing();
-      currentState = STATE_TOUCH_ON;
       break;
       
     case STATE_TOUCH_ON:
       if (timeElapsedInState < 1000){
         allLightsOn();
-        currentState = STATE_ON_BRIGHT;
       } else {
         allLightsAnimating(timeElapsedInState - 1000);
-        currentState = STATE_ON_ANIMATED;
       }
       break;
       
     case STATE_ON_BRIGHT:
     case STATE_ON_ANIMATED:
       allLightsFadeDown();
-      currentState = STATE_TOUCH_OFF;
+      
       break;
       
     case STATE_TOUCH_OFF:
       allLightsOff();
-      currentState = STATE_INACTIVE;
       break;
     
   }
@@ -229,6 +217,7 @@ void allLightsOn(){
     dot.maximumValue = 255.0;
     lights[ d ] = dot;
   }
+  currentState = STATE_ON_BRIGHT;
   Serial.println("[on]");
 }
 
@@ -252,6 +241,7 @@ void allLightsFadeDown(){
     dot.maximumValue = -1.0;
     lights[ d ] = dot;
   }
+  currentState = STATE_TOUCH_OFF;
   Serial.println("[fade]");
 }
 
@@ -266,6 +256,7 @@ void allLightsBreathing(){
     dot.maximumValue = 125.0;
     lights[ d ] = dot;
   }
+  currentState = STATE_TOUCH_ON;
   Serial.println("[breathing]");
 }
 
@@ -293,6 +284,7 @@ void allLightsAnimating(float timeElapsedIn){
     // reassign the dot to the array
     lights[ d ] = dot;
   }
+  currentState = STATE_ON_ANIMATED;
   Serial.println("[animating:");
   Serial.print(timeElapsed);
   Serial.print("/");
