@@ -1,6 +1,6 @@
 //-- fastLED
 #include "FastLED.h"
-const int NUM_LEDS = 50;
+const int NUM_LEDS = 55;
 const int DATA_PIN = 21;
 const int CLOCK_PIN = 20;
 CRGB leds[NUM_LEDS];
@@ -53,10 +53,11 @@ int totalPalettes = 5;
 
 // -- App State
 #define STATE_INACTIVE 0
-#define STATE_TOUCH_ON 1
-#define STATE_ON_BRIGHT 2
-#define STATE_ON_ANIMATED 3
-#define STATE_TOUCH_OFF 4
+#define STATE_TOUCH_INITIAL 1
+#define STATE_TOUCH_ON 2
+#define STATE_ON_BRIGHT 3
+#define STATE_ON_ANIMATED 4
+#define STATE_TOUCH_OFF 5
 int currentState = STATE_INACTIVE;
 
 

@@ -10,7 +10,11 @@ void setup() {
   sBias = touchRead(sensPin); nBias = touchRead(noisePin);
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
   // create the light structs
-  initData();  
+  initData();
+
+  isTouch = false;
+  oldTouch = isTouch;
+  currentState = STATE_INACTIVE;
 }
 
 void loop() {
@@ -100,12 +104,12 @@ void updateLightDots(){
       dot.currentValue = dot.minimumValue;
       dot.increment = abs( dot.increment );
       // if we're animating, then recycle the dot
-      dotHasReachedLowestValue( dot );
+      dot = dotHasReachedLowestValue( dot );
     } else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue){
       // if we've heading up and have hit the top
       dot.currentValue = dot.maximumValue;
       dot.increment = -abs( dot.increment );
-      dotHasReachedHighestValue( dot );
+      dot = dotHasReachedHighestValue( dot );
     }
     lights[ d ] = dot;
     
@@ -124,12 +128,36 @@ void updateLightDots(){
   //Serial.println(". ");
 }
 
-void dotHasReachedLowestValue(LightDot dot){
-  
+LightDot dotHasReachedLowestValue(LightDot dot){
+  switch ( currentState ){
+    case STATE_TOUCH_ON:
+      // slow down the dot
+      dot.maximumValue = max( dot.maximumValue - 20, 125.0 );
+      dot.increment = max( min(dot.increment - 0.5, 10.5), 2.0 ); // no more than 10.5, so it drops fast and then slows
+      dot.sat = min(dot.sat + 10,255);
+
+      break;
+    case STATE_ON_ANIMATED:
+      // switch to the next colour in the palette
+      dot.colourId = dot.colourId + 1;
+      if (dot.colourId > totalPalettes){
+        dot.colourId = 0;
+      }
+      dot.hue = palette[ dot.colourId ][ PALETTE_HUE ];
+      dot.sat = palette[ dot.colourId ][ PALETTE_SATURATION ];
+    
+      break;
+  }
+  return dot;
 }
 
-void dotHasReachedHighestValue(LightDot dot){
-  
+LightDot dotHasReachedHighestValue(LightDot dot){
+  switch ( currentState ){
+    case STATE_TOUCH_INITIAL:
+      allLightsBreathing();
+      break;
+  }
+  return dot;
 }
 
 
@@ -158,33 +186,43 @@ void getTouch() {
   }
 
   if (isTouch != oldTouch){
-    nextTouchState();
+    Serial.print("[touch:");
+    Serial.print(isTouch);
+    Serial.print("]");
+    nextTouchState(isTouch);
   }
   oldTouch = isTouch;
 
-  //  Serial.print(sens);
-  //  Serial.print(" ");
-  //  Serial.print(noise);
-  //  Serial.print(" ");
-  //  Serial.println(filt);
 }
 
-void nextTouchState(){
+void nextTouchState(boolean touchDown){
   
   Serial.print("changeState from ");
   Serial.print( currentState );
   
   switch( currentState ) {
     case STATE_INACTIVE:
-      allLightsBreathing();
-      break;
+      if (touchDown == true){
+        allLightsFadeIn();
+      }
       
+      // allLightsBreathing();
+      break;
+    /*
     case STATE_TOUCH_ON:
       if (timeElapsedInState < 1000){
         allLightsOn();
       } else {
         allLightsAnimating(timeElapsedInState - 1000);
       }
+      break;
+     */
+    case STATE_TOUCH_INITIAL:
+      allLightsOn();
+      break;
+
+    case STATE_TOUCH_ON:
+      allLightsAnimating(timeElapsedInState);
       break;
       
     case STATE_ON_BRIGHT:
@@ -206,11 +244,42 @@ void nextTouchState(){
 
 }
 
+void allLightsFadeIn(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.hue = 125;
+    dot.sat = 0;
+    dot.currentValue = 0.0;
+    dot.increment = 15.0;
+    dot.minimumValue = 255.0;
+    dot.maximumValue = 255.0;
+    lights[ d ] = dot;
+  }
+  currentState = STATE_TOUCH_INITIAL;
+  Serial.print("[fade:in]");
+}
+
+void allLightsBreathing(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.hue = 125;
+    dot.sat = 0;
+    //dot.currentValue = 125.0;
+    dot.increment = -abs(dot.increment);
+    dot.minimumValue = 80.0;
+    //dot.maximumValue = 125.0;
+    lights[ d ] = dot;
+  }
+  currentState = STATE_TOUCH_ON;
+  timeElapsedInState = 0; // bit nasty :-/
+  Serial.print("[breathing]");
+}
+
 void allLightsOn(){
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
     dot.hue = 55;
-    dot.sat = 255;
+    dot.sat = 0;
     dot.currentValue = 255.0;
     dot.increment = 0.0;
     dot.minimumValue = 255.0;
@@ -218,52 +287,14 @@ void allLightsOn(){
     lights[ d ] = dot;
   }
   currentState = STATE_ON_BRIGHT;
-  Serial.println("[on]");
+  Serial.print("[on]");
 }
 
-void allLightsOff(){
-  for (int d = 0; d < NUM_LEDS; d++ ){
-    LightDot dot = lights[ d ];
-    dot.currentValue = -1;
-    dot.increment = 0.0;
-    dot.minimumValue = -10.0;
-    dot.maximumValue = -1.0;
-    lights[ d ] = dot;
-  }
-  Serial.println("[off]");
-}
-
-void allLightsFadeDown(){
-  for (int d = 0; d < NUM_LEDS; d++ ){
-    LightDot dot = lights[ d ];
-    dot.increment = -8.0;
-    dot.minimumValue = -10.0;
-    dot.maximumValue = -1.0;
-    lights[ d ] = dot;
-  }
-  currentState = STATE_TOUCH_OFF;
-  Serial.println("[fade]");
-}
-
-void allLightsBreathing(){
-  for (int d = 0; d < NUM_LEDS; d++ ){
-    LightDot dot = lights[ d ];
-    dot.hue = 125;
-    dot.sat = 125;
-    dot.currentValue = 125.0;
-    dot.increment = 2.5;
-    dot.minimumValue = 80.0;
-    dot.maximumValue = 125.0;
-    lights[ d ] = dot;
-  }
-  currentState = STATE_TOUCH_ON;
-  Serial.println("[breathing]");
-}
 
 void allLightsAnimating(float timeElapsedIn){
 
-  float timeElapsed = timeElapsedIn / 50.0;
-  float margin = (timeElapsed / 100.0);
+  float timeElapsed = timeElapsedIn / 500.0;
+  float margin = (timeElapsed / 10.0);
   
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
@@ -271,8 +302,8 @@ void allLightsAnimating(float timeElapsedIn){
     // set the initial colour
     int colourInPalette = (d % totalPalettes);
     dot.colourId = colourInPalette;
-    dot.hue = palette[ colourInPalette ][ PALETTE_HUE ];
-    dot.sat = palette[ colourInPalette ][ PALETTE_SATURATION ];
+    dot.hue = palette[ dot.colourId ][ PALETTE_HUE ];
+    dot.sat = palette[ dot.colourId ][ PALETTE_SATURATION ];
     // set initial current value - make some on, some off and some in between
     dot.currentValue = (d % 4) * (255 / 4.0);
     // make increment vary 
@@ -290,23 +321,33 @@ void allLightsAnimating(float timeElapsedIn){
   Serial.print("/");
   float showNum = 1 / ((timeElapsed + ((2 % 10) * margin)) / deltaUpdate);
   Serial.print(showNum);
-  Serial.println("]");
+  Serial.print("]");
 }
 
 
-void setLED() {
-  int i;
-  if (sw == true) {
-
-    for ( i = 0; i < NUM_LEDS; i++) {
-      leds[i] = CRGB::Green;
-    }
-  } else {
-    for ( i = 0; i < NUM_LEDS; i++) {
-      leds[i] = CRGB::Black;
-    }
+void allLightsFadeDown(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.increment = -8.0;
+    dot.minimumValue = -10.0;
+    dot.maximumValue = -1.0;
+    lights[ d ] = dot;
   }
-  FastLED.show();
+  currentState = STATE_TOUCH_OFF;
+  Serial.print("[fade:out]");
+}
+
+void allLightsOff(){
+  for (int d = 0; d < NUM_LEDS; d++ ){
+    LightDot dot = lights[ d ];
+    dot.currentValue = -1;
+    dot.increment = 0.0;
+    dot.minimumValue = -10.0;
+    dot.maximumValue = -1.0;
+    lights[ d ] = dot;
+  }
+  currentState = STATE_INACTIVE;
+  Serial.print("[off]");
 }
 
 
