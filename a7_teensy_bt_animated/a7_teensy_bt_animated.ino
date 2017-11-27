@@ -193,6 +193,8 @@ void getTouch() {
   if (isTouch != oldTouch){
     Serial.print("[touch:");
     Serial.print(isTouch);
+    Serial.print("/filt:");
+    Serial.print(filt);
     Serial.print("]");
     nextTouchState(isTouch);
   }
@@ -252,12 +254,12 @@ void nextTouchState(boolean touchDown){
 void allLightsFadeIn(){
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
-    dot.hue = 125;
-    dot.sat = 0;
+    dot.hue = 125; // 125
+    dot.sat = 0;  // 0
     dot.currentValue = 0.0;
     dot.increment = 15.0;
-    dot.minimumValue = 255.0;
-    dot.maximumValue = 255.0;
+    dot.minimumValue = 254.0;
+    dot.maximumValue = 254.0;
     lights[ d ] = dot;
   }
   currentState = STATE_TOUCH_INITIAL;
@@ -283,12 +285,12 @@ void allLightsBreathing(){
 void allLightsOn(){
   for (int d = 0; d < NUM_LEDS; d++ ){
     LightDot dot = lights[ d ];
-    dot.hue = 55;
-    dot.sat = 0;
-    dot.currentValue = 255.0;
+    dot.hue = 255; // 55 is best value for the crank light
+    dot.sat = 0; // 0
+    dot.currentValue = 254.0;
     dot.increment = 0.0;
-    dot.minimumValue = 255.0;
-    dot.maximumValue = 255.0;
+    dot.minimumValue = 254.0;
+    dot.maximumValue = 254.0;
     lights[ d ] = dot;
   }
   currentState = STATE_ON_BRIGHT;
