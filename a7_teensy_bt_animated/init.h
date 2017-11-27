@@ -12,6 +12,17 @@ int rVal, gVal, bVal; int counter = 0;
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 
+//--Specific Lights
+// Crank light
+//const int touchTriggerOn = 1800;
+//const int touchTriggerOff = 1400;
+// Small Black & Yellow & Small Crank
+//const int touchTriggerOn = 1200;
+//const int touchTriggerOff = 800;
+// Tall Turquoise and Yellow
+const int touchTriggerOn = 1400;
+const int touchTriggerOff = 1000;
+
 //-- onboard LED
 const int ledPin = 13;
 

@@ -167,12 +167,17 @@ void getTouch() {
   noise =  touchRead(noisePin) - nBias;
   filt = (filtAlpha * (sens - noise) ) + ((1 - filtAlpha) * filt);
 
-
-  if (filt > 1800 ) { // touching
+  /*
+  Serial.print("[filt:");
+  Serial.print(filt);
+  Serial.print("]");
+  */
+    
+  if (filt > touchTriggerOn ) { // touching
     isTouch = true;
   }
 
-  if (filt  < 1400 ) { // not touching
+  if (filt < touchTriggerOff ) { // not touching
     isTouch = false;
     holdCount = 0;
   }
@@ -182,7 +187,7 @@ void getTouch() {
     sw = !sw;
     // mutate the state, mate...
     
-    digitalWrite(ledPin, sw);
+    digitalWrite(ledPin, sw); // what does this do?
   }
 
   if (isTouch != oldTouch){
