@@ -1,5 +1,5 @@
 #include "init.h"
-
+#include <EEPROM.h>
 
 void setup() {
   Wire.setSCL(16); Wire.setSDA(17); Wire.begin();
@@ -16,9 +16,29 @@ void setup() {
   oldTouch = isTouch;
   currentState = STATE_INACTIVE;
   
+  getSavedPalette();
+
+  int i = 0;
+  for (i=0;i<totalPalettes;i++) {
+    setHueSat(i, 319, 87);
+  }
+  
   Serial.println("started lamp");
   allLightsOn();
 }
+
+void setHueSat(int indx, float h, float s){
+  palette[indx][0] = convertHue(h);
+  palette[indx][1] = convertSat(s);
+}
+
+int convertHue(float f){
+  return (f/360.0)*255.0;
+}
+int convertSat(float f){
+  return (f/100.0)*255.0;
+}
+
 
 void loop() {
   if (Serial.available() > 0) {
@@ -34,7 +54,7 @@ void loop() {
       sData += btSerial.read();
     }
     */
-    Serial.print("got BT ");
+    Serial.print("got BT:");
     Serial.println(ssData);
   }
 
@@ -53,6 +73,10 @@ void loop() {
 
   if (ssData == "anim:fast"){
     allLightsAnimating(100);
+  }
+
+  if (ssData == ""){
+
   }
 
   if (sData == '9') {
@@ -92,6 +116,23 @@ void loop() {
 }//loop
 
 //-------- Functions --------//
+
+void getSavedPalette(){
+  int savedPalette[5][2] = {};
+  EEPROM.get(0,savedPalette);
+  int paletteSize = sizeof(savedPalette);
+
+  // DEBUG
+  Serial.print("saved palette has:");
+  Serial.println(paletteSize);
+
+  if (paletteSize > 0){ // only update if we have values
+    for(int i=0;i<totalPalettes;i++){
+      palette[i][0] = savedPalette[i][0];
+      palette[i][1] = savedPalette[i][1];
+    }
+  }
+}
 
 void updateLightDots(){
   //Serial.print(">> ");

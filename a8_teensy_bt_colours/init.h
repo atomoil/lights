@@ -68,7 +68,8 @@ elapsedMillis timeElapsedInState;
 #define PALETTE_HUE 0
 #define PALETTE_SATURATION 1
 
-int palette[][2] = { {40,255}, {80,255}, {120,255}, {140,255}, {180,255} };
+// default palette value
+int palette[5][2] = { {40,255}, {80,255}, {120,255}, {140,255}, {180,255} };
 int totalPalettes = sizeof(palette) / sizeof(palette[0]);
 
 
