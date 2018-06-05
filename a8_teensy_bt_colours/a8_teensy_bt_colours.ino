@@ -16,27 +16,46 @@ void setup() {
   oldTouch = isTouch;
   currentState = STATE_INACTIVE;
   
-  getSavedPalette();
+  //getSavedPalette();
 
-  int i = 0;
-  for (i=0;i<totalPalettes;i++) {
-    setHueSat(i, 319, 87);
-  }
+  /*
+  // moody purple
+  setHueSat(0, 305, 95);
+  setHueSat(1, 319, 87);
+  setHueSat(2, 291, 75);
+  setHueSat(3, 286, 53);
+  setHueSat(4, 253, 29);
+  */
+
+  /*
+  // colourful
+  setHueSat(0, 273, 86);
+  setHueSat(1, 332, 99);
+  setHueSat(2, 39, 100);
+  setHueSat(3, 248, 80);
+  setHueSat(4, 50, 100);
+  */
+
+  /*
+  // lava
+  setHueSat(0, 18, 86);
+  setHueSat(1, 69, 99);
+  setHueSat(2, 46, 100);
+  setHueSat(3, 40, 80);
+  setHueSat(4, 15, 100);
+  */
+
+  /*
+  // spirit of the rainbow
+  setHueSat(0, 86, 86);
+  setHueSat(1, 153, 99);
+  setHueSat(2, 195, 100);
+  setHueSat(3, 241, 80);
+  setHueSat(4, 289, 100);
+  */
   
   Serial.println("started lamp");
   allLightsOn();
-}
-
-void setHueSat(int indx, float h, float s){
-  palette[indx][0] = convertHue(h);
-  palette[indx][1] = convertSat(s);
-}
-
-int convertHue(float f){
-  return (f/360.0)*255.0;
-}
-int convertSat(float f){
-  return (f/100.0)*255.0;
 }
 
 
@@ -47,6 +66,12 @@ void loop() {
 
   String ssData;
   //sData = '';
+
+  // useful debug!
+  if (Serial.available()) {
+    ssData = Serial.readString();
+  }
+  
   if (btSerial.available() > 0) { //bluetooth serial
     ssData = btSerial.readString();
     /*
@@ -133,6 +158,20 @@ void getSavedPalette(){
     }
   }
 }
+
+
+void setHueSat(int indx, float h, float s){
+  palette[indx][0] = convertHue(h);
+  palette[indx][1] = convertSat(s);
+}
+
+int convertHue(float f){
+  return (f/360.0)*255.0;
+}
+int convertSat(float f){
+  return (f/100.0)*255.0;
+}
+
 
 void updateLightDots(){
   //Serial.print(">> ");
