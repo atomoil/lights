@@ -1,10 +1,31 @@
 //-- fastLED
 #include "FastLED.h"
 const int NUM_LEDS = 55; // 97  tall grey/brown 59 new smallest grey crank 55 otehr small grey, turqoise 55
-//const int DATA_PIN = 21; // v1 boards
-//const int CLOCK_PIN = 20;
+
+#define LAMP_v1_BOARD 0
+#define LAMP_v1r1_6_STRIP_BOARDS 1
+
+#define LAMP_CURRENT LAMP_v1_BOARD
+
+#if LAMP_CURRENT == LAMP_v1_BOARD
+const int DATA_PIN = 21; // v1 boards
+const int CLOCK_PIN = 20;
+const int sensPin = A9; //v1 board 23,22
+const int noisePin = A8;
+#endif
+
+#if LAMP_CURRENT == LAMP_v1r1_6_STRIP_BOARDS
 const int DATA_PIN = 6; //v1.1 6 strip boards
 const int CLOCK_PIN = 7;
+const int sensPin = 3;
+const int noisePin = 2;
+#endif
+
+int sens = 0; 
+int sBias = 0;
+int noise = 0; 
+int nBias = 0;
+
 CRGB leds[NUM_LEDS];
 int ledChange[NUM_LEDS]; int ledValues[NUM_LEDS]; int ledTimings[NUM_LEDS];
 int rVal, gVal, bVal; int counter = 0;
@@ -38,11 +59,6 @@ const int ledPin = 13;
 #define btSerial Serial1
 char sData;
 
-//-- touchRead
-//const int sensPin = A9; //v1 board 23,22
-//const int noisePin = A8;
-const int sensPin = 3; int sens = 0; int sBias = 0;
-const int noisePin = 2;  int noise = 0; int nBias = 0;
 
 // -- Filter
 float filtAlpha = 0.1; 
