@@ -142,7 +142,7 @@ LightDot dotHasReachedLowestValue(LightDot dot){
     case STATE_ON_ANIMATED:
       // switch to the next colour in the palette
       dot.colourId = dot.colourId + 1;
-      if (dot.colourId > totalPalettes){
+      if (dot.colourId >= totalPalettes){
         dot.colourId = 0;
       }
       dot.hue = palette[ dot.colourId ][ PALETTE_HUE ];
