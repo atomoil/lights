@@ -1,25 +1,45 @@
 //-- fastLED
 #include "FastLED.h"
-const int NUM_LEDS = 55; // 97  tall grey/brown 59 new smallest grey crank 55 otehr small grey, turqoise 55
 
-#define LAMP_v1_BOARD 0
-#define LAMP_v1r1_6_STRIP_BOARDS 1
+#define LAMP_TALL_RAKU
+#define LAMP_SHORT_RAKU
+#define LAMP_TALL_TURQ
 
-#define LAMP_CURRENT LAMP_v1_BOARD
+#define LAMP_CURRENT LAMP_SHORT_RAKU
 
-#if LAMP_CURRENT == LAMP_v1_BOARD
+// -----------------------------------
+
+#define BOARD_v1 0
+#define BOARD_v2_6_STRIP 1
+
+#if LAMP_CURRENT == LAMP_TALL_TURQ
+  #define BOARD_CURRENT BOARD_v1
+
+#elif LAMP_CURRENT == LAMP_SHORT_RAKU
+  #define BOARD_CURRENT BOARD_v1
+
+#elif LAMP_CURRENT == LAMP_TALL_RAKU
+  #define BOARD_CURRENT BOARD_v1
+
+#endif
+
+
+
+
+#if BOARD_CURRENT == BOARD_v1
 const int DATA_PIN = 21; // v1 boards
 const int CLOCK_PIN = 20;
 const int sensPin = A9; //v1 board 23,22
 const int noisePin = A8;
 #endif
 
-#if LAMP_CURRENT == LAMP_v1r1_6_STRIP_BOARDS
+#if BOARD_CURRENT == BOARD_v2_6_STRIP
 const int DATA_PIN = 6; //v1.1 6 strip boards
 const int CLOCK_PIN = 7;
 const int sensPin = 3;
 const int noisePin = 2;
 #endif
+
 
 int sens = 0; 
 int sBias = 0;
@@ -35,15 +55,22 @@ int rVal, gVal, bVal; int counter = 0;
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 
+const int NUM_LEDS = 55; // 97  tall grey/brown 59 new smallest grey crank 55 otehr small grey, turqoise 55
+
 //--Specific Lights
+#if LAMP_CURRENT == LAMP_TALL_RAKU
 // Crank light
-//const int touchTriggerOn = 1800;
-//const int touchTriggerOff = 1400;
-//
+const int touchTriggerOn = 1800;
+const int touchTriggerOff = 1400;
+#endif
+
+#if LAMP_CURRENT == LAMP_SHORT_RAKU
 // Small Black & Yellow & Small Crank
-//const int touchTriggerOn = 1200;
-//const int touchTriggerOff = 800;
+const int touchTriggerOn = 1200;
+const int touchTriggerOff = 800;
+#endif
 //
+#if LAMP_CURRENT == LAMP_TURQUOISE
 // Tall Turquoise and Yellow
 //const int touchTriggerOn = 1400;
 //const int touchTriggerOff = 1000;
@@ -51,6 +78,7 @@ int rVal, gVal, bVal; int counter = 0;
 // Ian's Tall Turquoise
 const int touchTriggerOn = 800;
 const int touchTriggerOff = 600;
+#endif
 
 //-- onboard LED
 const int ledPin = 13;
