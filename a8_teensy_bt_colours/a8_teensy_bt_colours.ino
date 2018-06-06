@@ -53,6 +53,7 @@ void setup() {
   setHueSat(2, 195, 100);
   setHueSat(3, 241, 80);
   setHueSat(4, 289, 100);
+  pl:86:86:153:99:195:100:241:80:289:100
   */
   
   Serial.println("started lamp");
