@@ -123,13 +123,11 @@ void loop() {
       } else {
         palette[row][0] = convertSat(col);
       }
-      /*
       Serial.print(row);
       Serial.print("/");
       Serial.print(elem);
       Serial.print(": ");
       Serial.println(col);
-      */
       i++;
     }
   }
