@@ -25,6 +25,7 @@ void setup() {
   setHueSat(2, 291, 75);
   setHueSat(3, 286, 53);
   setHueSat(4, 253, 29);
+  pl:305:95:319:87:291:75:286:53:253:29
   */
 
   /*
@@ -60,54 +61,82 @@ void setup() {
 
 
 void loop() {
-  if (Serial.available() > 0) {
-    sData = Serial.read();
-  }
-
-  String ssData;
-  //sData = '';
+ 
+  String ssData = "";
 
   // useful debug!
   if (Serial.available()) {
     ssData = Serial.readString();
+    
+    Serial.print("got Message (Serial):");
+    Serial.println(ssData);
   }
   
   if (btSerial.available() > 0) { //bluetooth serial
     ssData = btSerial.readString();
-    /*
-    while(btSerial.available() > 0){
-      sData += btSerial.read();
-    }
-    */
-    Serial.print("got BT:");
+
+    Serial.print("got Message (BT):");
     Serial.println(ssData);
   }
 
   //on
-  if (ssData == "on") {
+  if (ssData == "st:on") {
     allLightsOn();
   }
 
-  if (ssData == "off") {
+  if (ssData == "st:off") {
     allLightsOff();
   }
 
-  if (ssData == "anim:slow"){
+  if (ssData == "am:slow"){
     allLightsAnimating(10000);
   }
 
-  if (ssData == "anim:fast"){
+  if (ssData == "an:fast"){
     allLightsAnimating(100);
   }
 
-  if (ssData == ""){
-
+  if (ssData.startsWith("an")) { // an is for animation
+    
   }
 
-  if (sData == '9') {
+  // pl:10:11:20:21:30:31:40:41:50:51:60:61
+  // pl:10:100:20:100:30:100:40:100:50:100
+  // 
+  if (ssData.startsWith("pl")) { // pl is for palette
+    char input[100];
+    ssData.toCharArray(input,99);
+    char *text = strtok(input,":");
+    int col = 0;
+    int i = 0;
+    int row = 0;
+    int elem = 0;
+    //Serial.print("pl split: ");
+    //Serial.println(text);
+    while (text != 0 && i < totalPalettes*2){
+      row = i / 2;
+      elem = i % 2;
+      text = strtok(0,":");
+      col = atoi( text );
+      if (elem == 0){
+        palette[row][0] = convertHue(col);
+      } else {
+        palette[row][0] = convertSat(col);
+      }
+      /*
+      Serial.print(row);
+      Serial.print("/");
+      Serial.print(elem);
+      Serial.print(": ");
+      Serial.println(col);
+      */
+      i++;
+    }
+  }
+
+  if (ssData == '9') {
     getRTC();
   }
-  sData = ' ';
    
   // --- touch stuff---//
   if (timeSw >= deltaSw) { // scan for touch  every deltaSw mS
