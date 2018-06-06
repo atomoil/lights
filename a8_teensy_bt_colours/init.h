@@ -1,9 +1,9 @@
 //-- fastLED
 #include "FastLED.h"
 
-#define LAMP_TALL_RAKU
-#define LAMP_SHORT_RAKU
-#define LAMP_TALL_TURQ
+#define LAMP_TALL_RAKU 0
+#define LAMP_SHORT_RAKU 1
+#define LAMP_TALL_TURQ 2
 
 #define LAMP_CURRENT LAMP_SHORT_RAKU
 
@@ -14,13 +14,12 @@
 
 #if LAMP_CURRENT == LAMP_TALL_TURQ
   #define BOARD_CURRENT BOARD_v1
-
+  
 #elif LAMP_CURRENT == LAMP_SHORT_RAKU
   #define BOARD_CURRENT BOARD_v1
 
 #elif LAMP_CURRENT == LAMP_TALL_RAKU
   #define BOARD_CURRENT BOARD_v1
-
 #endif
 
 
@@ -45,10 +44,6 @@ int sens = 0;
 int sBias = 0;
 int noise = 0; 
 int nBias = 0;
-
-CRGB leds[NUM_LEDS];
-int ledChange[NUM_LEDS]; int ledValues[NUM_LEDS]; int ledTimings[NUM_LEDS];
-int rVal, gVal, bVal; int counter = 0;
 
 //-- RTC
 #include <Wire.h>
@@ -79,6 +74,10 @@ const int touchTriggerOff = 800;
 const int touchTriggerOn = 800;
 const int touchTriggerOff = 600;
 #endif
+
+CRGB leds[NUM_LEDS];
+int ledChange[NUM_LEDS]; int ledValues[NUM_LEDS]; int ledTimings[NUM_LEDS];
+int rVal, gVal, bVal; int counter = 0;
 
 //-- onboard LED
 const int ledPin = 13;
