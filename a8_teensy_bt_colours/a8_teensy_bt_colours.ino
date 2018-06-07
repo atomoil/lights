@@ -16,7 +16,7 @@ void setup() {
   oldTouch = isTouch;
   currentState = STATE_INACTIVE;
   
-  //getSavedPalette();
+  getSavedPalette();
 
   /*
   // moody purple
@@ -112,8 +112,6 @@ void loop() {
     int i = 0;
     int row = 0;
     int elem = 0;
-    //Serial.print("pl split: ");
-    //Serial.println(text);
     while (text != 0 && i < totalPalettes*2){
       row = i / 2;
       elem = i % 2;
@@ -122,7 +120,7 @@ void loop() {
       if (elem == 0){
         palette[row][0] = convertHue(col);
       } else {
-        palette[row][0] = convertSat(col);
+        palette[row][1] = convertSat(col);
       }
       Serial.print(row);
       Serial.print("/");
@@ -131,6 +129,8 @@ void loop() {
       Serial.println(col);
       i++;
     }
+    // save the palette to permanent storage
+    EEPROM.put(0,palette);
   }
 
   if (ssData == '9') {
