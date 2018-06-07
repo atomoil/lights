@@ -18,4 +18,5 @@
 
  // short browny:, 600,400 49 led, big psu
  // v. tall grey: 800, 600 120 led , big psu
- 
+
+ // Colour palettes - https://coolors.co/
