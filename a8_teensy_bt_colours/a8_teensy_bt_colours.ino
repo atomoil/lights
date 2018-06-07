@@ -261,7 +261,6 @@ LightDot dotHasReachedLowestValue(LightDot dot){
   switch ( currentState ){
     case STATE_TOUCH_ON:
       // slow down the dot
-      dot.maximumValue = max( dot.maximumValue - 20, 125.0 );
       dot.increment = max( min(dot.increment - 0.5, 10.5), 2.0 ); // no more than 10.5, so it drops fast and then slows
       dot.sat = min(dot.sat + 10,255);
 
