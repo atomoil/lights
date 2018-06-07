@@ -197,6 +197,7 @@ void getSavedPalette(){
   Serial.print("saved palette has:");
   Serial.println(paletteSize);
 
+  
   if (paletteSize > 0){ // only update if we have values
     for(int i=0;i<totalPalettes;i++){
       palette[i][0] = savedPalette[i][0];
@@ -445,8 +446,12 @@ void allLightsAnimating(float timeElapsedIn){
     float durationToReach = timeElapsed + ((d % 10) * margin);
     dot.increment = 1 / (durationToReach / deltaUpdate);
     // set varying minimum and maximum
-    dot.minimumValue = -10.0 - (((d+2) % 5) * 10 );
-    dot.maximumValue = 255.0 + (((d+3) % 4) * 10 );
+    dot.minimumValue = -210.0 - (((d+2) % 4) * 30 );
+    dot.maximumValue = 255.0 + (((d+3) % 7) * 30 );
+    Serial.print("dotValues:");
+    Serial.print(dot.minimumValue);
+    Serial.print(":");
+    Serial.println(dot.maximumValue);
     // reassign the dot to the array
     lights[ d ] = dot;
   }
