@@ -107,7 +107,7 @@ void loop() {
     allLightsOff();
   }
 
-  if (ssData == "am:slow"){
+  if (ssData == "an:slow"){
     allLightsAnimating(10000);
   }
 
