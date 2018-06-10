@@ -1,25 +1,38 @@
 //-- fastLED
 #include "FastLED.h"
 
-#define LAMP_TALL_RAKU 0
-#define LAMP_SHORT_RAKU 1
-#define LAMP_TALL_TURQ 2
+#define LAMP_SHORT_BROWN 0
+#define LAMP_SHORT_RAKU_1 1
+#define LAMP_SHORT_RAKU_2 2
+#define LAMP_SHORT_BLACK_YELLOW 3
+#define LAMP_TALL_RAKU 4
+#define LAMP_TURQUOISE 5
 
-#define LAMP_CURRENT LAMP_SHORT_RAKU
+#define LAMP_CURRENT LAMP_SHORT_BROWN
 
 // -----------------------------------
 
 #define BOARD_v1 0
 #define BOARD_v2_6_STRIP 1
 
-#if LAMP_CURRENT == LAMP_TALL_TURQ
+#if LAMP_CURRENT == LAMP_TURQUOISE
+  #define BOARD_CURRENT BOARD_v2_6_STRIP
+  
+#elif LAMP_CURRENT == LAMP_SHORT_RAKU_1
   #define BOARD_CURRENT BOARD_v1
   
-#elif LAMP_CURRENT == LAMP_SHORT_RAKU
+#elif LAMP_CURRENT == LAMP_SHORT_RAKU_2
   #define BOARD_CURRENT BOARD_v1
 
 #elif LAMP_CURRENT == LAMP_TALL_RAKU
+  #define BOARD_CURRENT BOARD_v2_6_STRIP
+  
+#elif LAMP_CURRENT == LAMP_SHORT_BLACK_YELLOW
   #define BOARD_CURRENT BOARD_v1
+
+#elif LAMP_CURRENT == LAMP_SHORT_BROWN
+  #define BOARD_CURRENT BOARD_v2_6_STRIP
+
 #endif
 
 
@@ -50,21 +63,42 @@ int nBias = 0;
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 
-const int NUM_LEDS = 55; // 97  tall grey/brown 59 new smallest grey crank 55 otehr small grey, turqoise 55
+//const int NUM_LEDS = 55; // 97  tall grey/brown 59 new smallest grey crank 55 other small grey, turqoise 55
 
 //--Specific Lights
 #if LAMP_CURRENT == LAMP_TALL_RAKU
 // Crank light
-const int touchTriggerOn = 1800;
-const int touchTriggerOff = 1400;
+const int touchTriggerOn = 800; //1800
+const int touchTriggerOff = 600; //1400
+const int NUM_LEDS = 97;
 #endif
 
-#if LAMP_CURRENT == LAMP_SHORT_RAKU
+#if LAMP_CURRENT == LAMP_SHORT_RAKU_1
 // Small Black & Yellow & Small Crank
 const int touchTriggerOn = 1200;
 const int touchTriggerOff = 800;
+const int NUM_LEDS = 59;
 #endif
-//
+
+#if LAMP_CURRENT == LAMP_SHORT_RAKU_2
+// Small Black & Yellow & Small Crank
+const int touchTriggerOn = 1200;
+const int touchTriggerOff = 800;
+const int NUM_LEDS = 55;
+#endif
+
+#if LAMP_CURRENT == LAMP_SHORT_BLACK_YELLOW
+const int touchTriggerOn = 900;
+const int touchTriggerOff = 600;
+const int NUM_LEDS = 55;
+#endif
+
+#if LAMP_CURRENT == LAMP_BROWN
+const int touchTriggerOn = 800;
+const int touchTriggerOff = 600;
+const int NUM_LEDS = 55;
+#endif
+
 #if LAMP_CURRENT == LAMP_TURQUOISE
 // Tall Turquoise and Yellow
 //const int touchTriggerOn = 1400;
@@ -73,6 +107,7 @@ const int touchTriggerOff = 800;
 // Ian's Tall Turquoise
 const int touchTriggerOn = 800;
 const int touchTriggerOff = 600;
+const int NUM_LEDS = 55;
 #endif
 
 CRGB leds[NUM_LEDS];
@@ -140,6 +175,7 @@ struct LightDot {
 };
 
 LightDot lights[NUM_LEDS];
+
 
 void initData(){
 
