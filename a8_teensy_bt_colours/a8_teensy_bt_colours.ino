@@ -12,6 +12,11 @@ void setup() {
   // create the light structs
   initData();
 
+  Serial.print("There are ");
+  Serial.print(NUM_LEDS);
+  Serial.println(" LEDs");
+
+
   isTouch = false;
   oldTouch = isTouch;
   currentState = STATE_INACTIVE;
@@ -192,11 +197,6 @@ void getSavedPalette(){
   int savedPalette[5][2] = {};
   EEPROM.get(0,savedPalette);
   int paletteSize = sizeof(savedPalette);
-
-  // DEBUG
-  Serial.print("saved palette has:");
-  Serial.println(paletteSize);
-
   
   if (paletteSize > 0){ // only update if we have values
     for(int i=0;i<totalPalettes;i++){
