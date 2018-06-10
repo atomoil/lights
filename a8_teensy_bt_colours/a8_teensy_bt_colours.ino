@@ -296,10 +296,12 @@ void getTouch() {
   filt = (filtAlpha * (sens - noise) ) + ((1 - filtAlpha) * filt);
 
   /*
-  Serial.print("[filt:");
-  Serial.print(filt);
-  Serial.print("]");
-  */
+  if (filt > 20){
+    Serial.print("[filt:");
+    Serial.print(filt);
+    Serial.println("]");
+  }
+  // */
     
   if (filt > touchTriggerOn ) { // touching
     isTouch = true;
