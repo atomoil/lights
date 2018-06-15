@@ -93,7 +93,7 @@ const int touchTriggerOff = 600;
 const int NUM_LEDS = 55;
 #endif
 
-#if LAMP_CURRENT == LAMP_BROWN
+#if LAMP_CURRENT == LAMP_SHORT_BROWN
 const int touchTriggerOn = 800;
 const int touchTriggerOff = 600;
 const int NUM_LEDS = 55;
