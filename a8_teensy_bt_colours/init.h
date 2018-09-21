@@ -8,7 +8,7 @@
 #define LAMP_TALL_RAKU 4
 #define LAMP_TURQUOISE 5
 
-#define LAMP_CURRENT LAMP_SHORT_BROWN
+#define LAMP_CURRENT LAMP_SHORT_BLACK_YELLOW
 
 // -----------------------------------
 
@@ -94,8 +94,8 @@ const int NUM_LEDS = 55;
 #endif
 
 #if LAMP_CURRENT == LAMP_SHORT_BROWN
-const int touchTriggerOn = 800;
-const int touchTriggerOff = 600;
+const int touchTriggerOn = 700;
+const int touchTriggerOff = 500;
 const int NUM_LEDS = 55;
 #endif
 
