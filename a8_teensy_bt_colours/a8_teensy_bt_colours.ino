@@ -9,6 +9,7 @@ void setup() {
   filt = touchRead(sensPin);      //set filt for t=1
   sBias = touchRead(sensPin); nBias = touchRead(noisePin);
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
+  FastLED.setMaxPowerInVoltsAndMilliamps(5,2500);
   // create the light structs
   initData();
 
