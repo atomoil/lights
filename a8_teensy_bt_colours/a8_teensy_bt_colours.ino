@@ -122,7 +122,12 @@ void loop() {
   }
 
   if (ssData.startsWith("an")) { // an is for animation
-    
+    char input[100];
+    ssData.toCharArray(input,99);
+    char *text = strtok(input,":");
+    text = strtok(0,":");
+    int duration = atoi(text);
+    allLightsAnimating(duration);
   }
 
   // pl:10:11:20:21:30:31:40:41:50:51:60:61
