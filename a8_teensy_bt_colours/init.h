@@ -7,8 +7,9 @@
 #define LAMP_SHORT_BLACK_YELLOW 3
 #define LAMP_TALL_RAKU 4
 #define LAMP_TURQUOISE 5
+#define LAMP_SERIES_2 6
 
-#define LAMP_CURRENT LAMP_SHORT_BLACK_YELLOW
+#define LAMP_CURRENT LAMP_SERIES_2
 
 // -----------------------------------
 
@@ -31,6 +32,9 @@
   #define BOARD_CURRENT BOARD_v1
 
 #elif LAMP_CURRENT == LAMP_SHORT_BROWN
+  #define BOARD_CURRENT BOARD_v2_6_STRIP
+
+#elif LAMP_CURRENT == LAMP_SERIES_2
   #define BOARD_CURRENT BOARD_v2_6_STRIP
 
 #endif
@@ -108,6 +112,12 @@ const int NUM_LEDS = 55;
 const int touchTriggerOn = 800;
 const int touchTriggerOff = 600;
 const int NUM_LEDS = 55;
+#endif
+
+#if LAMP_CURRENT == LAMP_SERIES_2
+const int touchTriggerOn = 1200;
+const int touchTriggerOff = 800;
+const int NUM_LEDS = 89;
 #endif
 
 CRGB leds[NUM_LEDS];
