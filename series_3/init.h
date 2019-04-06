@@ -3,10 +3,10 @@
 
 #define LAMP_S3_OBVARA 1
 #define LAMP_S3_TALL_DARK 2
-#define LAMP_S3_ 3
+#define LAMP_S3_SAGGAR_DARK 3
 #define LAMP_SERIES_3 7
 
-#define LAMP_CURRENT LAMP_S3_OBVARA
+#define LAMP_CURRENT LAMP_S3_SAGGAR_DARK
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -34,9 +34,21 @@
 
 //--Specific Lights
 #if LAMP_CURRENT == LAMP_S3_OBVARA
-// Crank light
-const int touchTriggerOn = 700; //1800
-const int touchTriggerOff = 500; //1400
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
+const int NUM_LEDS = 13;
+#endif
+
+
+#if LAMP_CURRENT == LAMP_S3_TALL_DARK
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
+const int NUM_LEDS = 13;
+#endif
+
+#if LAMP_CURRENT == LAMP_S3_SAGGAR_DARK
+const int touchTriggerOn = 800; // 700 // 1800
+const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 13;
 #endif
 
@@ -114,6 +126,7 @@ int totalPalettes = sizeof(palette) / sizeof(palette[0]);
 #define STATE_ON_ANIMATED 4
 #define STATE_TOUCH_OFF 5
 int currentState = STATE_INACTIVE;
+float currentAnimatingSpeed;
 
 
 // -- Dot State

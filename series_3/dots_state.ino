@@ -93,7 +93,7 @@ void allLightsOn(){
 
 
 void allLightsAnimating(float timeElapsedIn){
-
+  currentAnimatingSpeed = timeElapsedIn;
   float timeElapsed = timeElapsedIn / 500.0;
   float margin = (timeElapsed / 10.0);
   
@@ -107,7 +107,7 @@ void allLightsAnimating(float timeElapsedIn){
       dot.hue = palette[ dot.colourId ][ PALETTE_HUE ];
       dot.sat = palette[ dot.colourId ][ PALETTE_SATURATION ];
       // set initial current value - make some on, some off and some in between
-      dot.currentValue = (d % 4) * (255 / 4.0);
+      dot.currentValue = ((c % 3)+(d % 3)) * (255 / 6.0);
       // make increment vary 
       float durationToReach = timeElapsed + ((d % 10) * margin);
       dot.increment = 1 / (durationToReach / deltaUpdate);
@@ -131,6 +131,31 @@ void allLightsAnimating(float timeElapsedIn){
   Serial.print("]");
 }
 
+void setAnimatingSpeed(float timeElapsedIn){
+  currentAnimatingSpeed = timeElapsedIn;
+  if (currentState != STATE_ON_ANIMATED){
+    allLightsAnimating(timeElapsedIn);
+  } else {
+    float timeElapsed = timeElapsedIn / 500.0;
+    float margin = (timeElapsed / 10.0);
+  
+    for (int c = 0; c < NUM_COLUMNS; c++){
+      for (int d = 0; d < NUM_LEDS; d++ ){
+        LightDot dot = lights[ c ][ d ];
+        float durationToReach = timeElapsed + ((d % 10) * margin);
+        dot.increment = 1 / (durationToReach / deltaUpdate);
+        lights[ c ][ d ] = dot;
+      }
+    }
+  }
+}
+
+void incAnimatingSpeed(float timeInc){
+  float newSpeed = currentAnimatingSpeed + timeInc;
+  if (newSpeed > 0){
+    setAnimatingSpeed(newSpeed);
+  }
+}
 
 void allLightsFadeDown(){
   for (int c = 0; c < NUM_COLUMNS; c++){

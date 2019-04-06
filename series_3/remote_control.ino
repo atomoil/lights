@@ -15,27 +15,27 @@ void getRemote() {
     if (results.value == A)
     {
       Serial.println("A");
-      allLightsAnimating( 100 );
+      setAnimatingSpeed( 200 );
     }
     if (results.value == B)
     {
       Serial.println("B");
-      allLightsAnimating( 1000 );
+      setAnimatingSpeed( 5000 );
     }
     if (results.value == C)
     {
       Serial.println("C");
-      allLightsAnimating( 10000 );
+      setAnimatingSpeed( 20000 );
     }
     if (results.value == UP)
     {
       Serial.println("UP");
-      
+      incAnimatingSpeed( 100 );
     }
     if (results.value == DOWN)
     {
       Serial.println("DOWN");
-      
+      incAnimatingSpeed( -100 );
     }
     if (results.value == LEFT)
     {

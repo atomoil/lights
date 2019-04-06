@@ -14,13 +14,9 @@ void processMessages(String ssData) {
 
   if (ssData == "an:slow"){
     allLightsAnimating(10000);
-  }
-
-  if (ssData == "an:fast"){
+  } else if (ssData == "an:fast"){
     allLightsAnimating(100);
-  }
-
-  if (ssData.startsWith("an")) { // an is for animation
+  } else if (ssData.startsWith("an")) { // an is for animation
     char input[100];
     ssData.toCharArray(input,99);
     char *text = strtok(input,":");
@@ -60,9 +56,18 @@ void processMessages(String ssData) {
     // save the palette to permanent storage
     EEPROM.put(0,palette);
   }
+
+  if (ssData == "v:get"){
+    sendVersionOverBluetooth();
+  }
    
 }
 
+void sendVersionOverBluetooth(){
+  if (btSerial.available()) {
+    btSerial.write("3.0");
+  }
+}
 
 int convertHue(float f){
   return (f/360.0)*255.0;
