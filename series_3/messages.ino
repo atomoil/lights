@@ -13,16 +13,16 @@ void processMessages(String ssData) {
   }
 
   if (ssData == "an:slow"){
-    allLightsAnimating(10000);
+    setAnimatingSpeed(10000);
   } else if (ssData == "an:fast"){
-    allLightsAnimating(100);
+    setAnimatingSpeed(100);
   } else if (ssData.startsWith("an")) { // an is for animation
     char input[100];
     ssData.toCharArray(input,99);
     char *text = strtok(input,":");
     text = strtok(0,":");
     int duration = atoi(text);
-    allLightsAnimating(duration);
+    setAnimatingSpeed(duration);
   }
 
   // pl:10:11:20:21:30:31:40:41:50:51:60:61
@@ -53,20 +53,39 @@ void processMessages(String ssData) {
       Serial.println(col);
       i++;
     }
+    resetPaletteOnAllDots();
     // save the palette to permanent storage
     EEPROM.put(0,palette);
   }
 
-  if (ssData == "v:get"){
+  if (ssData.startsWith("v:get")){
+    Serial.println("v:get");
     sendVersionOverBluetooth();
+  }
+
+  if (ssData.startsWith("d:sendsens:1")){
+    sendTouchValue = true;
+  } else if (ssData.startsWith("d:sendsens:0")){
+    sendTouchValue = false;
   }
    
 }
 
 void sendVersionOverBluetooth(){
+  btSerial.write("<v=3.0/>");
+  /*
   if (btSerial.available()) {
+    Serial.println("sendVersionOverBluetooth");
     btSerial.write("3.0");
-  }
+  } else {
+    Serial.println("no bluetooth to send to");
+  }*/
+}
+
+void sendTouchSensitivity(int sens){
+  btSerial.print("<t=");
+  btSerial.print(sens);
+  btSerial.print("/>");
 }
 
 int convertHue(float f){

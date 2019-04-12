@@ -5,8 +5,9 @@ void setup() {
   Serial.begin(9600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-    btSerial.begin(9600);  
-    Serial.println("BT serial started at 9600");
+  // btSerial.begin(57600); 
+  btSerial.begin(9600);  
+  Serial.println("BT serial started at 57600"); // Serial.println("BT serial started at 9600");
     
   filt = touchRead(sensPin);      //set filt for t=1
   sBias = touchRead(sensPin); 
@@ -28,7 +29,6 @@ void setup() {
   Serial.print("There are ");
   Serial.print(NUM_LEDS);
   Serial.println(" LEDs");
-
 
   isTouch = false;
   oldTouch = isTouch;
@@ -116,6 +116,10 @@ void getTouch() {
   if (filt < touchTriggerOff ) { // not touching
     isTouch = false;
     holdCount = 0;
+  }
+  
+  if (sendTouchValue == true){
+    sendTouchSensitivity(filt);
   }
 
   if (isTouch != oldTouch && isTouch == true) { // flip switch if change and on low->high touch

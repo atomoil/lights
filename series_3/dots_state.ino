@@ -63,8 +63,9 @@ void allLightsBreathing(){
       dot.sat = 0;
       //dot.currentValue = 125.0;
       dot.increment = -abs(dot.increment);
-      dot.minimumValue = 80.0;
-      //dot.maximumValue = 125.0;
+      // dot.maximumValue = 125.0;
+      dot.minimumValue = 20.0;
+      dot.currentValue = float(d) * (255.0 / float(NUM_LEDS));
       lights[ c ][ d ] = dot;
     }
   }
@@ -114,10 +115,12 @@ void allLightsAnimating(float timeElapsedIn){
       // set varying minimum and maximum
       dot.minimumValue = -210.0 - (((d+2) % 4) * 30 );
       dot.maximumValue = 255.0 + (((d+3) % 7) * 30 );
+      /*
       Serial.print("dotValues:");
       Serial.print(dot.minimumValue);
       Serial.print(":");
       Serial.println(dot.maximumValue);
+      */
       // reassign the dot to the array
       lights[ c ][ d ] = dot;
     }
@@ -152,6 +155,13 @@ void setAnimatingSpeed(float timeElapsedIn){
 
 void incAnimatingSpeed(float timeInc){
   float newSpeed = currentAnimatingSpeed + timeInc;
+  if (newSpeed > 0){
+    setAnimatingSpeed(newSpeed);
+  }
+}
+
+void multAnimatingSpeed(float mult){
+  float newSpeed = currentAnimatingSpeed * mult;
   if (newSpeed > 0){
     setAnimatingSpeed(newSpeed);
   }

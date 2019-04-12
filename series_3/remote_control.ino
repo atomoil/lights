@@ -30,20 +30,30 @@ void getRemote() {
     if (results.value == UP)
     {
       Serial.println("UP");
-      incAnimatingSpeed( 100 );
+      // incAnimatingSpeed( 100 );
+      multAnimatingSpeed( 1.5 );
     }
     if (results.value == DOWN)
     {
       Serial.println("DOWN");
-      incAnimatingSpeed( -100 );
+      // incAnimatingSpeed( -100 );
+      multAnimatingSpeed( 0.5 );
     }
     if (results.value == LEFT)
     {
       Serial.println("LEFT");
+      dotBrightness -= 0.1;
+      if (dotBrightness < 0.1){
+        dotBrightness = 0.1;
+      }
     }
     if (results.value == RIGHT)
     {
       Serial.println("RIGHT");
+      dotBrightness += 0.1;
+      if (dotBrightness > 1.0){
+        dotBrightness = 1.0;
+      }
     }
     if (results.value == SELECT)
     {

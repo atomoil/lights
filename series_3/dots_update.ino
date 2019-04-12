@@ -26,7 +26,8 @@ void updateLightDots(){
       // value < 0 means off, greater than 255 is on 
       // keep colour within bounds as dot can go higher and lower (to stay on or off for longer)
       if (dot.currentValue > 0){
-        int val = min( 255, dot.currentValue );
+        int rawVal = min( 255, dot.currentValue );
+        int val = int(float(rawVal) * dotBrightness);
         CHSV colour = CHSV( dot.hue, dot.sat, val );
         //CHSV colour = CHSV( 125, 255, val );
         leds[ c ][ dot.led ] = colour;
@@ -36,6 +37,16 @@ void updateLightDots(){
     }
   }
   //Serial.println(". ");
+}
+
+void resetPaletteOnAllDots(){
+  for (int c = 0; c < NUM_COLUMNS; c++){
+    for (int d = 0; d < NUM_LEDS; d++ ){
+      LightDot dot = lights[ c ][ d ];
+      dot = resetPalette(dot);
+      lights[ c ][ d ] = dot;
+    }
+  }
 }
 
 LightDot dotHasReachedLowestValue(LightDot dot){
@@ -69,4 +80,9 @@ LightDot dotHasReachedHighestValue(LightDot dot){
   return dot;
 }
 
+LightDot resetPalette(LightDot dot){
+  dot.hue = palette[ dot.colourId ][ PALETTE_HUE ];
+  dot.sat = palette[ dot.colourId ][ PALETTE_SATURATION ];
+  return dot;
+}
 

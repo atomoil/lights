@@ -4,6 +4,7 @@
 #define LAMP_S3_OBVARA 1
 #define LAMP_S3_TALL_DARK 2
 #define LAMP_S3_SAGGAR_DARK 3
+#define LAMP_S3_SAGGAR_LIGHT 4
 #define LAMP_SERIES_3 7
 
 #define LAMP_CURRENT LAMP_S3_SAGGAR_DARK
@@ -107,6 +108,10 @@ elapsedMillis timeUpdate;
 
 elapsedMillis timeElapsedInState;
 
+// 
+bool sendTouchValue = false;
+
+float dotBrightness = 1.0;
 
 // -- Colour Palettes
 
