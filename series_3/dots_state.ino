@@ -46,8 +46,8 @@ void allLightsFadeIn(){
       dot.sat = 0;  // 0
       dot.currentValue = 0.0;
       dot.increment = 15.0;
-      dot.minimumValue = 254.0;
-      dot.maximumValue = 254.0;
+      dot.minimumValue = 200.0;
+      dot.maximumValue = 200.0;
       lights[ c ][ d ] = dot;
     }
   }
@@ -56,6 +56,7 @@ void allLightsFadeIn(){
 }
 
 void allLightsBreathing(){
+  // float maxBreathing = ((255.0*10) / float(NUM_LEDS));
   for (int c = 0; c < NUM_COLUMNS; c++){
     for (int d = 0; d < NUM_LEDS; d++ ){
       LightDot dot = lights[ c ][ d ];
@@ -65,7 +66,7 @@ void allLightsBreathing(){
       dot.increment = -abs(dot.increment);
       // dot.maximumValue = 125.0;
       dot.minimumValue = 20.0;
-      dot.currentValue = float(d) * (255.0 / float(NUM_LEDS));
+      // dot.currentValue = 255.0 - (float(d) * maxBreathing);
       lights[ c ][ d ] = dot;
     }
   }
@@ -162,7 +163,7 @@ void incAnimatingSpeed(float timeInc){
 
 void multAnimatingSpeed(float mult){
   float newSpeed = currentAnimatingSpeed * mult;
-  if (newSpeed > 0){
+  if (newSpeed > 200){
     setAnimatingSpeed(newSpeed);
   }
 }

@@ -31,13 +31,13 @@ void getRemote() {
     {
       Serial.println("UP");
       // incAnimatingSpeed( 100 );
-      multAnimatingSpeed( 1.5 );
+      multAnimatingSpeed( 1.25 );
     }
     if (results.value == DOWN)
     {
       Serial.println("DOWN");
       // incAnimatingSpeed( -100 );
-      multAnimatingSpeed( 0.5 );
+      multAnimatingSpeed( 0.75 );
     }
     if (results.value == LEFT)
     {

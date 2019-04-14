@@ -7,7 +7,7 @@
 #define LAMP_S3_SAGGAR_LIGHT 4
 #define LAMP_SERIES_3 7
 
-#define LAMP_CURRENT LAMP_S3_SAGGAR_DARK
+#define LAMP_CURRENT LAMP_S3_TALL_DARK
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -44,7 +44,7 @@ const int NUM_LEDS = 13;
 #if LAMP_CURRENT == LAMP_S3_TALL_DARK
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
-const int NUM_LEDS = 13;
+const int NUM_LEDS = 16;
 #endif
 
 #if LAMP_CURRENT == LAMP_S3_SAGGAR_DARK
