@@ -5,7 +5,6 @@
 #define LAMP_S3_TALL_DARK 2
 #define LAMP_S3_SAGGAR_DARK 3
 #define LAMP_S3_SAGGAR_LIGHT 4
-#define LAMP_SERIES_3 7
 
 #define LAMP_CURRENT LAMP_S3_TALL_DARK
 
@@ -42,16 +41,17 @@ const int NUM_LEDS = 13;
 
 
 #if LAMP_CURRENT == LAMP_S3_TALL_DARK
-const int touchTriggerOn = 700; // 700 // 1800
-const int touchTriggerOff = 500; // 500
+const int touchTriggerOn = 500; // 700 // 1800
+const int touchTriggerOff = 400; // 500
 const int NUM_LEDS = 16;
 #endif
 
 #if LAMP_CURRENT == LAMP_S3_SAGGAR_DARK
-const int touchTriggerOn = 800; // 700 // 1800
+const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 13;
 #endif
+
 
 
 CRGB leds[6][NUM_LEDS];
@@ -91,8 +91,10 @@ char sData;
 
 
 // -- Filter
-float filtAlpha = 0.1; 
-int filt = 0;       //initialization of EMA S
+#include <Filters.h>
+FilterOnePole filterLP( LOWPASS, 1.0 ); //create a one pole (RC) lowpass filter
+FilterOnePole filterLP2( LOWPASS, 1.0 );
+float filt = 0;
  
 //-- Switch
 int holdCount;
