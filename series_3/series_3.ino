@@ -2,11 +2,11 @@
 #include <EEPROM.h>
 
 void setup() {
-  Serial.begin(9600);  //setup of Serial module
+  Serial.begin(57600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-    btSerial.begin(9600);  
-    Serial.println("BT serial started at 9600");
+    btSerial.begin(57600);  
+    Serial.println("BT serial started at 57600");
     
   filt = touchRead(sensPin);      //set filt for t=1
   sBias = touchRead(sensPin); 
@@ -35,14 +35,16 @@ void setup() {
   currentState = STATE_INACTIVE;
   
   getSavedPalette();
-
+  
+  delay(500); // let power supply settle
+  sBias = touchRead(sensPin); // DC offset, noise cal.
   Serial.println("started lamp");
-  allLightsOn();
+  //allLightsOn(); // seems to interfere with DC offset noise cal above.(??)
 }
 
 
 void loop() {
- 
+  
   String ssData = "";
 
   // useful debug!
@@ -106,8 +108,11 @@ void setHueSat(int indx, float h, float s){
 
 void getTouch() {
   sens = touchRead(sensPin) - sBias;
-  sens = abs(sens);
-  filt = (filtAlpha * sens ) + ((1 - filtAlpha) * filt);
+  filterLP.input( sens );
+  filt = filterLP.output();
+  filterLP2.input(filt);
+  filt =  filterLP2.output();
+  if (filt < 10) (filt = 0);
 
   if (filt > touchTriggerOn ) { // touching
     isTouch = true;
