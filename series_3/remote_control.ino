@@ -42,18 +42,12 @@ void getRemote() {
     if (results.value == LEFT)
     {
       Serial.println("LEFT");
-      dotBrightness -= 0.1;
-      if (dotBrightness < 0.1){
-        dotBrightness = 0.1;
-      }
+      incDotBrightness( -0.1 );
     }
     if (results.value == RIGHT)
     {
       Serial.println("RIGHT");
-      dotBrightness += 0.1;
-      if (dotBrightness > 1.0){
-        dotBrightness = 1.0;
-      }
+      incDotBrightness( 0.1 );
     }
     if (results.value == SELECT)
     {
@@ -62,4 +56,3 @@ void getRemote() {
     irrecv.resume();
   }
 }
-

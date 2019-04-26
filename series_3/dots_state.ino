@@ -136,6 +136,8 @@ void allLightsAnimating(float timeElapsedIn){
 }
 
 void setAnimatingSpeed(float timeElapsedIn){
+  Serial.print("setAnimatingSpeed");
+  Serial.println(timeElapsedIn);
   currentAnimatingSpeed = timeElapsedIn;
   if (currentState != STATE_ON_ANIMATED){
     allLightsAnimating(timeElapsedIn);
@@ -154,19 +156,6 @@ void setAnimatingSpeed(float timeElapsedIn){
   }
 }
 
-void incAnimatingSpeed(float timeInc){
-  float newSpeed = currentAnimatingSpeed + timeInc;
-  if (newSpeed > 0){
-    setAnimatingSpeed(newSpeed);
-  }
-}
-
-void multAnimatingSpeed(float mult){
-  float newSpeed = currentAnimatingSpeed * mult;
-  if (newSpeed > 200){
-    setAnimatingSpeed(newSpeed);
-  }
-}
 
 void allLightsFadeDown(){
   for (int c = 0; c < NUM_COLUMNS; c++){
@@ -195,4 +184,30 @@ void allLightsOff(){
   }
   currentState = STATE_INACTIVE;
   Serial.print("[off]");
+}
+
+
+void incAnimatingSpeed(float timeInc){
+  float newSpeed = currentAnimatingSpeed + timeInc;
+  if (newSpeed > 0){
+    setAnimatingSpeed(newSpeed);
+  }
+}
+
+void multAnimatingSpeed(float mult){
+  float newSpeed = currentAnimatingSpeed * mult;
+  if (newSpeed > 200){
+    setAnimatingSpeed(newSpeed);
+  } else {
+    setAnimatingSpeed(200);
+  }
+}
+
+void incDotBrightness(float inc){
+  dotBrightness += inc;
+  if (dotBrightness < 0.1){
+    dotBrightness = 0.1;
+  } else if (dotBrightness > 1.0){
+    dotBrightness = 1.0;
+  }
 }
