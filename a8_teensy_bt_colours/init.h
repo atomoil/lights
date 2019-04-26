@@ -9,7 +9,7 @@
 #define LAMP_TURQUOISE 5
 #define LAMP_SERIES_2 6
 
-#define LAMP_CURRENT LAMP_SERIES_2
+#define LAMP_CURRENT LAMP_TURQUOISE
 
 // -----------------------------------
 
@@ -202,4 +202,3 @@ void initData(){
   }
 
 }
-

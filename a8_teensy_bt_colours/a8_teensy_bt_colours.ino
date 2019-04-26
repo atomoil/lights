@@ -6,8 +6,7 @@ void setup() {
   Serial.begin(9600);  //setup of Serial module, 115200 bits/second
   btSerial.begin(9600); //bluetooth serial default 9600
   pinMode(ledPin, OUTPUT);
-  filt = touchRead(sensPin);      //set filt for t=1
-  sBias = touchRead(sensPin); nBias = touchRead(noisePin);
+
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
   FastLED.setMaxPowerInVoltsAndMilliamps(5,2500);
   // create the light structs
@@ -24,64 +23,13 @@ void setup() {
   
   getSavedPalette();
 
-  /*
-  // moody purple
-  setHueSat(0, 305, 95);
-  setHueSat(1, 319, 87);
-  setHueSat(2, 291, 75);
-  setHueSat(3, 286, 53);
-  setHueSat(4, 253, 29);
-  pl:305:95:319:87:291:75:286:53:253:29
-  */
-
-  /*
-  // colourful
-  setHueSat(0, 273, 86);
-  setHueSat(1, 332, 99);
-  setHueSat(2, 39, 100);
-  setHueSat(3, 248, 80);
-  setHueSat(4, 50, 100);
-  */
-
-  /*
-  // lava
-  setHueSat(0, 18, 86);
-  setHueSat(1, 69, 99);
-  setHueSat(2, 46, 100);
-  setHueSat(3, 40, 80);
-  setHueSat(4, 15, 100);
-  // pl:18:86:69:99:46:100:40:80:15:100
-  */
-
-  /*
-  // spirit of the rainbow
-  setHueSat(0, 86, 86);
-  setHueSat(1, 153, 99);
-  setHueSat(2, 195, 100);
-  setHueSat(3, 241, 80);
-  setHueSat(4, 289, 100);
-  // pl:86:86:153:99:195:100:241:80:289:100
-  // */
-
-  /*
-  // summer meadow (too light)
-  pl:46:87:78:97:87:93:134:98:127:96
+  delay(500);
   
-  // early autumn meadow
-  pl:46:100:78:100:87:100:134:100:76:100
-  
-  // under water
-  pl:284:100:270:100:224:100:188:100:160:100
-  
-  //
-  pl:284:100:270:100:224:100:
-  */
-
-  
-  
+  filt = touchRead(sensPin);      //set filt for t=1
+  sBias = touchRead(sensPin); nBias = touchRead(noisePin);
   
   Serial.println("started lamp");
-  allLightsOn();
+  allLightsOn(); // this appears to turn the lamp off as it defaults to being on.
 }
 
 
@@ -115,13 +63,9 @@ void loop() {
 
   if (ssData == "an:slow"){
     allLightsAnimating(10000);
-  }
-
-  if (ssData == "an:fast"){
-    allLightsAnimating(100);
-  }
-
-  if (ssData.startsWith("an")) { // an is for animation
+  } else if (ssData == "an:fast"){
+    allLightsAnimating(200);
+  } else if (ssData.startsWith("an")) { // an is for animation
     char input[100];
     ssData.toCharArray(input,99);
     char *text = strtok(input,":");
@@ -160,6 +104,11 @@ void loop() {
     }
     // save the palette to permanent storage
     EEPROM.put(0,palette);
+  }
+
+  if (ssData.startsWith("v:get")){
+    Serial.println("v:get");
+    btSerial.write("<v=2.0/>");
   }
 
   if (ssData == '9') {
@@ -532,4 +481,3 @@ void print2digits(int number) {
   }
   Serial.print(number);
 }
-
