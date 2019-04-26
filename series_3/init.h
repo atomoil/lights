@@ -5,8 +5,9 @@
 #define LAMP_S3_TALL_DARK 2
 #define LAMP_S3_SAGGAR_DARK 3
 #define LAMP_S3_SAGGAR_LIGHT 4
+#define LAMP_S1_06_TURQUOISE 5
 
-#define LAMP_CURRENT LAMP_S3_TALL_DARK
+#define LAMP_CURRENT LAMP_S1_06_TURQUOISE
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -30,12 +31,13 @@
 #define DATA_PIN6 23
 #define CLOCK_PIN6 22
 
-#define NUM_COLUMNS 6
+
 
 //--Specific Lights
 #if LAMP_CURRENT == LAMP_S3_OBVARA
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
+#define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
 #endif
 
@@ -43,18 +45,28 @@ const int NUM_LEDS = 13;
 #if LAMP_CURRENT == LAMP_S3_TALL_DARK
 const int touchTriggerOn = 500; // 700 // 1800
 const int touchTriggerOff = 400; // 500
+#define NUM_COLUMNS 6
 const int NUM_LEDS = 16;
 #endif
 
 #if LAMP_CURRENT == LAMP_S3_SAGGAR_DARK
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
+#define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
+#endif
+
+#if LAMP_CURRENT == LAMP_S1_06_TURQUOISE
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
+#define NUM_COLUMNS 1
+const int NUM_LEDS = 55;
 #endif
 
 
 
-CRGB leds[6][NUM_LEDS];
+
+CRGB leds[NUM_COLUMNS][NUM_LEDS];
 
 
 //--------------IR------------------//
@@ -164,4 +176,3 @@ void initData(){
     }
   }
 }
-

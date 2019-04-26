@@ -142,5 +142,3 @@ void getTouch() {
   oldTouch = isTouch;
 
 }
-
-

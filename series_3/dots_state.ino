@@ -16,7 +16,8 @@ void nextTouchState(boolean touchDown){
       break;
 
     case STATE_TOUCH_ON:
-      allLightsAnimating(timeElapsedInState);
+      setAnimatingSpeed(timeElapsedInState);
+      
       break;
       
     case STATE_ON_BRIGHT:
@@ -93,9 +94,8 @@ void allLightsOn(){
   Serial.print("[on]");
 }
 
-
+// don't call this directly, use setAnimatingSpeed!!
 void allLightsAnimating(float timeElapsedIn){
-  currentAnimatingSpeed = timeElapsedIn;
   float timeElapsed = timeElapsedIn / 500.0;
   float margin = (timeElapsed / 10.0);
   
@@ -138,12 +138,16 @@ void allLightsAnimating(float timeElapsedIn){
 void setAnimatingSpeed(float timeElapsedIn){
   Serial.print("setAnimatingSpeed");
   Serial.println(timeElapsedIn);
-  currentAnimatingSpeed = timeElapsedIn;
+  if (timeElapsedIn >= 50) {
+    currentAnimatingSpeed = timeElapsedIn;
+  } else {
+    currentAnimatingSpeed = 50;
+  }
   if (currentState != STATE_ON_ANIMATED){
     allLightsAnimating(timeElapsedIn);
   } else {
-    float timeElapsed = timeElapsedIn / 500.0;
-    float margin = (timeElapsed / 10.0);
+    float timeElapsed = currentAnimatingSpeed / 500.0;
+    float margin = (currentAnimatingSpeed / 10.0);
   
     for (int c = 0; c < NUM_COLUMNS; c++){
       for (int d = 0; d < NUM_LEDS; d++ ){
@@ -189,18 +193,12 @@ void allLightsOff(){
 
 void incAnimatingSpeed(float timeInc){
   float newSpeed = currentAnimatingSpeed + timeInc;
-  if (newSpeed > 0){
-    setAnimatingSpeed(newSpeed);
-  }
+  setAnimatingSpeed(newSpeed);
 }
 
 void multAnimatingSpeed(float mult){
   float newSpeed = currentAnimatingSpeed * mult;
-  if (newSpeed > 200){
-    setAnimatingSpeed(newSpeed);
-  } else {
-    setAnimatingSpeed(200);
-  }
+  setAnimatingSpeed(newSpeed);
 }
 
 void incDotBrightness(float inc){
