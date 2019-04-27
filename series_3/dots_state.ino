@@ -127,24 +127,27 @@ void allLightsAnimating(float timeElapsedIn){
     }
   }
   currentState = STATE_ON_ANIMATED;
-  Serial.println("[animating:");
+  Serial.print("[animating:");
   Serial.print(timeElapsed);
   Serial.print("/");
   float showNum = 1 / ((timeElapsed + ((2 % 10) * margin)) / deltaUpdate);
   Serial.print(showNum);
-  Serial.print("]");
+  Serial.println("]");
 }
 
 void setAnimatingSpeed(float timeElapsedIn){
   Serial.print("setAnimatingSpeed");
   Serial.println(timeElapsedIn);
-  if (timeElapsedIn >= 50) {
+  if (timeElapsedIn >= 150) {
     currentAnimatingSpeed = timeElapsedIn;
   } else {
-    currentAnimatingSpeed = 50;
+    currentAnimatingSpeed = 150;
   }
+  Serial.print("currentAnimatingSpeed");
+  Serial.println(currentAnimatingSpeed);
+  
   if (currentState != STATE_ON_ANIMATED){
-    allLightsAnimating(timeElapsedIn);
+    allLightsAnimating(currentAnimatingSpeed);
   } else {
     float timeElapsed = currentAnimatingSpeed / 500.0;
     float margin = (timeElapsed / 10.0);
