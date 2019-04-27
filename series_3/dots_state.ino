@@ -147,7 +147,7 @@ void setAnimatingSpeed(float timeElapsedIn){
     allLightsAnimating(timeElapsedIn);
   } else {
     float timeElapsed = currentAnimatingSpeed / 500.0;
-    float margin = (currentAnimatingSpeed / 10.0);
+    float margin = (timeElapsed / 10.0);
   
     for (int c = 0; c < NUM_COLUMNS; c++){
       for (int d = 0; d < NUM_LEDS; d++ ){
