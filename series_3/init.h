@@ -1,13 +1,13 @@
 //-- fastLED
 #include "FastLED.h"
 
-#define LAMP_S3_OBVARA 1
-#define LAMP_S3_TALL_DARK 2
-#define LAMP_S3_SAGGAR_DARK 3
-#define LAMP_S3_SAGGAR_LIGHT 4
-#define LAMP_S1_06_TURQUOISE 5
+#define LAMP_S1_06_TURQUOISE 1
+#define LAMP_S3_01_SAGGAR_DARK 2
+#define LAMP_S3_02_SAGGAR_LIGHT 3
+#define LAMP_S3_03_OBVARA 4
+#define LAMP_S3_04_TALL_DARK 5
 
-#define LAMP_CURRENT LAMP_S1_06_TURQUOISE
+#define LAMP_CURRENT LAMP_S3_03_OBVARA
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -34,7 +34,7 @@
 
 
 //--Specific Lights
-#if LAMP_CURRENT == LAMP_S3_OBVARA
+#if LAMP_CURRENT == LAMP_S3_03_OBVARA
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
@@ -42,14 +42,22 @@ const int NUM_LEDS = 13;
 #endif
 
 
-#if LAMP_CURRENT == LAMP_S3_TALL_DARK
-const int touchTriggerOn = 500; // 700 // 1800
-const int touchTriggerOff = 400; // 500
+#if LAMP_CURRENT == LAMP_S3_02_SAGGAR_LIGHT
+const int touchTriggerOn = 640;
+const int touchTriggerOff = 400;
+#define NUM_COLUMNS 6
+const int NUM_LEDS = 13;
+#endif
+
+
+#if LAMP_CURRENT == LAMP_S3_04_TALL_DARK
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 16;
 #endif
 
-#if LAMP_CURRENT == LAMP_S3_SAGGAR_DARK
+#if LAMP_CURRENT == LAMP_S3_01_SAGGAR_DARK
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
