@@ -4,7 +4,7 @@
 void setup() {
   Wire.setSCL(16); Wire.setSDA(17); Wire.begin();
   Serial.begin(9600);  //setup of Serial module, 115200 bits/second
-  btSerial.begin(9600); //bluetooth serial default 9600
+  btSerial.begin(57600); //bluetooth serial default 9600
   pinMode(ledPin, OUTPUT);
 
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
