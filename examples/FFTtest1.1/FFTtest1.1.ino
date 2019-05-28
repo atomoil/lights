@@ -34,17 +34,35 @@ void loop() {
     //      ledLevel();
     //     }
 
+    // (125 - 17)/6 - 18
+    // (125 - 29)/6 - 16
     // ---- FFT
     if (FFT.available())
     {
       hue++;
+
+      /*
+      int minVal = 14; // ~ half "29"
+      int sizeOfBand = 16;
+      for(int i=0;i<6;i++){
+        int index = i+1;
+        int small = minVal+(i * sizeOfBand);
+        int large = minVal+((i+1) * sizeOfBand);
+        getFFT( index, FFT.read( small, large) );
+      }
+      ledCycleLevels();
+      // */
+
+      // *
       getFFT( 1, FFT.read( 0, 1) );
       getFFT( 2, FFT.read( 2, 3) );
       getFFT( 3, FFT.read( 4, 9) );
       getFFT( 4, FFT.read( 10, 22) );
       getFFT( 5, FFT.read( 23, 53) );
       getFFT( 6, FFT.read( 54, 126) );
-      ledCycle();
+      //ledCycle();
+      ledCycleLevels();
+      // */
     }
 
   }
@@ -59,7 +77,7 @@ void getFFT(int i, float n) {
   {
     fftVals[i] = n*255;
   } else {
-    fftVals[i] = tmp * 0.9; //decay
+    fftVals[i] = tmp * 0.95; //decay
   }
   for (int x; x < 6; x++)
   {
