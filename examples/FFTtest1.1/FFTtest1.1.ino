@@ -105,7 +105,7 @@ void ledLevel() { // simple levels
 }
 
 void ledCycle() { // simple fft pattern
-   hue++;
+  hue++;
   for (int i = 0; i < NUM_LEDS; i++)
   {
     leds[0][i] = CHSV(hue, sat, fftVals[1]);
@@ -114,6 +114,30 @@ void ledCycle() { // simple fft pattern
     leds[3][i] = CHSV(hue, sat, fftVals[4]);
     leds[4][i] = CHSV(hue, sat, fftVals[5]);
     leds[5][i] = CHSV(hue, sat, fftVals[6]);
+  }
+}
+
+void ledCycleLevels() { // simple fft pattern
+  hue++;
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[0][i] = CHSV(hue, sat, valueForLED(fftVals[1],i,NUM_LEDS));
+    leds[1][i] = CHSV(hue, sat, valueForLED(fftVals[2],i,NUM_LEDS));
+    leds[2][i] = CHSV(hue, sat, valueForLED(fftVals[3],i,NUM_LEDS));
+    leds[3][i] = CHSV(hue, sat, valueForLED(fftVals[4],i,NUM_LEDS));
+    leds[4][i] = CHSV(hue, sat, valueForLED(fftVals[5],i,NUM_LEDS));
+    leds[5][i] = CHSV(hue, sat, valueForLED(fftVals[6],i,NUM_LEDS));
+  }
+}
+
+float valueForLED(int value, int number, int maxnum) {
+  float retval = ((value / 125.0) * maxnum) - number;
+  if (retval > 1) {
+    return 1;
+  } else if (retval < 0) {
+    return 0;
+  } else {
+    return fmod(retval,1.0);
   }
 }
 
@@ -128,4 +152,3 @@ void ledOff() { // all off
     leds[5][i] = CHSV(0, 0, 0);
   }
 }
-
