@@ -79,7 +79,7 @@ const int NUM_LEDS = 13;
 #if LAMP_CURRENT == LAMP_S4_01_SANDY
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
-const int NUM_LEDS = 13;
+const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
 #endif

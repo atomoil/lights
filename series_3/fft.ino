@@ -59,21 +59,17 @@ void reportFFT() {
 }
 
 void updateFFT_Bars() { // fft "equaliser bars"
-  int hue = 20;
-  int sat = 255;
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    leds[0][i] = CHSV(palette[ 0 ][ PALETTE_HUE ], palette[ 0 ][ PALETTE_SATURATION ], valueForLED(fftVals[0],i,NUM_LEDS));
-    leds[1][i] = CHSV(palette[ 1 ][ PALETTE_HUE ], palette[ 1 ][ PALETTE_SATURATION ], valueForLED(fftVals[1],i,NUM_LEDS));
-    leds[2][i] = CHSV(palette[ 2 ][ PALETTE_HUE ], palette[ 2 ][ PALETTE_SATURATION ], valueForLED(fftVals[2],i,NUM_LEDS));
-    leds[3][i] = CHSV(palette[ 3 ][ PALETTE_HUE ], palette[ 3 ][ PALETTE_SATURATION ], valueForLED(fftVals[3],i,NUM_LEDS));
-    leds[4][i] = CHSV(palette[ 4 ][ PALETTE_HUE ], palette[ 4 ][ PALETTE_SATURATION ], valueForLED(fftVals[4],i,NUM_LEDS));
-    leds[5][i] = CHSV(palette[ 2 ][ PALETTE_HUE ], palette[ 2 ][ PALETTE_SATURATION ], valueForLED(fftVals[5],i,NUM_LEDS));
+    for( int x = 0; x < NUM_COLUMNS; x++) {
+      int pal = (x + i) % 5;
+      leds[x][i] = CHSV(palette[ pal ][ PALETTE_HUE ], palette[ pal ][ PALETTE_SATURATION ], valueForLED(fftVals[x % 4],NUM_LEDS-i-1,NUM_LEDS));
+    }
   }
 }
 
 int valueForLED(float value, int number, int maxnum) {
-  float retval = 0.2 + (realValueForLED(value, number, maxnum) * 0.8);
+  float retval = 0.1 + (realValueForLED(value, number, maxnum) * 0.9);
   return (retval * 255) * dotBrightness;
 }
 
