@@ -1,6 +1,12 @@
 #include "init.h"
 #include <EEPROM.h>
 
+#ifdef SUPPORTS_FFT
+AudioInputAnalog         adc1(A0);
+AudioAnalyzeFFT256       FFT;
+AudioConnection          patchCord1(adc1, FFT);
+#endif
+
 void setup() {
   Serial.begin(57600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
@@ -34,6 +40,12 @@ void setup() {
   currentState = STATE_INACTIVE;
   
   getSavedPalette();
+
+#ifdef SUPPORTS_FFT
+  AudioMemory(4);
+  FFT.averageTogether(8);
+  FFT.windowFunction(AudioWindowHanning256);
+#endif
   
   delay(500); // let power supply settle
   sBias = touchRead(sensPin); // DC offset, noise cal.
@@ -73,11 +85,20 @@ void loop() {
 
   // --- update LED arrays 60mS ---//
   if (timeUpdate >= deltaUpdate){
-    
-     updateLightDots();
 
-     FastLED.show();
-     timeUpdate = 0;
+#ifdef SUPPORTS_FFT
+    if (fft_mode == FFT_INACTIVE){
+      updateLightDots();
+    } else {
+      updateFFT();
+      updateFFT_Bars();
+    }
+#else
+    updateLightDots();
+#endif
+
+    FastLED.show();
+    timeUpdate = 0;
   }
 }//loop
 

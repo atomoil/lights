@@ -97,6 +97,20 @@ void processMessages(String ssData) {
   } else if (ssData.startsWith("d:sendsens:0")){
     sendTouchValue = false;
   }
+
+#ifdef SUPPORTS_FFT
+  if (ssData.startsWith("f:0")){
+    fft_mode = FFT_INACTIVE;
+    Serial.println("switching to FFT_INACTIVE");
+  } else if (ssData.startsWith("f:1")){
+    fft_mode = FFT_BARS;
+    Serial.println("switching to FFT_BARS");
+  } else if (ssData.startsWith("f:2")){
+    Serial.println("switching to FFT_PULSE");
+    fft_mode = FFT_PULSE;
+  }
+#endif
+
    
 }
 

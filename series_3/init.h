@@ -6,8 +6,12 @@
 #define LAMP_S3_02_SAGGAR_LIGHT 3
 #define LAMP_S3_03_OBVARA 4
 #define LAMP_S3_04_TALL_DARK 5
+#define LAMP_S4_01_SANDY 6
+#define LAMP_S4_02_RAKU_DARK 7
+#define LAMP_S4_03_RAKU_TURQ 8
 
-#define LAMP_CURRENT LAMP_S3_03_OBVARA
+
+#define LAMP_CURRENT LAMP_S4_01_SANDY
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -32,6 +36,13 @@
 #define CLOCK_PIN6 22
 
 
+// NOTE: Series 1 & 2 Lamps don't work with this codebase - please use previous codebase.
+#if LAMP_CURRENT == LAMP_S1_06_TURQUOISE
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
+#define NUM_COLUMNS 1
+const int NUM_LEDS = 55;
+#endif
 
 //--Specific Lights
 #if LAMP_CURRENT == LAMP_S3_03_OBVARA
@@ -64,14 +75,14 @@ const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 13;
 #endif
 
-#if LAMP_CURRENT == LAMP_S1_06_TURQUOISE
+
+#if LAMP_CURRENT == LAMP_S4_01_SANDY
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
-#define NUM_COLUMNS 1
-const int NUM_LEDS = 55;
+const int NUM_LEDS = 13;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
 #endif
-
-
 
 
 CRGB leds[NUM_COLUMNS][NUM_LEDS];
@@ -94,6 +105,22 @@ decode_results results;
 #define LEFT 0x00FF30CF
 #define RIGHT 0x00FF7A85
 #define SELECT 0x00FF18E7
+
+
+#ifdef SUPPORTS_FFT
+
+#include <Audio.h>
+#include <math.h>
+#define FFT_INACTIVE 0
+#define FFT_BARS 1
+#define FFT_PULSE 2
+  
+int fft_mode = FFT_INACTIVE;
+float fftVals[6];
+
+  
+#endif
+
 
 //-- touchRead
 const int sensPin = 15; 

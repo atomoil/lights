@@ -12,6 +12,23 @@ void getRemote() {
         allLightsOn();
       }
     }
+#ifdef SUPPORTS_FFT
+    if (results.value == A)
+    {
+      Serial.println("A");
+      fft_mode = FFT_INACTIVE;
+    }
+    if (results.value == B)
+    {
+      Serial.println("B");
+      fft_mode = FFT_BARS;
+    }
+    if (results.value == C)
+    {
+      Serial.println("C");
+      fft_mode = FFT_PULSE;
+    }
+#else
     if (results.value == A)
     {
       Serial.println("A");
@@ -27,6 +44,8 @@ void getRemote() {
       Serial.println("C");
       setAnimatingSpeed( 20000 );
     }
+#endif
+
     if (results.value == UP)
     {
       Serial.println("UP");
