@@ -31,6 +31,7 @@ void updateFFT() {
     getFFT( 3, FFT.read( 20, 47) );
     getFFT( 4, FFT.read( 48, 110) );
     getFFT( 5, FFT.read( 111, 255) );
+    getMaxLevel();
     reportFFT();
   } else {
     Serial.println("FFT not ready");
@@ -49,12 +50,36 @@ void getFFT(int i, float n) {
   }
 }
 
+void getMaxLevel() {
+  float n = 0.0;
+  // get highest band level
+  for (int i=0; i<6; i++){
+    n = max(fftVals[i],n);
+  }
+  Serial.print(n);
+  Serial.print(",");
+  // 1 / level to get value to multiply bands with
+  if (n > fft_max_band){
+    fft_max_band = n;
+  } else {
+    fft_max_band = fft_max_band * 0.99;
+    fft_max_band = max( fft_max_band, 0.01 );
+  }
+  Serial.print(fft_max_band);
+  Serial.print(">");
+
+  fft_mult = 1/fft_max_band;
+}
+
 void reportFFT() {
-  for (int x; x < 6; x++)
+  for (int x=0; x < 6; x++)
   {
-    Serial.print( fftVals[x + 1] );
+    Serial.print( fftVals[x]*100 );
     Serial.print(",");
   }
+  Serial.print(">");
+  Serial.print(fft_mult);
+  
   Serial.println();
 }
 
@@ -74,7 +99,10 @@ int valueForLED(float value, int number, int maxnum) {
 }
 
 float realValueForLED(float value, int number, int maxnum) {
-  float retval = (value * maxnum) - number;
+  if (value < 0.004) { // silence out low values
+    return 0.0;
+  }
+  float retval = ((value * fft_mult) * maxnum) - number;
   if (retval >= 1) {
     return 1.0;
   } else if (retval < 0) {

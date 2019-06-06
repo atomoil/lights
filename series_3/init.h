@@ -114,7 +114,9 @@ decode_results results;
 #define FFT_INACTIVE 0
 #define FFT_BARS 1
 #define FFT_PULSE 2
-  
+
+float fft_max_band = 0.0;
+float fft_mult = 1.0;
 int fft_mode = FFT_INACTIVE;
 float fftVals[6];
 
