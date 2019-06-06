@@ -87,8 +87,8 @@ void updateFFT_Bars() { // fft "equaliser bars"
   for (int i = 0; i < NUM_LEDS; i++)
   {
     for( int x = 0; x < NUM_COLUMNS; x++) {
-      int pal = (x + i) % 5;
-      leds[x][i] = CHSV(palette[ pal ][ PALETTE_HUE ], palette[ pal ][ PALETTE_SATURATION ], valueForLED(fftVals[x % 4],NUM_LEDS-i-1,NUM_LEDS));
+      int pal = fmod(((x*NUM_LEDS) + i)/3, 5.0); // group the LED Colours
+      leds[x][i] = CHSV(palette[ pal ][ PALETTE_HUE ], palette[ pal ][ PALETTE_SATURATION ], valueForLED(fftVals[x % 4],i,NUM_LEDS));
     }
   }
 }
