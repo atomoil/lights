@@ -179,6 +179,7 @@ void allLightsFadeDown(){
 }
 
 void allLightsOff(){
+  app_mode = MODE_REACTIVE;
   for (int c = 0; c < NUM_COLUMNS; c++){
     for (int d = 0; d < NUM_LEDS; d++ ){
       LightDot dot = lights[ c ][ d ];

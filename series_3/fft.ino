@@ -4,27 +4,6 @@
 void updateFFT() {
   if (FFT.available())
   {
-
-    /*
-    int minVal = 14; // ~ half "29"
-    int sizeOfBand = 16;
-    for(int i=0;i<6;i++){
-      int index = i+1;
-      int small = minVal+(i * sizeOfBand);
-      int large = minVal+((i+1) * sizeOfBand);
-      getFFT( index, FFT.read( small, large) );
-    }
-    ledCycleLevels();
-    // */
-
-    /*
-    getFFT( 0, FFT.read( 0, 1) );
-    getFFT( 1, FFT.read( 2, 3) );
-    getFFT( 2, FFT.read( 4, 9) );
-    getFFT( 3, FFT.read( 10, 22) );
-    getFFT( 4, FFT.read( 23, 53) );
-    getFFT( 5, FFT.read( 54, 126) );
-    */
     getFFT( 0, FFT.read( 0, 2) );
     getFFT( 1, FFT.read( 3, 7) );
     getFFT( 2, FFT.read( 8, 19) );
@@ -32,7 +11,7 @@ void updateFFT() {
     getFFT( 4, FFT.read( 48, 110) );
     getFFT( 5, FFT.read( 111, 255) );
     getMaxLevel();
-    reportFFT();
+    // reportFFT();
   } else {
     Serial.println("FFT not ready");
   }
@@ -56,17 +35,17 @@ void getMaxLevel() {
   for (int i=0; i<6; i++){
     n = max(fftVals[i],n);
   }
-  Serial.print(n);
-  Serial.print(",");
+  //Serial.print(n);
+  //Serial.print(",");
   // 1 / level to get value to multiply bands with
   if (n > fft_max_band){
     fft_max_band = n;
   } else {
-    fft_max_band = fft_max_band * 0.99;
-    fft_max_band = max( fft_max_band, 0.01 );
+    fft_max_band = fft_max_band * 0.9;
+    fft_max_band = max( fft_max_band, 0.005 ); // stop value getting too small / mult getting too large
   }
-  Serial.print(fft_max_band);
-  Serial.print(">");
+  //Serial.print(fft_max_band);
+  //Serial.print(">");
 
   fft_mult = 1/fft_max_band;
 }
@@ -89,6 +68,19 @@ void updateFFT_Bars() { // fft "equaliser bars"
     for( int x = 0; x < NUM_COLUMNS; x++) {
       int pal = fmod(((x*NUM_LEDS) + i)/3, 5.0); // group the LED Colours
       leds[x][i] = CHSV(palette[ pal ][ PALETTE_HUE ], palette[ pal ][ PALETTE_SATURATION ], valueForLED(fftVals[x % 4],i,NUM_LEDS));
+    }
+  }
+}
+
+void updateFFT_Pulse() { // fft grouped into bands
+  int total_bands = 3;
+  float number_in_band = NUM_LEDS / total_bands;
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    for( int x = 0; x < NUM_COLUMNS; x++) {
+      int band = (i / number_in_band);
+      int pal = (band + (x*NUM_COLUMNS)) % 5; //  % 5;
+      leds[x][i] = CHSV(palette[ pal ][ PALETTE_HUE ], palette[ pal ][ PALETTE_SATURATION ], valueForLED(fftVals[band % 4],band,total_bands));
     }
   }
 }

@@ -2,7 +2,7 @@
  *  Then:
  *  open Arduino Serial monitor,
  * make sure its set to NL+CR.  
- * Then type: AT+NAME=newName
+ * Then type: AT+NAMEnewName
  * press 'send' and when rebooted the bluetooth
  *  should have the new name.
  *  you can then replace this serial ->bluetooth sketch
@@ -16,7 +16,7 @@ boolean NL = true;
  
 void setup() 
 {
-    Serial.begin(9600);
+    Serial.begin(57600);
     Serial.print("Sketch:   ");   Serial.println(__FILE__);
     Serial.print("Uploaded: ");   Serial.println(__DATE__);
     Serial.println(" ");

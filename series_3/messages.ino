@@ -99,15 +99,15 @@ void processMessages(String ssData) {
   }
 
 #ifdef SUPPORTS_FFT
-  if (ssData.startsWith("f:0")){
-    fft_mode = FFT_INACTIVE;
-    Serial.println("switching to FFT_INACTIVE");
-  } else if (ssData.startsWith("f:1")){
-    fft_mode = FFT_BARS;
+  if (ssData.startsWith("md:0")){
+    app_mode = MODE_REACTIVE;
+    Serial.println("switching to MODE_REACTIVE");
+  } else if (ssData.startsWith("md:1")){
+    app_mode = MODE_FFT_BARS;
     Serial.println("switching to FFT_BARS");
-  } else if (ssData.startsWith("f:2")){
+  } else if (ssData.startsWith("md:2")){
     Serial.println("switching to FFT_PULSE");
-    fft_mode = FFT_PULSE;
+    app_mode = MODE_FFT_PULSE;
   }
 #endif
 
@@ -115,7 +115,10 @@ void processMessages(String ssData) {
 }
 
 void sendVersionOverBluetooth(){
-  btSerial.write("<v=3.0/>");
+  btSerial.write("<v=");
+  btSerial.write(hardware_version);
+  btSerial.write("/>");
+  btSerial.write(supports);
 }
 
 void sendLevelsOverBluetooth(){

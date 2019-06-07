@@ -11,7 +11,7 @@ void setup() {
   Serial.begin(57600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-  btSerial.begin(57600);  
+  btSerial.begin(9600);  
   Serial.println("BT serial started at 57600");
     
   filt = touchRead(sensPin);      //set filt for t=1
@@ -86,15 +86,17 @@ void loop() {
   // --- update LED arrays 60mS ---//
   if (timeUpdate >= deltaUpdate){
 
+    if (app_mode == MODE_REACTIVE){
+       updateLightDots();
+    }
 #ifdef SUPPORTS_FFT
-    if (fft_mode == FFT_INACTIVE){
-      updateLightDots();
-    } else {
+    else if (app_mode == MODE_FFT_BARS){
       updateFFT();
       updateFFT_Bars();
+    } else if (app_mode == MODE_FFT_PULSE){
+      updateFFT();
+      updateFFT_Pulse();
     }
-#else
-    updateLightDots();
 #endif
 
     FastLED.show();

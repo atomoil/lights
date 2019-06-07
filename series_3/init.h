@@ -11,7 +11,7 @@
 #define LAMP_S4_03_RAKU_TURQ 8
 
 
-#define LAMP_CURRENT LAMP_S4_01_SANDY
+#define LAMP_CURRENT LAMP_S4_03_RAKU_TURQ
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -36,12 +36,15 @@
 #define CLOCK_PIN6 22
 
 
+
+
 // NOTE: Series 1 & 2 Lamps don't work with this codebase - please use previous codebase.
 #if LAMP_CURRENT == LAMP_S1_06_TURQUOISE
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 1
 const int NUM_LEDS = 55;
+char hardware_version[] = "1.0";
 #endif
 
 //--Specific Lights
@@ -50,6 +53,7 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
+char hardware_version[] = "3.0";
 #endif
 
 
@@ -58,6 +62,7 @@ const int touchTriggerOn = 640;
 const int touchTriggerOff = 400;
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
+char hardware_version[] = "3.0";
 #endif
 
 
@@ -66,6 +71,7 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 16;
+char hardware_version[] = "3.0";
 #endif
 
 #if LAMP_CURRENT == LAMP_S3_01_SAGGAR_DARK
@@ -73,17 +79,33 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
+char hardware_version[] = "3.0";
 #endif
 
 
-#if LAMP_CURRENT == LAMP_S4_01_SANDY
+#if LAMP_CURRENT == LAMP_S4_01_SANDY || LAMP_CURRENT == LAMP_S4_02_RAKU_DARK 
+const int touchTriggerOn = 700; // 700 // 1800
+const int touchTriggerOff = 500; // 500
+const int NUM_LEDS = 11;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
+#if LAMP_CURRENT == LAMP_S4_03_RAKU_TURQ
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
 #endif
 
+#ifdef SUPPORTS_FFT
+char supports[] = "<fft=1,2/>";
+#else
+char supports[] = "";
+#endif
 
 CRGB leds[NUM_COLUMNS][NUM_LEDS];
 
@@ -106,23 +128,23 @@ decode_results results;
 #define RIGHT 0x00FF7A85
 #define SELECT 0x00FF18E7
 
+#define MODE_REACTIVE 0
 
 #ifdef SUPPORTS_FFT
 
 #include <Audio.h>
 #include <math.h>
-#define FFT_INACTIVE 0
-#define FFT_BARS 1
-#define FFT_PULSE 2
+#define MODE_FFT_BARS 1
+#define MODE_FFT_PULSE 2
 
 float fft_max_band = 0.0;
 float fft_mult = 1.0;
-int fft_mode = FFT_INACTIVE;
 float fftVals[6];
 
   
 #endif
 
+int app_mode = MODE_REACTIVE;
 
 //-- touchRead
 const int sensPin = 15; 

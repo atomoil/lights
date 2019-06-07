@@ -4,29 +4,35 @@ void getRemote() {
     if (results.value == POWER)
     {
       Serial.println("POWER");
-      if (currentState == STATE_ON_BRIGHT){
+      if (app_mode != MODE_REACTIVE){
+        // we're in FFT mode
         allLightsOff();
-      } else if (currentState == STATE_ON_ANIMATED){
-        allLightsFadeDown();
       } else {
-        allLightsOn();
+        // we're in REACTIVE mode
+        if (currentState == STATE_ON_BRIGHT){
+          allLightsOff();
+        } else if (currentState == STATE_ON_ANIMATED){
+          allLightsFadeDown();
+        } else {
+          allLightsOn();
+        }
       }
     }
 #ifdef SUPPORTS_FFT
     if (results.value == A)
     {
       Serial.println("A");
-      fft_mode = FFT_INACTIVE;
+      app_mode = MODE_REACTIVE;
     }
     if (results.value == B)
     {
       Serial.println("B");
-      fft_mode = FFT_BARS;
+      app_mode = MODE_FFT_BARS;
     }
     if (results.value == C)
     {
       Serial.println("C");
-      fft_mode = FFT_PULSE;
+      app_mode = MODE_FFT_PULSE;
     }
 #else
     if (results.value == A)
