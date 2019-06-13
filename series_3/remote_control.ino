@@ -23,6 +23,7 @@ void getRemote() {
     {
       Serial.println("A");
       app_mode = MODE_REACTIVE;
+      multAnimatingSpeed( 1.0 ); // slight cheat to switch into STATE_ON_ANIMATED
     }
     if (results.value == B)
     {
