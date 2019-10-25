@@ -11,7 +11,7 @@ void setup() {
   Serial.begin(57600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-  btSerial.begin(9600);  
+  btSerial.begin(57600);  
   Serial.println("BT serial started at 57600");
     
   filt = touchRead(sensPin);      //set filt for t=1

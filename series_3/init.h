@@ -9,9 +9,12 @@
 #define LAMP_S4_01_SANDY 6
 #define LAMP_S4_02_RAKU_DARK 7
 #define LAMP_S4_03_RAKU_TURQ 8
+#define LAMP_S5_01_BLACK_YELLOW 9
+#define LAMP_S5_02_BUTTERFLY  10
+#define LAMP_S5_03_TURQ_WHITE 11
 
 
-#define LAMP_CURRENT LAMP_S4_03_RAKU_TURQ
+#define LAMP_CURRENT LAMP_S5_02_BUTTERFLY
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -101,6 +104,34 @@ const int NUM_LEDS = 12;
 char hardware_version[] = "4.0";
 #endif
 
+
+#if LAMP_CURRENT == LAMP_S5_01_BLACK_YELLOW
+const int touchTriggerOn = 600;
+const int touchTriggerOff = 400;
+const int NUM_LEDS = 12;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
+#if LAMP_CURRENT == LAMP_S5_02_BUTTERFLY 
+const int touchTriggerOn = 500; // 700 // 1800
+const int touchTriggerOff = 300; // 500
+const int NUM_LEDS = 12;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
+#if LAMP_CURRENT == LAMP_S5_03_TURQ_WHITE
+const int touchTriggerOn = 525; // 700 // 1800
+const int touchTriggerOff = 400; // 500
+const int NUM_LEDS = 12;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
 #ifdef SUPPORTS_FFT
 char supports[] = "<fft=1,2/>";
 #else
@@ -133,6 +164,7 @@ decode_results results;
 #ifdef SUPPORTS_FFT
 
 #include <Audio.h>
+
 #include <math.h>
 #define MODE_FFT_BARS 1
 #define MODE_FFT_PULSE 2

@@ -13,3 +13,7 @@ Quit Arduino app. if running.
 #include <Filters.h>
 
 NOTE: all serial coms now at 57600.
+
+IRremote conflicts with Audio library
+
+In IRremote do a search & replace change STATE_IDLE to STATE_OFF (or manually in irRev.cpp, IRremote.cpp & IRremoteInt.h)
