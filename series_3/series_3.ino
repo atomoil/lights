@@ -9,6 +9,7 @@ AudioConnection          patchCord1(adc1, FFT);
 
 void setup() {
  // Serial.begin(57600);  //setup of Serial module
+  ssData.reserve(200);
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
   btSerial.begin(57600);  
@@ -55,25 +56,39 @@ void setup() {
 
 
 void loop() {
-
-  String ssData = "";
-
+  
   // useful debug!
-  if (Serial.available()) {
-    ssData = Serial.readString();
-    
-    Serial.print("got Message (Serial):");
-    Serial.println(ssData);
+//  if (Serial.available()) {
+//    ssData = Serial.readString();
+//    Serial.print("got Message (Serial):");
+//    Serial.println(ssData);
+//  }
+  
+//  if (btSerial.available() > 0) { //bluetooth serial
+//    ssData = btSerial.readString();
+//    Serial.print("got Message (BT):");
+//    Serial.println(ssData);
+//  }
+
+while (btSerial.available()) {
+    // get the new byte:
+    char inChar = (char)btSerial.read();
+    // add it to the String:
+    ssData += inChar;
+    // if the incoming character is a newline, set a flag so the main loop can
+    // do something about it:
+    if (inChar == '\n') {
+      stringComplete = true;
+    }
   }
   
-  if (btSerial.available() > 0) { //bluetooth serial
-    ssData = btSerial.readString();
-
-    //Serial.print("got Message (BT):");
-    //Serial.println(ssData);
+  if (stringComplete) {
+    Serial.println(ssData);
+    processMessages(ssData);
+    // clear the string:
+    ssData = "";
+    stringComplete = false;
   }
-
-  processMessages(ssData);
 
   getRemote();
 
@@ -107,7 +122,6 @@ void loop() {
 
 
 //-------- Functions --------//
-
 void getSavedPalette(){
   int savedPalette[5][2] = {};
   EEPROM.get(0,savedPalette);

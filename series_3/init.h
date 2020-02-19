@@ -1,3 +1,7 @@
+// serial data
+String ssData = "";         // a String to hold incoming data
+bool stringComplete = false;  // whether the string is complete
+
 //-- fastLED
 #include "FastLED.h"
 
