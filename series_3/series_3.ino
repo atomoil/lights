@@ -8,10 +8,10 @@ AudioConnection          patchCord1(adc1, FFT);
 #endif
 
 void setup() {
-  Serial.begin(57600);  //setup of Serial module
+ // Serial.begin(57600);  //setup of Serial module
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-  btSerial.begin(9600);  
+  btSerial.begin(57600);  
   Serial.println("BT serial started at 57600");
     
   filt = touchRead(sensPin);      //set filt for t=1
@@ -69,8 +69,8 @@ void loop() {
   if (btSerial.available() > 0) { //bluetooth serial
     ssData = btSerial.readString();
 
-    Serial.print("got Message (BT):");
-    Serial.println(ssData);
+    //Serial.print("got Message (BT):");
+    //Serial.println(ssData);
   }
 
   processMessages(ssData);

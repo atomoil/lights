@@ -9,9 +9,10 @@
 #define LAMP_S4_01_SANDY 6
 #define LAMP_S4_02_RAKU_DARK 7
 #define LAMP_S4_03_RAKU_TURQ 8
+#define LAMP_BUTTERFLY 9
 
-
-#define LAMP_CURRENT LAMP_S4_03_RAKU_TURQ
+//#define LAMP_CURRENT LAMP_S4_03_RAKU_TURQ
+#define LAMP_CURRENT LAMP_BUTTERFLY
 
 // -----------------------------------
 //---------LEDS----------------//
@@ -96,6 +97,15 @@ char hardware_version[] = "4.0";
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 12;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
+#if LAMP_CURRENT == LAMP_BUTTERFLY
+const int touchTriggerOn = 300; // 700 // 1800
+const int touchTriggerOff = 200; // 500
+const int NUM_LEDS = 11;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
 char hardware_version[] = "4.0";
