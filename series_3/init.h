@@ -12,6 +12,7 @@
 #define LAMP_S5_01_BLACK_YELLOW 9
 #define LAMP_S5_02_BUTTERFLY  10
 #define LAMP_S5_03_TURQ_WHITE 11
+#define LAMP_S5_04_CAROL_BUTTERFLY 12
 
 
 #define LAMP_CURRENT LAMP_S5_02_BUTTERFLY
@@ -127,6 +128,15 @@ char hardware_version[] = "4.0";
 const int touchTriggerOn = 525; // 700 // 1800
 const int touchTriggerOff = 400; // 500
 const int NUM_LEDS = 12;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.0";
+#endif
+
+#if LAMP_CURRENT == LAMP_S5_04_CAROL_BUTTERFLY
+const int touchTriggerOn = 300;
+const int touchTriggerOff = 200;
+const int NUM_LEDS = 11;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
 char hardware_version[] = "4.0";
