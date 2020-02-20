@@ -193,6 +193,9 @@ const int sensPin = 15;
 int sens = 0; 
 int sBias = 0;
 
+//- Bluetooth serial data
+String ssData = "";         // a String to hold incoming data
+bool stringComplete = false;  // whether the string is complete
 
 
 //-- onboard LED

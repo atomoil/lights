@@ -9,6 +9,7 @@ AudioConnection          patchCord1(adc1, FFT);
 
 void setup() {
   Serial.begin(57600);  //setup of Serial module
+  ssData.reserve(200);
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
   btSerial.begin(57600);  
@@ -56,24 +57,36 @@ void setup() {
 
 void loop() {
 
-  String ssData = "";
-
   // useful debug!
   if (Serial.available()) {
     ssData = Serial.readString();
+    stringComplete = true;
     
     Serial.print("got Message (Serial):");
     Serial.println(ssData);
   }
-  
-  if (btSerial.available() > 0) { //bluetooth serial
-    ssData = btSerial.readString();
 
+  // process one message at a time, hope there isn't a massive backlog :-/
+  while (btSerial.available() && stringComplete == false) {
+    // get the new byte:
+    char inChar = (char)btSerial.read();
+    // add it to the String:
+    ssData += inChar;
+    // if the incoming character is a newline, set a flag so the main loop can
+    // do something about it:
+    if (inChar == '\n') {
+      stringComplete = true;
+    }
+  }
+  
+  if (stringComplete) {
     Serial.print("got Message (BT):");
     Serial.println(ssData);
+    processMessages(ssData);
+    // clear the string:
+    ssData = "";
+    stringComplete = false;
   }
-
-  processMessages(ssData);
 
   getRemote();
 
