@@ -1,5 +1,7 @@
 //-- fastLED
 #include "FastLED.h"
+#include <stdio.h>
+#include <string.h>
 
 #define LAMP_S1_06_TURQUOISE 1
 #define LAMP_S3_01_SAGGAR_DARK 2
@@ -13,6 +15,7 @@
 #define LAMP_S5_02_BUTTERFLY  10
 #define LAMP_S5_03_TURQ_WHITE 11
 #define LAMP_S5_04_CAROL_BUTTERFLY 12
+#define LAMP_TEST 13
 
 
 #define LAMP_CURRENT LAMP_S5_02_BUTTERFLY
@@ -57,7 +60,7 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
-char hardware_version[] = "3.0";
+char hardware_version[] = "3.1";
 #endif
 
 
@@ -66,7 +69,7 @@ const int touchTriggerOn = 640;
 const int touchTriggerOff = 400;
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
-char hardware_version[] = "3.0";
+char hardware_version[] = "3.1";
 #endif
 
 
@@ -75,7 +78,7 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 16;
-char hardware_version[] = "3.0";
+char hardware_version[] = "3.1";
 #endif
 
 #if LAMP_CURRENT == LAMP_S3_01_SAGGAR_DARK
@@ -83,7 +86,7 @@ const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 #define NUM_COLUMNS 6
 const int NUM_LEDS = 13;
-char hardware_version[] = "3.0";
+char hardware_version[] = "3.1";
 #endif
 
 
@@ -93,7 +96,7 @@ const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 11;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
 #endif
 
 #if LAMP_CURRENT == LAMP_S4_03_RAKU_TURQ
@@ -102,7 +105,7 @@ const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
 #endif
 
 
@@ -112,7 +115,7 @@ const int touchTriggerOff = 400;
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
 #endif
 
 #if LAMP_CURRENT == LAMP_S5_02_BUTTERFLY 
@@ -121,7 +124,7 @@ const int touchTriggerOff = 300; // 500
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
 #endif
 
 #if LAMP_CURRENT == LAMP_S5_03_TURQ_WHITE
@@ -130,7 +133,7 @@ const int touchTriggerOff = 400; // 500
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
 #endif
 
 #if LAMP_CURRENT == LAMP_S5_04_CAROL_BUTTERFLY
@@ -139,7 +142,16 @@ const int touchTriggerOff = 200;
 const int NUM_LEDS = 11;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
-char hardware_version[] = "4.0";
+char hardware_version[] = "4.1";
+#endif
+
+#if LAMP_CURRENT == LAMP_TEST
+const int touchTriggerOn = 300;
+const int touchTriggerOff = 200;
+const int NUM_LEDS = 11;
+#define NUM_COLUMNS 6
+#define SUPPORTS_FFT 1
+char hardware_version[] = "4.1";
 #endif
 
 #ifdef SUPPORTS_FFT

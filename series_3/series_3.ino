@@ -71,16 +71,18 @@ void loop() {
     // get the new byte:
     char inChar = (char)btSerial.read();
     // add it to the String:
-    ssData += inChar;
+    if (inChar == '\n') {
+      stringComplete = true;
+    } else {
+      ssData += inChar;
+    }
     Serial.print("BT: ");
     Serial.print(inChar);
     Serial.print(" > ");
     Serial.println(ssData);
     // if the incoming character is a newline, set a flag so the main loop can
     // do something about it:
-    if (inChar == '\n') {
-      stringComplete = true;
-    }
+    
   }
   
   if (stringComplete) {
