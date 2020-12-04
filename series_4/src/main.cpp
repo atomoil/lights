@@ -8,6 +8,37 @@ AudioAnalyzeFFT256       FFT;
 AudioConnection          patchCord1(adc1, FFT);
 #endif
 
+// func def
+int convertHue(float f);
+int convertSat(float f);
+void getSavedPalette();
+void setHueSat(int indx, float h, float s);
+void getTouch();
+void processMessages(String ssData);
+void getRemote();
+void updateFFT();
+void updateFFT_Bars();
+void updateLightDots();
+void updateFFT_Pulse();
+void sendTouchSensitivity(int sens);
+void nextTouchState(bool touchDown);
+void allLightsFadeIn();
+void allLightsFadeIn();
+void allLightsFadeDown();
+void allLightsOn();
+void setAnimatingSpeed(float timeElapsedIn);
+void allLightsOff();
+LightDot dotHasReachedLowestValue(LightDot dot);
+LightDot dotHasReachedHighestValue(LightDot dot);
+LightDot resetPalette(LightDot dot);
+void getFFT(int i, float n);
+void getMaxLevel();
+int valueForLED(float value, int number, int maxnum);
+float realValueForLED(float value, int number, int maxnum);
+void sendVersionOverBluetooth();
+void sendLevelsOverBluetooth();
+//////////////////// series_3
+
 void setup() {
   Serial.begin(57600);  //setup of Serial module
   ssData.reserve(200);
