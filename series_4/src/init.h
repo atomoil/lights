@@ -18,7 +18,7 @@
 #define LAMP_TEST 13
 
 
-#define LAMP_CURRENT LAMP_S5_02_BUTTERFLY
+#define LAMP_CURRENT LAMP_TEST
 
 // -----------------------------------
 //---------LEDS----------------//
