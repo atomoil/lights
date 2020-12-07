@@ -1,8 +1,9 @@
 #include "colour_cycling.h"
 
 
-ColourCyclingMode::ColourCyclingMode(LEDManager &ledAttach, int coloursAttach[], int countColoursAttach): 
+ColourCyclingMode::ColourCyclingMode(LEDManager &ledAttach, unsigned int howOftenToChangeAttach, int coloursAttach[], int countColoursAttach): 
     leds(ledAttach),
+    howOftenToChange(howOftenToChangeAttach),
     colours(coloursAttach),
     countColours(countColoursAttach)
 {}
@@ -17,7 +18,7 @@ void ColourCyclingMode::loop()
 {
     // put your main code here, to run repeatedly:
     // LEDs
-    if (timeSw >= deltaSw)
+    if (timeSw >= howOftenToChange)
     {
         timeSw = 0;
 

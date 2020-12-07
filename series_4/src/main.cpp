@@ -6,11 +6,16 @@
 #include "inputs/touch_input.h"
 
 LEDManager leds;
-// should we define all instances up front
-int cols[] = {255,0,0,    0,255,0,  0,0,255 };
-ColourCyclingMode mode(leds, cols, 3);
+// should we define all instances up front?
+int cols_1[] = {255,0,0,    0,255,0,  0,0,255 };
+ColourCyclingMode rgbmode(leds, 1500, cols_1, 3);
+//
+int cols_2[] = { 10,10,10,   50,50,50,  150,150,150 };
+ColourCyclingMode touchdownmode(leds, 500, cols_2, 3);
+
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
+ColourCyclingMode* mode = &rgbmode;
 
 // functions
 void processTouchData(std::tuple<TOUCH_STATE,float> val);
@@ -20,7 +25,7 @@ void setup()
     // put your setup code here, to run once:
     leds.setup();
     touch.setup();
-    mode.setup();
+    mode->setup();
 }
 
 void loop()
@@ -28,7 +33,7 @@ void loop()
     std::tuple<TOUCH_STATE, float> touchData = touch.loop();
     processTouchData(touchData);
 
-    mode.loop(); // pass any non-mode changing input to mode
+    mode->loop(); // pass any non-mode changing input to mode
 
     leds.loop(); // update leds last
 }
@@ -41,9 +46,11 @@ void processTouchData(std::tuple<TOUCH_STATE,float> val) {
     if (touchState == TOUCH_DOWN) {
         Serial.print("TOUCH DOWN for ");
         Serial.println(touchValue);
+        mode = &touchdownmode;
         // mode = ColourCyclingMode(leds);
     } else if (touchState == TOUCH_UP) {
         Serial.print("TOUCH ended and lasted ");
         Serial.println(touchValue);
+        mode = &rgbmode;
     }
 }

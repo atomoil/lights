@@ -9,9 +9,9 @@ private:
     LEDManager &leds;
     int* colours;
     int countColours;
-    const unsigned int deltaSw = 500;
     uint8_t  count = 1;
     elapsedMillis timeSw;
+    unsigned int howOftenToChange;
 
     // void loopLEDs();
     void ledRed();
@@ -23,5 +23,5 @@ private:
 public:
     void setup();
     void loop();
-    ColourCyclingMode(LEDManager &ledAttach, int coloursAttach[6], int countColours);
+    ColourCyclingMode(LEDManager &ledAttach, unsigned int howOftenToChangeAttach, int coloursAttach[6], int countColours);
 };
