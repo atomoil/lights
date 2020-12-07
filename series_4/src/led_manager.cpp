@@ -23,7 +23,7 @@ void LEDManager::setup()
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            leds[x][y] = CRGB(125, 125, 125);
+            leds[x][y] = CRGB(0, 15, 0);
         }
     }
 
@@ -42,4 +42,8 @@ void LEDManager::setLED(int x, int y, int r, int g, int b, boolean fixed)
     {
         leds[x][y] = CRGB(r, g, b);
     }
+}
+
+int LEDManager::totalLEDs() {
+    return NUM_COLUMNS * NUM_LEDS;
 }

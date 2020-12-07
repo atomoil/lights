@@ -1,6 +1,9 @@
 #include "FastLED.h"
 #include "init.h"
 
+#ifndef LED_MANAGER_HPP_INCLUDED
+#define LED_MANAGER_HPP_INCLUDED
+
 class LEDManager
 {
 private:
@@ -9,5 +12,8 @@ private:
 public:
     void setup();
     void loop();
+    int totalLEDs();
     void setLED(int x, int y, int r, int g, int b, boolean fixed);
 };
+
+#endif
