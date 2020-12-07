@@ -2,7 +2,7 @@
 #include "init.h"
 #include "main.h"
 #include "led_manager.h"
-#include "modes/colour_cycling.h"
+#include "modes/ColourCyclingMode.h"
 #include "inputs/touch_input.h"
 
 LEDManager leds;
