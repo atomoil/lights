@@ -5,7 +5,7 @@
 class CyclingTestMode
 {
 private:
-    LEDManager *leds;
+    LEDManager &leds;
     const unsigned int deltaSw = 500;
     uint8_t  count = 1;
     elapsedMillis timeSw;

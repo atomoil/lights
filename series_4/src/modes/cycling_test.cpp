@@ -1,7 +1,7 @@
 #include "cycling_test.h"
 
 
-CyclingTestMode::CyclingTestMode(LEDManager &ledAttach): leds(&ledAttach) {}
+CyclingTestMode::CyclingTestMode(LEDManager &ledAttach): leds(ledAttach) {}
 
 void CyclingTestMode::setup() {
     setAllLEDsTo(255,255,255);
@@ -55,7 +55,7 @@ void CyclingTestMode::setAllLEDsTo(int r, int g, int b)
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            leds->setLED(x, y, r, g, b, true);
+            leds.setLED(x, y, r, g, b, true);
         }
     }
 }
