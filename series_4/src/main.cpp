@@ -6,15 +6,14 @@
 #include "inputs/touch_input.h"
 
 LEDManager leds;
-// should we define all instances up front?
+TouchInput touch(TOUCH_ON, TOUCH_OFF);
+
+// define all instance up front
 int cols_1[] = {255,0,0,    0,255,0,  0,0,255 };
 ColourCyclingMode rgbmode(leds, 1500, cols_1, 3);
 //
 int cols_2[] = { 10,10,10,   50,50,50,  150,150,150 };
 ColourCyclingMode touchdownmode(leds, 500, cols_2, 3);
-
-TouchInput touch(TOUCH_ON, TOUCH_OFF);
-
 ColourCyclingMode* mode = &rgbmode;
 
 // functions
