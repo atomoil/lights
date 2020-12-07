@@ -45,23 +45,20 @@ std::tuple<STATE,float> TouchInput::loop()
     if (isTouching != wasTouching) {
         if (isTouching == true) { // TOUCH_DOWN
             // it's been timeElapsed since the last touch down
-            // return 
-            // returnValue = -timeElapsed;
             returnState = TOUCH_DOWN;
         } else { // TOUCH_UP
             returnState = TOUCH_UP;
             returnValue = timeElapsed;
         }
-        // reset it
+        // reset the timer as state has changed
         timeElapsed = 0;
     } else {
+        // report timeElapsed if we're touching, no need if we're not.
         if (isTouching == true) {
             returnState = TOUCH_DOWN;
             returnValue = timeElapsed;
         }
     }
-
-    // @TODO handle broadcasting touch level (for v0.9 iOS app not v1.0 app)
-
+    // @TODO (??) handle broadcasting touch level (for v0.9 iOS app not v1.0 app)
     return std::tuple<STATE, float>(returnState, returnValue);
 }

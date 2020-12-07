@@ -16,9 +16,6 @@ private:
     elapsedMillis checkMs;
     FilterOnePole filterLP;
     FilterOnePole filterLP2;
-    //FilterOnePole filterLP(LOWPASS, 1.0); //create a one pole (RC) lowpass filter
-    //FilterOnePole filterLP2(LOWPASS, 1.0);
-
 
 public:
     TouchInput(int on, int off);
