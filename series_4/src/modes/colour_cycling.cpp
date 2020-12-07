@@ -1,11 +1,15 @@
 #include "colour_cycling.h"
 
 
-ColourCyclingMode::ColourCyclingMode(LEDManager &ledAttach, unsigned int howOftenToChangeAttach, int coloursAttach[], int countColoursAttach): 
-    leds(ledAttach),
-    howOftenToChange(howOftenToChangeAttach),
-    colours(coloursAttach),
-    countColours(countColoursAttach)
+ColourCyclingMode::ColourCyclingMode(
+    LEDManager &ledAttach, 
+    unsigned int howOftenToChangeAttach, 
+    int coloursAttach[], 
+    int countColoursAttach): 
+        BaseMode(ledAttach),
+        howOftenToChange(howOftenToChangeAttach),
+        colours(coloursAttach),
+        countColours(countColoursAttach)
 {}
 
 void ColourCyclingMode::setup() {

@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include "init.h"
 #include "led_manager.h"
+#include "BaseMode.h"
 
 
-class ColourCyclingMode
+class ColourCyclingMode: public BaseMode
 {
 private:
-    LEDManager &leds;
     int* colours;
     int countColours;
     uint8_t  count = 1;
