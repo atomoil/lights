@@ -36,39 +36,8 @@ void ColourCyclingMode::loop()
         int b = colours[col_index+2];
         setAllLEDsTo( r, g, b);
 
-        /*
-
-        if (count == 1)
-            ledRed();
-        if (count == 2)
-            ledGreen();
-        if (count == 3)
-            ledBlue();
-        if (count == 4)
-            ledWhite();
-        */
         count++;
     }
-}
-
-void ColourCyclingMode::ledRed()
-{
-    setAllLEDsTo(255, 0, 0);
-}
-
-void ColourCyclingMode::ledGreen()
-{
-    setAllLEDsTo(0, 255, 0);
-}
-
-void ColourCyclingMode::ledBlue()
-{
-    setAllLEDsTo(0, 0, 255);
-}
-
-void ColourCyclingMode::ledWhite()
-{
-    setAllLEDsTo(255, 125, 125);
 }
 
 void ColourCyclingMode::setAllLEDsTo(int r, int g, int b)

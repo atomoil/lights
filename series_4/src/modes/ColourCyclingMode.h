@@ -13,11 +13,6 @@ private:
     elapsedMillis timeSw;
     unsigned int howOftenToChange;
 
-    // void loopLEDs();
-    void ledRed();
-    void ledGreen();
-    void ledBlue();
-    void ledWhite();
     void setAllLEDsTo(int r, int g, int b);
 
 public:
