@@ -13,7 +13,7 @@ private:
     int triggerOn;
     int triggerOff;
     elapsedMillis timeElapsed;
-    elapsedMillis checkMs;
+    elapsedMillis nextFrameMs;
     FilterOnePole filterLP;
     FilterOnePole filterLP2;
 
