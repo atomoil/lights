@@ -3,7 +3,7 @@
 #include "JonHub-Filters-master/Filters.h"
 #include <tuple>
 
-enum STATE { NONE, TOUCH_DOWN, TOUCH_UP };
+enum TOUCH_STATE { NONE, TOUCH_DOWN, TOUCH_UP };
 
 class TouchInput
 {
@@ -20,6 +20,6 @@ private:
 public:
     TouchInput(int on, int off);
     void setup();
-    std::tuple<STATE,float> loop(); // should be Actions loop(); but one thing at a time!
+    std::tuple<TOUCH_STATE,float> loop(); // should be Actions loop(); but one thing at a time!
 };
 

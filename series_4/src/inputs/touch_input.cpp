@@ -17,7 +17,7 @@ void TouchInput::setup()
 }
 
 // tuple use from https://www.cplusplus.com/reference/tuple/tuple/
-std::tuple<STATE,float> TouchInput::loop()
+std::tuple<TOUCH_STATE,float> TouchInput::loop()
 {
     /*
     if (checkMs >= 10) {
@@ -39,7 +39,7 @@ std::tuple<STATE,float> TouchInput::loop()
         isTouching = false;
     }
 
-    STATE returnState = NONE;
+    TOUCH_STATE returnState = NONE;
     float returnValue = 0;
     // if state has changed
     if (isTouching != wasTouching) {
@@ -60,5 +60,5 @@ std::tuple<STATE,float> TouchInput::loop()
         }
     }
     // @TODO (??) handle broadcasting touch level (for v0.9 iOS app not v1.0 app)
-    return std::tuple<STATE, float>(returnState, returnValue);
+    return std::tuple<TOUCH_STATE, float>(returnState, returnValue);
 }
