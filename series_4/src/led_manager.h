@@ -1,8 +1,9 @@
+#ifndef LED_MANAGER_HPP_INCLUDED
+#define LED_MANAGER_HPP_INCLUDED
+
 #include "FastLED.h"
 #include "init.h"
 
-#ifndef LED_MANAGER_HPP_INCLUDED
-#define LED_MANAGER_HPP_INCLUDED
 
 class LEDManager
 {

@@ -14,7 +14,7 @@
 #define DATA_PIN3 10
 #define CLOCK_PIN3 11
 
-#define DATA_PIN4 23//these two swapped with 6 on new board
+#define DATA_PIN4 23 //these two swapped with 6 on new board
 #define CLOCK_PIN4 22
 
 #define DATA_PIN5 21
