@@ -13,9 +13,16 @@ ColourCyclingMode::ColourCyclingMode(
 {}
 
 void ColourCyclingMode::setup() {
-    setAllLEDsTo(255,255,255);
+    setAllLEDsTo(255,255,255); // this should never actually be seen!
     Serial.print("Total colours are:");
     Serial.println(countColours);
+    restart();
+}
+
+void ColourCyclingMode::restart()
+{
+    timeSw = howOftenToChange; // get triggered immediately
+    count = 0;
 }
 
 void ColourCyclingMode::loop()
@@ -25,7 +32,6 @@ void ColourCyclingMode::loop()
     if (timeSw >= howOftenToChange)
     {
         timeSw = 0;
-
 
         if (count >= countColours)
             count = 0;
@@ -39,6 +45,7 @@ void ColourCyclingMode::loop()
         count++;
     }
 }
+
 
 void ColourCyclingMode::setAllLEDsTo(int r, int g, int b)
 {
