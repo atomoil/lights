@@ -53,7 +53,7 @@ void ColourCyclingMode::setAllLEDsTo(int r, int g, int b)
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            leds.setLED(x, y, r, g, b, true);
+            leds.setLED(x, y, r, g, b, howOftenToChange*1.8);
         }
     }
 }

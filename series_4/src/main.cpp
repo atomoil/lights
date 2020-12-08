@@ -9,10 +9,10 @@ LEDManager leds;
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
 // define all instance up front
-int cols_1[] = {255, 0, 0, 0, 255, 0, 0, 0, 255};
+int cols_1[] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
 ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, cols_1, 3);
 //
-int cols_2[] = {10, 10, 10, 50, 50, 50, 150, 150, 150};
+int cols_2[] = {10, 10, 10, /* */ 50, 50, 50, /* */ 150, 150, 150};
 ColourCyclingMode *touchdownmode = new ColourCyclingMode(leds, 500, cols_2, 3);
 ColourCyclingMode *mode = rgbmode;
 
@@ -49,7 +49,8 @@ void processTouchData(std::tuple<TOUCH_STATE, float> val)
         Serial.print("TOUCH DOWN for ");
         Serial.println(touchValue);
         // only set this if it's not already set
-        if (mode != touchdownmode) { 
+        if (mode != touchdownmode)
+        {
             mode = touchdownmode;
             mode->restart();
         }
