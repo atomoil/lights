@@ -3,19 +3,19 @@
 
 ColourCyclingMode::ColourCyclingMode(
     LEDManager &ledAttach, 
-    unsigned int howOftenToChangeAttach, 
+    unsigned int howOftenToChangeAttach,
+    float transitionTimeMsAttach,
     int coloursAttach[], 
     int countColoursAttach): 
         BaseMode(ledAttach),
         howOftenToChange(howOftenToChangeAttach),
+        transitionTimeMs(transitionTimeMsAttach),
         colours(coloursAttach),
         countColours(countColoursAttach)
 {}
 
 void ColourCyclingMode::setup() {
-    setAllLEDsTo(255,255,255); // this should never actually be seen!
-    Serial.print("Total colours are:");
-    Serial.println(countColours);
+    setAllLEDsTo(255,255,255,0); // this should never actually be seen!
     restart();
 }
 
@@ -40,7 +40,7 @@ void ColourCyclingMode::loop()
         int r = colours[col_index];
         int g = colours[col_index+1];
         int b = colours[col_index+2];
-        setAllLEDsTo( r, g, b, float(howOftenToChange) * 1.8);
+        setAllLEDsTo( r, g, b, transitionTimeMs );
 
         count++;
     }

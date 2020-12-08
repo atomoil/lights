@@ -3,18 +3,26 @@
 #include "main.h"
 #include "managers/LedManager.h"
 #include "modes/ColourCyclingMode.h"
+#include "modes/SingleColourMode.h"
 #include "inputs/touch_input.h"
+
+#define INITIAL_TOUCH_DOWN_TIME 1000
 
 LEDManager leds;
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
 // define all instance up front
 int cols_1[] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
-ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, cols_1, 3);
+ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
 //
-int cols_2[] = {10, 10, 10, /* */ 50, 50, 50, /* */ 150, 150, 150};
-ColourCyclingMode *touchdownmode = new ColourCyclingMode(leds, 500, cols_2, 3);
-ColourCyclingMode *mode = rgbmode;
+int cols_2[] = {255, 255, 255, /* */ 5, 5, 5, /* */ 250, 250, 250, /* */ 0, 0, 0};
+ColourCyclingMode *touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
+
+
+SingleColourMode *touchdownInitialMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 0, 255, 255);
+
+// set the first mode
+BaseMode *mode = rgbmode;
 
 // functions
 void processTouchData(std::tuple<TOUCH_STATE, float> val);
@@ -46,12 +54,18 @@ void processTouchData(std::tuple<TOUCH_STATE, float> val)
     switch (touchState)
     {
     case TOUCH_DOWN:
-        Serial.print("TOUCH DOWN for ");
-        Serial.println(touchValue);
+        //Serial.print("TOUCH DOWN for ");
+        //Serial.println(touchValue);
         // only set this if it's not already set
-        if (mode != touchdownmode)
+        if (touchValue < INITIAL_TOUCH_DOWN_TIME && mode != touchdownInitialMode)
         {
-            mode = touchdownmode;
+            Serial.println("TOUCH DOWN initial");
+            mode = touchdownInitialMode;
+            mode->restart();
+        }
+        if (touchValue >= INITIAL_TOUCH_DOWN_TIME && mode != touchdownCyclingMode) {
+            Serial.println("TOUCH DOWN cycling");
+            mode = touchdownCyclingMode;
             mode->restart();
         }
         break;
