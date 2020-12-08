@@ -76,13 +76,13 @@ LedColour LEDManager::updateColour(LedColour colour){
 
 // 1 second = 60 frames
 
-void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInSeconds)
+void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInMilliseconds)
 {
     if (x < NUM_COLUMNS && y < NUM_LEDS)
     {
         //leds[x][y] = CRGB(r, g, b);
         LedData data = matrix[x][y];
-        if (timeInSeconds <= 0) { // 0 value means set immediately
+        if (timeInMilliseconds <= 0) { // 0 value means set immediately
             data.r.changeValue = 0;
             data.r.current = r;
             data.r.desired = r;
@@ -96,7 +96,7 @@ void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInSeconds)
             data.b.desired = b;
         } else {
             // map seconds to 'frames'
-            float frames = timeInSeconds / FRAME_RATE;
+            float frames = timeInMilliseconds / FRAME_RATE;
             //
             data.r.desired = r;
             data.r.changeValue = (data.r.desired-data.r.current)/frames;
