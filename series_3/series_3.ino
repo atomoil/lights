@@ -8,18 +8,18 @@ AudioConnection          patchCord1(adc1, FFT);
 #endif
 
 void setup() {
- // Serial.begin(57600);  //setup of Serial module
+  // Serial.begin(57600);  //setup of Serial module
   ssData.reserve(200);
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
-  btSerial.begin(57600);  
+  btSerial.begin(57600);
   Serial.println("BT serial started at 57600");
-    
+
   filt = touchRead(sensPin);      //set filt for t=1
-  sBias = touchRead(sensPin); 
+  sBias = touchRead(sensPin);
 
   irrecv.enableIRIn(); // Start the IR receiver
-  
+
   FastLED.addLeds<APA102, DATA_PIN1, CLOCK_PIN1, BGR>(leds[0], NUM_LEDS);
   FastLED.addLeds<APA102, DATA_PIN2, CLOCK_PIN2, BGR>(leds[1], NUM_LEDS);
   FastLED.addLeds<APA102, DATA_PIN3, CLOCK_PIN3, BGR>(leds[2], NUM_LEDS);
@@ -28,7 +28,7 @@ void setup() {
   FastLED.addLeds<APA102, DATA_PIN6, CLOCK_PIN6, BGR>(leds[5], NUM_LEDS);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 4000);
 
-  
+
   // create the light structs
   initData();
 
@@ -39,7 +39,7 @@ void setup() {
   isTouch = false;
   oldTouch = isTouch;
   currentState = STATE_INACTIVE;
-  
+
   getSavedPalette();
 
 #ifdef SUPPORTS_FFT
@@ -47,7 +47,7 @@ void setup() {
   FFT.averageTogether(8);
   FFT.windowFunction(AudioWindowHanning256);
 #endif
-  
+
   delay(500); // let power supply settle
   sBias = touchRead(sensPin); // DC offset, noise cal.
   Serial.println("started lamp");
@@ -56,21 +56,21 @@ void setup() {
 
 
 void loop() {
-  
-  // useful debug!
-//  if (Serial.available()) {
-//    ssData = Serial.readString();
-//    Serial.print("got Message (Serial):");
-//    Serial.println(ssData);
-//  }
-  
-//  if (btSerial.available() > 0) { //bluetooth serial
-//    ssData = btSerial.readString();
-//    Serial.print("got Message (BT):");
-//    Serial.println(ssData);
-//  }
 
-while (btSerial.available()) {
+  // useful debug!
+  //  if (Serial.available()) {
+  //    ssData = Serial.readString();
+  //    Serial.print("got Message (Serial):");
+  //    Serial.println(ssData);
+  //  }
+
+  //  if (btSerial.available() > 0) { //bluetooth serial
+  //    ssData = btSerial.readString();
+  //    Serial.print("got Message (BT):");
+  //    Serial.println(ssData);
+  //  }
+
+  while (btSerial.available()) {
     // get the new byte:
     char inChar = (char)btSerial.read();
     // add it to the String:
@@ -81,7 +81,7 @@ while (btSerial.available()) {
       stringComplete = true;
     }
   }
-  
+
   if (stringComplete) {
     Serial.println(ssData);
     processMessages(ssData);
@@ -99,16 +99,16 @@ while (btSerial.available()) {
   }
 
   // --- update LED arrays 60mS ---//
-  if (timeUpdate >= deltaUpdate){
+  if (timeUpdate >= deltaUpdate) {
 
-    if (app_mode == MODE_REACTIVE){
-       updateLightDots();
+    if (app_mode == MODE_REACTIVE) {
+      updateLightDots();
     }
 #ifdef SUPPORTS_FFT
-    else if (app_mode == MODE_FFT_BARS){
+    else if (app_mode == MODE_FFT_BARS) {
       updateFFT();
       updateFFT_Bars();
-    } else if (app_mode == MODE_FFT_PULSE){
+    } else if (app_mode == MODE_FFT_PULSE) {
       updateFFT();
       updateFFT_Pulse();
     }
@@ -122,13 +122,13 @@ while (btSerial.available()) {
 
 
 //-------- Functions --------//
-void getSavedPalette(){
+void getSavedPalette() {
   int savedPalette[5][2] = {};
-  EEPROM.get(0,savedPalette);
+  EEPROM.get(0, savedPalette);
   int paletteSize = sizeof(savedPalette);
-  
-  if (paletteSize > 0){ // only update if we have values
-    for(int i=0;i<totalPalettes;i++){
+
+  if (paletteSize > 0) { // only update if we have values
+    for (int i = 0; i < totalPalettes; i++) {
       palette[i][0] = savedPalette[i][0];
       palette[i][1] = savedPalette[i][1];
     }
@@ -136,7 +136,7 @@ void getSavedPalette(){
 }
 
 
-void setHueSat(int indx, float h, float s){
+void setHueSat(int indx, float h, float s) {
   palette[indx][0] = convertHue(h);
   palette[indx][1] = convertSat(s);
 }
@@ -158,8 +158,8 @@ void getTouch() {
     isTouch = false;
     holdCount = 0;
   }
-  
-  if (sendTouchValue == true){
+
+  if (sendTouchValue == true) {
     sendTouchSensitivity(filt);
   }
 
@@ -168,7 +168,7 @@ void getTouch() {
     digitalWrite(ledPin, sw); //  flash led on teensy
   }
 
-  if (isTouch != oldTouch){
+  if (isTouch != oldTouch) {
     Serial.print("[touch:");
     Serial.print(isTouch);
     Serial.print("/filt:");
