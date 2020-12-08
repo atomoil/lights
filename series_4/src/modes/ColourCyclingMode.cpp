@@ -40,20 +40,9 @@ void ColourCyclingMode::loop()
         int r = colours[col_index];
         int g = colours[col_index+1];
         int b = colours[col_index+2];
-        setAllLEDsTo( r, g, b);
+        setAllLEDsTo( r, g, b, float(howOftenToChange) * 1.8);
 
         count++;
     }
 }
 
-
-void ColourCyclingMode::setAllLEDsTo(int r, int g, int b)
-{
-    for (int x = 0; x < NUM_LEDS; x++)
-    {
-        for (int y = 0; y < NUM_LEDS; y++)
-        {
-            leds.setLED(x, y, r, g, b, howOftenToChange*1.8);
-        }
-    }
-}
