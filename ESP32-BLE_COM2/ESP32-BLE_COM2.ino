@@ -7,7 +7,7 @@ void setup() {
   Serial2.begin(57600, SERIAL_8N1, 22, 19); //serial to teensy
 
  //---- LAMP NAME ----//
-  BLEDevice::init("LAMP-93");
+  BLEDevice::init("LAMP-06-01");
 
   // Create Bluetooth server and service
   BLEServer *pServer = BLEDevice::createServer();
@@ -16,7 +16,7 @@ void setup() {
   pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
 
   pCharacteristic->setCallbacks(new BTCallbacks());
-  pCharacteristic->setValue("Hello from LAMP-99");
+  // pCharacteristic->setValue("Hello from LAMP-99");
   
   pService->start();
   BLEAdvertising *pAdvertising = pServer->getAdvertising();
