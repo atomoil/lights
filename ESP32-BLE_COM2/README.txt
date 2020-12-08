@@ -6,7 +6,8 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 Boards Manager.type esp32 and install.
 
 * Open Tools > Manage Libraries
-* Type m5atom and install
+  * Install m5atom and install
+  * Install elapsedMillis (by Paul Stoffregen)
 
    When flashing the M5Atom:
     Select M5stick-c from board menu.
