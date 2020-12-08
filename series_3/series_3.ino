@@ -8,7 +8,8 @@ AudioConnection          patchCord1(adc1, FFT);
 #endif
 
 void setup() {
-  // Serial.begin(57600);  //setup of Serial module
+
+  Serial.begin(57600);  //setup of Serial module
   ssData.reserve(200);
   pinMode(ledPin, OUTPUT);
   //--- bluetooth serial
@@ -58,31 +59,36 @@ void setup() {
 void loop() {
 
   // useful debug!
-  //  if (Serial.available()) {
-  //    ssData = Serial.readString();
-  //    Serial.print("got Message (Serial):");
-  //    Serial.println(ssData);
-  //  }
 
-  //  if (btSerial.available() > 0) { //bluetooth serial
-  //    ssData = btSerial.readString();
-  //    Serial.print("got Message (BT):");
-  //    Serial.println(ssData);
-  //  }
+  if (Serial.available()) {
+    ssData = Serial.readString();
+    stringComplete = true;
 
-  while (btSerial.available()) {
+    Serial.print("got Message (Serial):");
+    Serial.println(ssData);
+  }
+
+  // process one message at a time, hope there isn't a massive backlog :-/
+  while (btSerial.available() && stringComplete == false) {
     // get the new byte:
     char inChar = (char)btSerial.read();
     // add it to the String:
-    ssData += inChar;
-    // if the incoming character is a newline, set a flag so the main loop can
-    // do something about it:
     if (inChar == '\n') {
       stringComplete = true;
+    } else {
+      ssData += inChar;
     }
+    Serial.print("BT: ");
+    Serial.print(inChar);
+    Serial.print(" > ");
+    Serial.println(ssData);
+    // if the incoming character is a newline, set a flag so the main loop can
+    // do something about it:
+
   }
 
   if (stringComplete) {
+    Serial.print("got Message (BT):");
     Serial.println(ssData);
     processMessages(ssData);
     // clear the string:
