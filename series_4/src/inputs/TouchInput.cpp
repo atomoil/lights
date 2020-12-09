@@ -1,4 +1,4 @@
-#include "touch_input.h"
+#include "TouchInput.h"
 
 TouchInput::TouchInput(int on, int off) : triggerOn(on),
                                           triggerOff(off)
@@ -65,7 +65,7 @@ std::tuple<TOUCH_STATE, float> TouchInput::loop()
         // report timeElapsed if we're touching, no need if we're not.
         if (isTouching == true)
         {
-            returnState = TOUCH_DOWN;
+            returnState = TOUCH_ACTIVE;
             returnValue = timeElapsed;
         }
     }

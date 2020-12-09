@@ -53,24 +53,10 @@ void AnimationMode::restart()
             // set varying minimum and maximum
             dot.minimumValue = -210.0 - (((d + 2) % 4) * 30);
             dot.maximumValue = 255.0 + (((d + 3) % 7) * 30);
-            /*
-      Serial.print("dotValues:");
-      Serial.print(dot.minimumValue);
-      Serial.print(":");
-      Serial.println(dot.maximumValue);
-      */
             // reassign the dot to the array
             lights[c][d] = dot;
         }
     }
-    /*
-    Serial.print("[animating:");
-    Serial.print(timeElapsed);
-    Serial.print("/");
-    float showNum = 1 / ((timeElapsed + ((2 % 10) * margin)) / deltaUpdate);
-    Serial.print(showNum);
-    Serial.println("]");
-    */
 }
 
 void AnimationMode::loop()

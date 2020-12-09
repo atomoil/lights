@@ -3,7 +3,7 @@
 #include "JonHub-Filters-master/Filters.h"
 #include <tuple>
 
-enum TOUCH_STATE { NONE, TOUCH_DOWN, TOUCH_UP };
+enum TOUCH_STATE { NONE, TOUCH_DOWN, TOUCH_ACTIVE, TOUCH_UP };
 
 class TouchInput
 {

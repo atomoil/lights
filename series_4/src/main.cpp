@@ -5,7 +5,7 @@
 #include "modes/ColourCyclingMode.h"
 #include "modes/SingleColourMode.h"
 #include "modes/AnimationMode.h"
-#include "inputs/touch_input.h"
+#include "inputs/TouchInput.h"
 
 #define INITIAL_TOUCH_DOWN_TIME 1000
 
@@ -14,19 +14,29 @@ PaletteManager *palette = new PaletteManager();
 
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
-// define all instance up front
+// define all instance up front (possibly not necessary now we are using pointers)
 int cols_1[] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
 ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
 //
-int cols_2[] = {255, 255, 255, /* */ 5, 5, 5, /* */ 250, 250, 250, /* */ 0, 0, 0};
+int cols_2[] = { 5, 5, 5, /* */ 240, 250, 240, /* */ 10, 10, 10, /* */ 240, 240, 250,  };
 ColourCyclingMode *touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
 
 AnimationMode *animationMode = new AnimationMode(leds, palette);
 
-SingleColourMode *touchdownInitialMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 0, 255, 255);
+SingleColourMode *touchdownInitialMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 255, 255, 255);
+
+SingleColourMode *brightMode = new SingleColourMode(leds, 0, 255, 255, 255 );
+
+SingleColourMode *switchOffMode = new SingleColourMode(leds, 5000, 0, 0, 0 );
+SingleColourMode *offMode = new SingleColourMode(leds, 0, 0, 0, 0 );
 
 // set the first mode
-BaseMode *mode = animationMode;
+BaseMode *mode = offMode;
+
+enum LampState {
+    OFF, TURNING_ON, ON, TURNING_OFF
+};
+LampState lampState = OFF;
 
 // functions
 void processTouchData(std::tuple<TOUCH_STATE, float> val);
@@ -58,26 +68,52 @@ void processTouchData(std::tuple<TOUCH_STATE, float> val)
     switch (touchState)
     {
     case TOUCH_DOWN:
-        //Serial.print("TOUCH DOWN for ");
-        //Serial.println(touchValue);
-        // only set this if it's not already set
-        if (touchValue < INITIAL_TOUCH_DOWN_TIME && mode != touchdownInitialMode)
-        {
-            Serial.println("TOUCH DOWN initial");
+        if (lampState == ON) {
+            lampState = TURNING_OFF;
+
+            mode = switchOffMode;
+        } else {
+            lampState = TURNING_ON;
             mode = touchdownInitialMode;
-            mode->restart();
+            
         }
-        if (touchValue >= INITIAL_TOUCH_DOWN_TIME && mode != touchdownCyclingMode) {
-            Serial.println("TOUCH DOWN cycling");
-            mode = touchdownCyclingMode;
-            mode->restart();
+        mode->restart();
+    case TOUCH_ACTIVE:
+
+        if (lampState == TURNING_ON) {
+
+            //Serial.print("TOUCH DOWN for ");
+            //Serial.println(touchValue);
+            // only set this if it's not already set
+            if (touchValue < INITIAL_TOUCH_DOWN_TIME && mode != touchdownInitialMode)
+            {
+                Serial.println("TOUCH DOWN initial");
+                mode = touchdownInitialMode;
+                mode->restart();
+            }
+            if (touchValue >= INITIAL_TOUCH_DOWN_TIME && mode != touchdownCyclingMode) {
+                Serial.println("TOUCH DOWN cycling");
+                mode = touchdownCyclingMode;
+                mode->restart();
+            }
         }
         break;
     case TOUCH_UP:
         Serial.print("TOUCH ended and lasted ");
         Serial.println(touchValue);
-        mode = rgbmode;
-        mode->restart();
+        if (lampState == TURNING_OFF) {
+            lampState = OFF;
+            mode = offMode;
+            mode->restart();
+        } else if (lampState == TURNING_ON) {
+            lampState = ON;
+            if (touchValue < INITIAL_TOUCH_DOWN_TIME) {
+                mode = brightMode;
+            } else {
+                mode = animationMode;
+            }
+            mode->restart();
+        }
         break;
     case NONE:
         break;
