@@ -1,7 +1,7 @@
 #include "SingleColourMode.h"
 
 SingleColourMode::SingleColourMode(
-    LEDManager &ledAttach,
+    LEDManager *ledAttach,
     float transitionTimeMsAttach,
     int rAttach,
     int gAttach,

@@ -20,5 +20,5 @@ public:
     void setup();
     void restart();
     void loop();
-    ColourCyclingMode(LEDManager &ledAttach, unsigned int howOftenToChangeAttach, float transitionTimeMs, int coloursAttach[6], int countColours);
+    ColourCyclingMode(LEDManager *ledAttach, unsigned int howOftenToChangeAttach, float transitionTimeMs, int coloursAttach[6], int countColours);
 };

@@ -8,10 +8,10 @@
 class BaseMode
 {
 protected:
-    LEDManager &leds;
+    LEDManager *leds;
     void setAllLEDsTo(int r, int g, int b, float transitionTime); // this would be useful to be shared...
 public:
-    BaseMode(LEDManager &ledAttach);
+    BaseMode(LEDManager *ledAttach);
     virtual void setup() = 0;
     virtual void restart() = 0;
     virtual void loop() = 0;

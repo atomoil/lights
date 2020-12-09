@@ -17,5 +17,5 @@ public:
     void setup();
     void restart();
     void loop();
-    SingleColourMode(LEDManager &ledAttach, float transitionTimeMs, int r, int g, int b);
+    SingleColourMode(LEDManager *ledAttach, float transitionTimeMs, int r, int g, int b);
 };

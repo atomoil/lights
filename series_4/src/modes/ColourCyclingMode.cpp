@@ -2,7 +2,7 @@
 
 
 ColourCyclingMode::ColourCyclingMode(
-    LEDManager &ledAttach, 
+    LEDManager *ledAttach, 
     unsigned int howOftenToChangeAttach,
     float transitionTimeMsAttach,
     int coloursAttach[], 

@@ -8,7 +8,7 @@
 
 #define INITIAL_TOUCH_DOWN_TIME 1000
 
-LEDManager leds;
+LEDManager *leds = new LEDManager();
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
 // define all instance up front
@@ -30,7 +30,7 @@ void processTouchData(std::tuple<TOUCH_STATE, float> val);
 void setup()
 {
     // put your setup code here, to run once:
-    leds.setup();
+    leds->setup();
     touch.setup();
     mode->setup();
 }
@@ -42,7 +42,7 @@ void loop()
 
     mode->loop(); // pass any non-mode changing input to mode
 
-    leds.loop(); // update leds last
+    leds->loop(); // update leds last
 }
 
 // based on inputs, possibly change mode

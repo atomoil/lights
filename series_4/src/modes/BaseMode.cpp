@@ -1,7 +1,7 @@
 #include "BaseMode.h"
 
 BaseMode::BaseMode(
-    LEDManager &ledAttach): 
+    LEDManager *ledAttach): 
         leds(ledAttach)
 {};
 
