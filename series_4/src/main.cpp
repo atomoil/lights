@@ -4,11 +4,14 @@
 #include "managers/LedManager.h"
 #include "modes/ColourCyclingMode.h"
 #include "modes/SingleColourMode.h"
+#include "modes/AnimationMode.h"
 #include "inputs/touch_input.h"
 
 #define INITIAL_TOUCH_DOWN_TIME 1000
 
 LEDManager *leds = new LEDManager();
+PaletteManager *palette = new PaletteManager();
+
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 
 // define all instance up front
@@ -18,11 +21,12 @@ ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, float(1300), cols
 int cols_2[] = {255, 255, 255, /* */ 5, 5, 5, /* */ 250, 250, 250, /* */ 0, 0, 0};
 ColourCyclingMode *touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
 
+AnimationMode *animationMode = new AnimationMode(leds, palette);
 
 SingleColourMode *touchdownInitialMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 0, 255, 255);
 
 // set the first mode
-BaseMode *mode = rgbmode;
+BaseMode *mode = animationMode;
 
 // functions
 void processTouchData(std::tuple<TOUCH_STATE, float> val);

@@ -83,3 +83,7 @@ int PaletteManager::satForSwatch(int swatch_id)
     if (swatch_id >= 5) return 0;
     return palette[swatch_id][PALETTE_SWATCH_SATURATION];
 }
+
+int PaletteManager::totalSwatches() {
+    return 5;
+}

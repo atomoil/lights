@@ -18,6 +18,7 @@ public:
     void setPaletteFromPlCode(char input[100]);
     int hueForSwatch(int swatch_id);
     int satForSwatch(int swatch_id);
+    int totalSwatches();
 };
 
 #endif
