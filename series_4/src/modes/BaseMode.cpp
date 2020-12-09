@@ -12,7 +12,7 @@ void BaseMode::setAllLEDsTo(int r, int g, int b, float transitionTime)
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            leds.setLED(x, y, r, g, b, transitionTime);
+            leds->setRGB(x, y, r, g, b, transitionTime);
         }
     }
 }

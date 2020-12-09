@@ -4,7 +4,7 @@
 #include "FastLED.h"
 #include "init.h"
 
-#define FRAME_RATE 60.0
+#define LED_FRAME_RATE 60.0
 
 /*
 enum LedColourChangeType {
@@ -41,7 +41,8 @@ public:
     void setup();
     void loop();
     int totalLEDs();
-    void setLED(int x, int y, int r, int g, int b, float timeInSeconds);
+    void setRGB(int x, int y, int r, int g, int b, float timeInSeconds);
+    void setHSV(int x, int y, int h, int s, int v, float timeInSeconds);
 };
 
 #endif

@@ -23,18 +23,18 @@ void LEDManager::setup()
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            leds[x][y] = CRGB(0, 15, 0);
+            matrix[x][y] = { x, y, 0, 0, 0 };
+            leds[x][y] = CRGB(0, 0, 0);
         }
     }
 
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 3000);
 
-    frameSize = 1000.0/FRAME_RATE;
+    frameSize = 1000.0/LED_FRAME_RATE;
 }
 
 void LEDManager::loop()
 {
-    // @TODO transition colours towards desired
     if (frameMs >= frameSize) { // 60 fps
         frameMs = 0;
         updateLEDs();
@@ -76,7 +76,7 @@ LedColour LEDManager::updateColour(LedColour colour){
 
 // 1 second = 60 frames
 
-void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInMilliseconds)
+void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseconds)
 {
     if (x < NUM_COLUMNS && y < NUM_LEDS)
     {
@@ -96,7 +96,7 @@ void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInMilliseco
             data.b.desired = b;
         } else {
             // map seconds to 'frames'
-            float frames = timeInMilliseconds / FRAME_RATE;
+            float frames = timeInMilliseconds / LED_FRAME_RATE;
             //
             data.r.desired = r;
             data.r.changeValue = (data.r.desired-data.r.current)/frames;
@@ -110,6 +110,13 @@ void LEDManager::setLED(int x, int y, int r, int g, int b, float timeInMilliseco
         matrix[x][y] = data;
     }
 }
+
+void LEDManager::setHSV(int x, int y, int h, int s, int v, float timeInMilliseconds)
+{
+    CRGB colour = CRGB().setHSV(h, s, v);
+    setRGB(x,y, colour.r, colour.g, colour.b, timeInMilliseconds);
+}
+
 
 int LEDManager::totalLEDs() {
     return NUM_COLUMNS * NUM_LEDS;
