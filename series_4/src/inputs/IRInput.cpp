@@ -14,6 +14,7 @@ LampMessage IRInput::loop()
     char* empty; // for returns with no value;
     if (irrecv->decode(&results))
     {
+        Serial.println("IRInput::loop got decode");
         if (results.value == POWER)
         {
             return {LAMP_TOGGLE_ON, 0, empty};

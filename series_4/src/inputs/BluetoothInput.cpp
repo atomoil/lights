@@ -5,7 +5,7 @@ BluetoothInput::BluetoothInput() {}
 void BluetoothInput::setup()
 {
     //Serial.begin(57600);
-    Serial1.begin(57600);
+    BLE_Serial.begin(57600);
 
     ssData.reserve(200);
     Serial.println("BluetoothInput::setup");
@@ -13,14 +13,6 @@ void BluetoothInput::setup()
 
 LampMessage BluetoothInput::loop()
 {
-    if (!Serial1.available()) {
-        //Serial1.begin(57600);
-        if (showErrorOnce == true) {
-            Serial.println("BLE not available!!! :-/");
-            showErrorOnce = false;
-        }
-        
-    }
     // process one message at a time, hope there isn't a massive backlog :-/
     while (BLE_Serial.available() && stringComplete == false)
     {
@@ -37,8 +29,9 @@ LampMessage BluetoothInput::loop()
         }
         Serial.print("BT: ");
         Serial.print(inChar);
-        Serial.print(" > ");
-        Serial.println(ssData);
+        Serial.print(" > '");
+        Serial.print(ssData);
+        Serial.println("'");
         // if the incoming character is a newline, set a flag so the main loop can
         // do something about it:
     
@@ -46,44 +39,47 @@ LampMessage BluetoothInput::loop()
 
     if (stringComplete)
     {
-        Serial.print("got Message (BT):");
-        Serial.println(ssData);
-        return processMessage(ssData);
+        Serial.print("BLE msg:'");
+        Serial.print(ssData);
+        Serial.println("'");
         // clear the string:
+        LampMessage msg = processMessage(ssData);
         ssData = "";
         stringComplete = false;
+        return msg;
     }
     char* empty = "";
     return {LAMP_NONE, 0, empty};
 }
 
-LampMessage BluetoothInput::processMessage(String ssData)
+LampMessage BluetoothInput::processMessage(String msg)
 {
     char* empty; // for returns with no value;
     //on
-    if (ssData == "st:on")
+    if (msg == "st:on")
     {
+        Serial.println("LAMP_ON!");
         return {LAMP_ON, 0, empty};
         //allLightsOn();
     }
 
-    if (ssData == "st:off")
+    if (msg == "st:off")
     {
         return {LAMP_OFF, 0, empty};
         // allLightsOff();
     }
 
-    if (ssData == "an:slow")
+    if (msg == "an:slow")
     { // an is for animation
         return {SET_ANIM_SPEED, 10000, empty};
         //setAnimatingSpeed(10000);
     }
-    else if (ssData == "an:fast")
+    else if (msg == "an:fast")
     {
         return {SET_ANIM_SPEED, 100, empty};
         //setAnimatingSpeed(100);
     }
-    else if (ssData.startsWith("an"))
+    else if (msg.startsWith("an"))
     {
         char input[100];
         ssData.toCharArray(input, 99);
@@ -94,7 +90,7 @@ LampMessage BluetoothInput::processMessage(String ssData)
         return {MULT_ANIM_SPEED, duration, empty};
     }
 
-    if (ssData.startsWith("am"))
+    if (msg.startsWith("am"))
     { // am is for animation multiplier
         char input[100];
         ssData.toCharArray(input, 99);
@@ -108,7 +104,7 @@ LampMessage BluetoothInput::processMessage(String ssData)
         //Serial.println(mult);
     }
 
-    if (ssData.startsWith("br"))
+    if (msg.startsWith("br"))
     { // am is for brightness
         char input[100];
         ssData.toCharArray(input, 99);
@@ -125,7 +121,7 @@ LampMessage BluetoothInput::processMessage(String ssData)
     // pl:10:11:20:21:30:31:40:41:50:51:60:61
     // pl:10:100:20:100:30:100:40:100:50:100
     //
-    if (ssData.startsWith("pl"))
+    if (msg.startsWith("pl"))
     { // pl is for palette
         char input[100];
         ssData.toCharArray(input, 99);
@@ -163,46 +159,49 @@ LampMessage BluetoothInput::processMessage(String ssData)
         */
     }
 
-    if (ssData.startsWith("v:get"))
+    if (msg.startsWith("v:get"))
     {
         Serial.println("v:get");
         return {GET_VERSION, 0, empty};
         // sendVersionOverBluetooth();
     }
 
-    if (ssData.startsWith("v:lvl"))
+    if (msg.startsWith("v:lvl"))
     {
         Serial.println("v:lvl");
         return {GET_LEVELS, 0, empty};
         // sendLevelsOverBluetooth();
     }
 
-    if (ssData.startsWith("d:sendsens:1"))
+    if (msg.startsWith("d:sendsens:1"))
     {
         return {DEBUG_SENSITIVITY, 1, empty};
         // sendTouchValue = true;
     }
-    else if (ssData.startsWith("d:sendsens:0"))
+    else if (msg.startsWith("d:sendsens:0"))
     {
         return {DEBUG_SENSITIVITY, 0, empty};
         // sendTouchValue = false;
     }
 
 #ifdef SUPPORTS_FFT
-    if (ssData.startsWith("md:0"))
+    if (msg.startsWith("md:0"))
     {
         return {FFT_MODE, 0, empty}; //
     }
-    else if (ssData.startsWith("md:1"))
+    else if (msg.startsWith("md:1"))
     {
         return {FFT_MODE, 1, empty}; //
     }
-    else if (ssData.startsWith("md:2"))
+    else if (msg.startsWith("md:2"))
     {
         return {FFT_MODE, 2, empty}; //
     }
 #endif
 
+    Serial.print("unknown incoming message '");
+    Serial.print(msg);
+    Serial.println("'");
     // return a default
     
     return {LAMP_NONE, 0, empty};

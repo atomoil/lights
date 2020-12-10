@@ -10,13 +10,32 @@ ColourCyclingMode::ColourCyclingMode(
         BaseMode(ledAttach),
         howOftenToChange(howOftenToChangeAttach),
         transitionTimeMs(transitionTimeMsAttach),
-        colours(coloursAttach),
         countColours(countColoursAttach)
-{}
+{
+    int max = countColours*3;
+    if (max > COLOURCYCLING_MAX_PALETTE) {
+        Serial.print("Warning too many colours passed (");
+        Serial.print(countColours);
+        Serial.print(") truncating to ");
+        Serial.print((COLOURCYCLING_MAX_PALETTE/3));
+        Serial.println(" if that's not enough, increase COLOURCYCLING_MAX_PALETTE");
+        max = COLOURCYCLING_MAX_PALETTE;
+    }
+    for(int i=0;i<max;i++) {
+        colours[i] = coloursAttach[i];
+    }
+}
 
 void ColourCyclingMode::setup() {
     setAllLEDsTo(255,255,255,0); // this should never actually be seen!
     restart();
+    for(int i=0;i<countColours;i++) {
+        char message[40];
+        int off = i*3;
+        sprintf(message,"%i > %i,%i,%i",i,colours[off],colours[off+1],colours[off+2]);
+        Serial.print("ColourCycling ");
+        Serial.println(message);
+    }
 }
 
 void ColourCyclingMode::restart()

@@ -61,7 +61,7 @@ void AnimationMode::restart()
 
 void AnimationMode::loop()
 {
-    Serial.println("AnimationMode::loop");
+    // Serial.println("AnimationMode::loop");
     for (int c = 0; c < NUM_COLUMNS; c++)
     {
         for (int d = 0; d < NUM_LEDS; d++)
