@@ -15,14 +15,15 @@
 LEDManager *leds = new LEDManager();
 PaletteManager *palette = new PaletteManager();
 
-TouchInput touch(TOUCH_ON, TOUCH_OFF);
-BluetoothInput bluetooth;
-IRInput remoteControl;
+
+TouchInput *touch = new TouchInput(TOUCH_ON, TOUCH_OFF);
+//BluetoothInput *bluetooth = new BluetoothInput();
+//IRInput *remoteControl = new IRInput();
 
 
 // define all instance up front (possibly not necessary now we are using pointers)
 int cols_1[] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
-ColourCyclingMode *rgbmode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
+ColourCyclingMode *rgbMode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
 //
 int cols_2[] = { 5, 5,  5, /* */ 240, 250, 240, /* */ 10, 10, 10, /* */ 240, 240, 250 };
 ColourCyclingMode *touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
@@ -37,7 +38,7 @@ SingleColourMode *switchOffMode = new SingleColourMode(leds, 5000, 0, 0, 0);
 SingleColourMode *offMode = new SingleColourMode(leds, 0, 0, 0, 0);
 
 // set the first mode
-BaseMode *mode = offMode;
+BaseMode *mode = animationMode; //offMode;
 
 enum LampState
 {
@@ -56,20 +57,22 @@ void setup()
 {
     // put your setup code here, to run once:
     leds->setup();
-    touch.setup();
-    bluetooth.setup();
-    remoteControl.setup();
+    touch->setup();
+    //bluetooth->setup();
+    //remoteControl->setup();
     mode->setup();
 }
 
 void loop()
 {
-    std::tuple<TOUCH_STATE, float> touchData = touch.loop();
+    std::tuple<TOUCH_STATE, float> touchData = touch->loop();
     processTouchData(touchData);
-    LampMessage bleData = bluetooth.loop();
+    /*
+    LampMessage bleData = bluetooth->loop();
     processLampMessage(bleData);
-    LampMessage irData = remoteControl.loop();
+    LampMessage irData = remoteControl->loop();
     processLampMessage(irData);
+    */
 
     mode->loop(); // pass any non-mode changing input to mode
 
@@ -150,6 +153,7 @@ void processTouchData(std::tuple<TOUCH_STATE, float> val)
 
 void processLampMessage(LampMessage message)
 {
+    /*
     LampMessageType type = message.type;
     switch (type)
     {
@@ -189,28 +193,18 @@ void processLampMessage(LampMessage message)
     case GET_VERSION:
         char version_message[80];
         sprintf(version_message, "<v=%s/>%s", hardware_version, supports);
-        bluetooth.sendMessage(version_message);
+        bluetooth->sendMessage(version_message);
         break;
     case GET_LEVELS:
         char levels_message[80];
         sprintf(levels_message, "<s=%.2f/><b=%.3f>", animationMode->getAnimationSpeed(), leds->getBrightness());
-        /*
-        char buff[20];
-        btSerial.write("<s=");
-        dtostrf(currentAnimatingSpeed, 3, 2, buff);
-        btSerial.write(buff);
-        btSerial.write("/>");
 
-        btSerial.write("<b=");
-        dtostrf(dotBrightness, 5, 3, buff);
-        btSerial.write(buff);
-        btSerial.write("/>");
-        */
-        bluetooth.sendMessage(levels_message);
+        bluetooth->sendMessage(levels_message);
         break;
     case DEBUG_SENSITIVITY:
         break;
     case FFT_MODE:
         break;
     }
+    */
 }
