@@ -18,7 +18,7 @@ PaletteManager *palette = new PaletteManager();
 
 TouchInput *touch = new TouchInput(TOUCH_ON, TOUCH_OFF);
 //BluetoothInput *bluetooth = new BluetoothInput();
-//IRInput *remoteControl = new IRInput();
+IRInput *remoteControl = new IRInput();
 
 
 // define all instance up front (possibly not necessary now we are using pointers)
@@ -38,7 +38,8 @@ SingleColourMode *switchOffMode = new SingleColourMode(leds, 5000, 0, 0, 0);
 SingleColourMode *offMode = new SingleColourMode(leds, 0, 0, 0, 0);
 
 // set the first mode
-BaseMode *mode = animationMode; //offMode;
+BaseMode *mode = rgbMode; //animationMode; //offMode;
+
 
 enum LampState
 {
@@ -59,7 +60,7 @@ void setup()
     leds->setup();
     touch->setup();
     //bluetooth->setup();
-    //remoteControl->setup();
+    remoteControl->setup();
     mode->setup();
 }
 

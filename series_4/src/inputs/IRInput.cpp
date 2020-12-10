@@ -1,11 +1,12 @@
 #include "IRInput.h"
 
-IRInput::IRInput() {}
+IRInput::IRInput() {
+    irrecv = new IRrecv(IR_RECV_PIN);
+}
 
 void IRInput::setup()
 {
-    irrecv = new IRrecv(IR_RECV_PIN);
-    irrecv->enableIRIn(); // Start the IR receiver
+    //irrecv->enableIRIn(); // Start the IR receiver
 }
 
 LampMessage IRInput::loop()
