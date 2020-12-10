@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "init.h"
+#include "../init.h"
 #include "LampMessage.h"
 
 #define BLE_Serial Serial1

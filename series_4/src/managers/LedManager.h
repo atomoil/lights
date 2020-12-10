@@ -2,7 +2,7 @@
 #define LED_MANAGER_HPP_INCLUDED
 
 #include "FastLED.h"
-#include "init.h"
+#include "../init.h"
 
 #define LED_FRAME_RATE 60.0
 
@@ -26,7 +26,6 @@ struct LedData {
     LedColour g;
     LedColour b;
 };
-
 
 class LEDManager
 {

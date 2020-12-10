@@ -3,7 +3,7 @@
 #define IRINPUT_HPP_INCLUDED
 
 #include <Arduino.h>
-#include "init.h"
+#include "../init.h"
 #include "LampMessage.h"
 
 #include <IRremote.h>

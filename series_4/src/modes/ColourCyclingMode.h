@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include "init.h"
-#include "managers/LedManager.h"
+#include "../init.h"
+#include "../managers/LedManager.h"
 #include "BaseMode.h"
 
 

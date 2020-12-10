@@ -2,8 +2,8 @@
 #define BASE_MODE_HPP_INCLUDED
 
 #include <Arduino.h>
-#include "init.h"
-#include "managers/LedManager.h"
+#include "../init.h"
+#include "../managers/LedManager.h"
 
 class BaseMode
 {
