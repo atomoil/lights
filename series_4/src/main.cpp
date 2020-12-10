@@ -8,6 +8,7 @@
 #include "modes/AnimationMode.h"
 #include "inputs/TouchInput.h"
 #include "inputs/BluetoothInput.h"
+#include "inputs/IRInput.h"
 
 #define INITIAL_TOUCH_DOWN_TIME 1000
 
@@ -16,6 +17,7 @@ PaletteManager *palette = new PaletteManager();
 
 TouchInput touch(TOUCH_ON, TOUCH_OFF);
 BluetoothInput bluetooth;
+IRInput remoteControl;
 
 
 // define all instance up front (possibly not necessary now we are using pointers)
@@ -56,6 +58,7 @@ void setup()
     leds->setup();
     touch.setup();
     bluetooth.setup();
+    remoteControl.setup();
     mode->setup();
 }
 
@@ -65,6 +68,8 @@ void loop()
     processTouchData(touchData);
     LampMessage bleData = bluetooth.loop();
     processLampMessage(bleData);
+    LampMessage irData = remoteControl.loop();
+    processLampMessage(irData);
 
     mode->loop(); // pass any non-mode changing input to mode
 
