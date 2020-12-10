@@ -1,3 +1,7 @@
+// serial data
+String ssData = "";         // a String to hold incoming data
+bool stringComplete = false;  // whether the string is complete
+
 //-- fastLED
 #include "FastLED.h"
 #include <stdio.h>
@@ -90,7 +94,7 @@ char hardware_version[] = "3.1";
 #endif
 
 
-#if LAMP_CURRENT == LAMP_S4_01_SANDY || LAMP_CURRENT == LAMP_S4_02_RAKU_DARK 
+#if LAMP_CURRENT == LAMP_S4_01_SANDY || LAMP_CURRENT == LAMP_S4_02_RAKU_DARK
 const int touchTriggerOn = 700; // 700 // 1800
 const int touchTriggerOff = 500; // 500
 const int NUM_LEDS = 11;
@@ -109,6 +113,7 @@ char hardware_version[] = "4.1";
 #endif
 
 
+
 #if LAMP_CURRENT == LAMP_S5_01_BLACK_YELLOW
 const int touchTriggerOn = 600;
 const int touchTriggerOff = 400;
@@ -118,7 +123,7 @@ const int NUM_LEDS = 12;
 char hardware_version[] = "4.1";
 #endif
 
-#if LAMP_CURRENT == LAMP_S5_02_BUTTERFLY 
+#if LAMP_CURRENT == LAMP_S5_02_BUTTERFLY
 const int touchTriggerOn = 500; // 700 // 1800
 const int touchTriggerOff = 300; // 500
 const int NUM_LEDS = 12;
@@ -195,14 +200,14 @@ float fft_max_band = 0.0;
 float fft_mult = 1.0;
 float fftVals[6];
 
-  
+
 #endif
 
 int app_mode = MODE_REACTIVE;
 
 //-- touchRead
-const int sensPin = 15; 
-int sens = 0; 
+const int sensPin = 15;
+int sens = 0;
 int sBias = 0;
 
 //- Bluetooth serial data
@@ -223,7 +228,7 @@ char sData;
 FilterOnePole filterLP( LOWPASS, 1.0 ); //create a one pole (RC) lowpass filter
 FilterOnePole filterLP2( LOWPASS, 1.0 );
 float filt = 0;
- 
+
 //-- Switch
 int holdCount;
 boolean sw = true ; boolean oldTouch; boolean isTouch;
@@ -238,7 +243,7 @@ elapsedMillis timeUpdate;
 
 elapsedMillis timeElapsedInState;
 
-// 
+//
 bool sendTouchValue = false;
 
 float dotBrightness = 1.0;
