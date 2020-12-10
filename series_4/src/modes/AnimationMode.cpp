@@ -4,8 +4,7 @@ AnimationMode::AnimationMode(
     LEDManager *ledAttach,
     PaletteManager *paletteAttach) : BaseMode(ledAttach),
                                      palette(paletteAttach)
-{
-}
+{}
 
 void AnimationMode::setup()
 {
@@ -30,6 +29,7 @@ void AnimationMode::setup()
 
 void AnimationMode::restart()
 {
+    Serial.println("AnimationMode::restart");
     float timeElapsed = currentAnimatingSpeed / 500.0;
     float margin = (timeElapsed / 10.0);
     // int deltaUpdate = 60; // @TODO every 60ms or 16fps - doesn't seem right
@@ -61,7 +61,7 @@ void AnimationMode::restart()
 
 void AnimationMode::loop()
 {
-    // Serial.println("AnimationMode::loop");
+    Serial.println("AnimationMode::loop");
     for (int c = 0; c < NUM_COLUMNS; c++)
     {
         for (int d = 0; d < NUM_LEDS; d++)
@@ -141,4 +141,8 @@ void AnimationMode::setAnimationSpeed(float newSpeed)
             lights[c][d] = dot;
         }
     }
+}
+
+float AnimationMode::getAnimationSpeed() {
+    return currentAnimatingSpeed;
 }

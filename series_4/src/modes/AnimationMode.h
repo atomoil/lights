@@ -37,6 +37,7 @@ public:
     void restart();
     void loop();
     void setAnimationSpeed(float newSpeed);
+    float getAnimationSpeed();
     AnimationMode(LEDManager *ledAttach, PaletteManager *palette);
 };
 

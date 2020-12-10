@@ -10,6 +10,7 @@ void LEDManager::setup()
         FastLED.addLeds<APA102, pin_id, CLOCK_PIN1, BGR, DATA_RATE_MHZ(5)>(leds[i], NUM_LEDS);
     }
     */
+    brightness = 1.0;
 
     FastLED.addLeds<APA102, DATA_PIN1, CLOCK_PIN1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN2, CLOCK_PIN2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
@@ -23,28 +24,32 @@ void LEDManager::setup()
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            matrix[x][y] = { x, y, 0, 0, 0 };
+            matrix[x][y] = {x, y, 0, 0, 0};
             leds[x][y] = CRGB(0, 0, 0);
         }
     }
 
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 3000);
 
-    frameSize = 1000.0/LED_FRAME_RATE;
+    frameSize = 1000.0 / LED_FRAME_RATE;
 }
 
 void LEDManager::loop()
 {
-    if (frameMs >= frameSize) { // 60 fps
+    if (frameMs >= frameSize)
+    { // 60 fps
         frameMs = 0;
         updateLEDs();
     }
     FastLED.show();
 }
 
-void LEDManager::updateLEDs() {
-    for(int x=0;x<NUM_COLUMNS;x++) {
-        for(int y=0;y<NUM_LEDS;y++) {
+void LEDManager::updateLEDs()
+{
+    for (int x = 0; x < NUM_COLUMNS; x++)
+    {
+        for (int y = 0; y < NUM_LEDS; y++)
+        {
             LedData data = matrix[x][y];
             data.r = updateColour(data.r);
             data.g = updateColour(data.g);
@@ -56,17 +61,22 @@ void LEDManager::updateLEDs() {
     }
 }
 
-
-LedColour LEDManager::updateColour(LedColour colour){
-    if (colour.changeValue > 0) {
-        colour.current = colour.current+colour.changeValue;
-        if (colour.current >= colour.desired) {
+LedColour LEDManager::updateColour(LedColour colour)
+{
+    if (colour.changeValue > 0)
+    {
+        colour.current = colour.current + colour.changeValue;
+        if (colour.current >= colour.desired)
+        {
             colour.current = colour.desired;
             colour.changeValue = 0;
         }
-    } else if (colour.changeValue < 0) {
-        colour.current = colour.current+colour.changeValue;
-        if (colour.current <= colour.desired) {
+    }
+    else if (colour.changeValue < 0)
+    {
+        colour.current = colour.current + colour.changeValue;
+        if (colour.current <= colour.desired)
+        {
             colour.current = colour.desired;
             colour.changeValue = 0;
         }
@@ -82,7 +92,8 @@ void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseco
     {
         //leds[x][y] = CRGB(r, g, b);
         LedData data = matrix[x][y];
-        if (timeInMilliseconds <= 0) { // 0 value means set immediately
+        if (timeInMilliseconds <= 0)
+        { // 0 value means set immediately
             data.r.changeValue = 0;
             data.r.current = r;
             data.r.desired = r;
@@ -94,18 +105,20 @@ void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseco
             data.b.changeValue = 0;
             data.b.current = b;
             data.b.desired = b;
-        } else {
+        }
+        else
+        {
             // map seconds to 'frames'
             float frames = timeInMilliseconds / LED_FRAME_RATE;
             //
             data.r.desired = r;
-            data.r.changeValue = (data.r.desired-data.r.current)/frames;
+            data.r.changeValue = (data.r.desired - data.r.current) / frames;
             //
             data.g.desired = g;
-            data.g.changeValue = (data.g.desired-data.g.current)/frames;
+            data.g.changeValue = (data.g.desired - data.g.current) / frames;
             //
             data.b.desired = b;
-            data.b.changeValue = (data.b.desired-data.b.current)/frames;
+            data.b.changeValue = (data.b.desired - data.b.current) / frames;
         }
         matrix[x][y] = data;
     }
@@ -114,10 +127,16 @@ void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseco
 void LEDManager::setHSV(int x, int y, int h, int s, int v, float timeInMilliseconds)
 {
     CRGB colour = CRGB().setHSV(h, s, v);
-    setRGB(x,y, colour.r, colour.g, colour.b, timeInMilliseconds);
+    setRGB(x, y, colour.r, colour.g, colour.b, timeInMilliseconds);
 }
 
+void LEDManager::setBrightness(float level)
+{
+    // @TODO - clamp values to 0 - 1
+    brightness = level;
 
-int LEDManager::totalLEDs() {
-    return NUM_COLUMNS * NUM_LEDS;
+}
+float LEDManager::getBrightness()
+{
+    return brightness;
 }

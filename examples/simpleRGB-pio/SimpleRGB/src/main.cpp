@@ -10,6 +10,7 @@ void ledWhite();
 void setup()
 {
     serialUSB.begin(57600); //USB to arduino monitor if needed
+    Serial1.begin(57600);
 
     FastLED.addLeds<APA102, DATA_PIN1, CLOCK_PIN1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN2, CLOCK_PIN2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
@@ -18,6 +19,8 @@ void setup()
     FastLED.addLeds<APA102, DATA_PIN5, CLOCK_PIN5, BGR, DATA_RATE_MHZ(5)>(leds[4], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN6, CLOCK_PIN6, BGR, DATA_RATE_MHZ(5)>(leds[5], NUM_LEDS);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 3000);
+
+    Serial.println("Started sketch");
 }
 
 void loop()
@@ -26,6 +29,10 @@ void loop()
     // LEDs
     if (timeSw >= deltaSw)
     {
+        Serial.print("BT available: ");
+        Serial.println(Serial1.available());
+        showBTMessage = false;
+
         //SerialUSB.println(count);
         timeSw = 0;
         if (count == 5)

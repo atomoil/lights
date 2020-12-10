@@ -21,9 +21,9 @@ void setup()
     Serial.print("Uploaded: ");   Serial.println(__DATE__);
     Serial.println(" ");
  
-    btSerial.begin(9600);  
+    btSerial.begin(57600);  
     Serial.println("BTserial started at 9600");
-      pinMode(ledPin, OUTPUT);
+    // pinMode(ledPin, OUTPUT);
 }
  
 void loop()

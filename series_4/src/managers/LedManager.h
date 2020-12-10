@@ -35,6 +35,7 @@ private:
     CRGB leds[NUM_COLUMNS][NUM_LEDS];
     elapsedMillis frameMs;
     float frameSize;
+    float brightness;
     void updateLEDs();
     LedColour updateColour(LedColour colour);
 public:
@@ -43,6 +44,8 @@ public:
     int totalLEDs();
     void setRGB(int x, int y, int r, int g, int b, float timeInSeconds);
     void setHSV(int x, int y, int h, int s, int v, float timeInSeconds);
+    void setBrightness(float level);
+    float getBrightness();
 };
 
 #endif

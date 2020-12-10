@@ -1,4 +1,5 @@
-
+#ifndef INIT_HPP_INCLUDED
+#define INIT_HPP_INCLUDED
 
 #define NUM_COLUMNS 6
 
@@ -28,10 +29,10 @@
 
 // TOUCH
 
-//const int sensPin = 15; // @TODO remove this
 #define TOUCH_PIN 15
 
-//const int touchTriggerOn = 700; // 700 // 1800
-//const int touchTriggerOff = 500; // 500
-#define TOUCH_ON 700
-#define TOUCH_OFF 500
+// REMOTE
+#define IR_RECV_PIN 5
+
+
+#endif

@@ -1,6 +1,8 @@
 // serial
 #define serialUSB Serial
 
+//SoftwareSerial bluetooth(0, 1);
+
 //---------LEDS----------------//
 #include "FastLED.h"
 #define NUM_LEDS 15
@@ -30,3 +32,5 @@ CRGB leds[6][NUM_LEDS];
 const int deltaSw = 500;
 uint8_t  count = 1;
 elapsedMillis timeSw;
+
+boolean showBTMessage = true;
