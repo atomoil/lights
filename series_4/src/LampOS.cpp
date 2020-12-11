@@ -9,9 +9,9 @@ LampOS::LampOS()
     bluetooth = new BluetoothInput();
     remoteControl = new IRInput();
 
-    int cols_1[30] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
-    rgbMode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
-    
+    //int cols_1[30] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
+    //rgbMode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
+
     int cols_2[30] = {40, 55, 45, /* */ 240, 250, 245, /* */ 10, 10, 10, /* */ 240, 245, 250};
     touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
 
@@ -24,6 +24,12 @@ LampOS::LampOS()
     switchOffMode = new SingleColourMode(leds, 5000, 0, 0, 0);
     offMode = new SingleColourMode(leds, 0, 0, 0, 0);
 
+#ifdef SUPPORTS_FFT
+
+    
+
+#endif
+
     // set the first mode
     //mode = rgbMode;
     //mode = animationMode;
@@ -32,7 +38,8 @@ LampOS::LampOS()
 
 void LampOS::setup()
 {
-    //Serial.print("LampOS::setup");
+    Serial.println("LampOS::setup start");
+
     lampState = OFF;
 
     leds->setup();
@@ -50,6 +57,24 @@ void LampOS::setup()
     brightMode->setup();
     switchOffMode->setup();
     offMode->setup();
+
+#ifdef SUPPORTS_FFT
+    
+    Serial.println("FFT is supported!!!");
+
+    // for reasons I honestly don't understand:
+    // initialising one of FFTBarsMode or FFTPulseMode in the constructor worked
+    // but initalising both of them stopped the program from running :-/
+    // doing it here seems fine.
+    fftBarsMode = new FFTBarsMode(leds, palette);
+    fftPulseMode = new FFTPulseMode(leds, palette);
+
+    //fftBarsMode->setup();
+    //fftPulseMode->setup();
+
+#else
+    Serial.print("FFT not supported");
+#endif
     Serial.println("LampOS::setup complete");
 }
 

@@ -5,9 +5,6 @@
 
 class FFTBarsMode: public BaseFFTMode
 {
-private:
-    
-
 public:
     // void setup();
     // void restart();

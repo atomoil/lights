@@ -5,16 +5,33 @@ BaseFFTMode::BaseFFTMode(
     PaletteManager *paletteAttach) : BaseMode(ledAttach),
                                      palette(paletteAttach)
 {
-    AudioInputAnalog adc1 = AudioInputAnalog(A0);
-    FFT = AudioAnalyzeFFT256();
-    patchCord = new AudioConnection(adc1, FFT);
+    
+}
+
+boolean BaseFFTMode::fftInitialised = false;
+
+void BaseFFTMode::initFFT() {
+    Serial.print("InitFFT ");
+    Serial.println(fftInitialised);
+    if (fftInitialised == false){
+        fftInitialised = true;
+
+        /*
+        AudioInputAnalog adc1 = AudioInputAnalog(A0);
+        FFT = AudioAnalyzeFFT256();
+        BaseFFTMode::patchCord = new AudioConnection(adc1, FFT);
+
+        // following was in setup, but maybe better here.
+        AudioMemory(4);
+        FFT.averageTogether(8);
+        FFT.windowFunction(AudioWindowHanning256);
+        */
+    }
 }
 
 void BaseFFTMode::setup()
 {
-    AudioMemory(4);
-    FFT.averageTogether(8);
-    FFT.windowFunction(AudioWindowHanning256);
+    BaseFFTMode::initFFT();
     restart();
 }
 

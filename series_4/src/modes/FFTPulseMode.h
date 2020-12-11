@@ -5,8 +5,6 @@
 
 class FFTPulseMode: public BaseFFTMode
 {
-private:
-    
 public:
     // void setup(); 
     // xsvoid restart();

@@ -13,6 +13,13 @@
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
+#ifdef SUPPORTS_FFT
+
+#include "modes/FFTBarsMode.h"
+#include "modes/FFTPulseMode.h"
+
+#endif
+
 #define INITIAL_TOUCH_DOWN_TIME 1200
 
 enum LampState
@@ -38,11 +45,18 @@ private:
     SingleColourMode *brightMode;
     SingleColourMode *switchOffMode;
     SingleColourMode *offMode;
+
+#ifdef SUPPORTS_FFT
+    FFTBarsMode *fftBarsMode;
+    FFTPulseMode *fftPulseMode;
+#endif
+
     BaseMode *mode;
     LampState lampState;
     elapsedMillis frameMs;
     void processTouchData(std::tuple<TOUCH_STATE, float> val);
     void processLampMessage(LampMessage);
+
 public:
     void setup();
     void loop();
