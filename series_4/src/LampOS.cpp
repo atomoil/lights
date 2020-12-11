@@ -50,6 +50,7 @@ void LampOS::setup()
     brightMode->setup();
     switchOffMode->setup();
     offMode->setup();
+    Serial.println("LampOS::setup complete");
 }
 
 void LampOS::loop()
@@ -211,6 +212,16 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     case INC_BRIGHTNESS:
     {
         Serial.println("INC_BRIGHTNESS");
+        float dotBrightness = leds->getBrightness() + lampMsg.number;
+        if (dotBrightness < 0.1)
+        {
+            dotBrightness = 0.1;
+        }
+        else if (dotBrightness > 1.0)
+        {
+            dotBrightness = 1.0;
+        }
+        leds->setBrightness(dotBrightness);
     }
     break;
     case SET_PALETTE:
@@ -225,6 +236,9 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     {
         char version_message[80];
         sprintf(version_message, "<v=%s/>%s", LAMP_HARDWARE_VERSION, LAMP_SUPPORTS);
+        //Serial.print("GET_VERSION - sending '");
+        //Serial.print(version_message);
+        //Serial.println("'");
         bluetooth->sendMessage(version_message);
     }
     break;
@@ -237,8 +251,33 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     }
     break;
     case DEBUG_SENSITIVITY:
+
         break;
     case FFT_MODE:
+#ifdef SUPPORTS_FFT
+        int fft_mode = int(lampMsg.number);
+        switch (fft_mode)
+        {
+        case 0:
+        {
+            mode = animationMode;
+            mode->restart();
+        }
+        break;
+        case 1:
+        {
+            mode = fftBarsMode;
+            mode->restart();
+        }
+        break;
+        case 2:
+        {
+            mode = fftPulseMode;
+            mode->restart();
+        }
+        break;
+        }
+#endif
         break;
     }
 }

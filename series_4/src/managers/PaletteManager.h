@@ -19,6 +19,8 @@ public:
     int hueForSwatch(int swatch_id);
     int satForSwatch(int swatch_id);
     int totalSwatches();
+    float getBrightness();
+    void setBrightness(float brightness);
 };
 
 #endif
