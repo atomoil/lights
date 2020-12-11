@@ -9,5 +9,5 @@ public:
     // void setup();
     // void restart();
     void loop();
-    FFTBarsMode(LEDManager *ledAttach, PaletteManager *paletteAttach);
+    FFTBarsMode(LEDManager *ledAttach, PaletteManager *paletteAttach, AudioManager *audioAttach);
 };

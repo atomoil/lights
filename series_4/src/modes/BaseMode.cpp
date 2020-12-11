@@ -8,9 +8,9 @@ BaseMode::BaseMode(
 
 void BaseMode::setAllLEDsTo(int r, int g, int b, float transitionTime)
 {
-    char message[30];
-    sprintf(message, "setAllLEDs to %i, %i, %i",r,g,b);
-    Serial.println(message);
+    //char message[30];
+    //sprintf(message, "setAllLEDs to %i, %i, %i",r,g,b);
+    //Serial.println(message);
     /*
     if (r > 255) r = 255;
     if (g > 255) g = 255;

@@ -5,13 +5,17 @@
 #include "init.h"
 #include "lamps.h"
 #include "main.h"
+
 #include "managers/LedManager.h"
-#include "modes/ColourCyclingMode.h"
-#include "modes/SingleColourMode.h"
-#include "modes/AnimationMode.h"
+#include "managers/AudioManager.h"
+
 #include "inputs/TouchInput.h"
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
+
+#include "modes/ColourCyclingMode.h"
+#include "modes/SingleColourMode.h"
+#include "modes/AnimationMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -47,6 +51,7 @@ private:
     SingleColourMode *offMode;
 
 #ifdef SUPPORTS_FFT
+    AudioManager *audio;
     FFTBarsMode *fftBarsMode;
     FFTPulseMode *fftPulseMode;
 #endif

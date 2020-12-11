@@ -9,5 +9,5 @@ public:
     // void setup(); 
     // xsvoid restart();
     void loop();
-    FFTPulseMode(LEDManager *ledAttach, PaletteManager *paletteAttach);
+    FFTPulseMode(LEDManager *ledAttach, PaletteManager *paletteAttach, AudioManager *audioAttach);
 };

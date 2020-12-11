@@ -4,7 +4,8 @@ AnimationMode::AnimationMode(
     LEDManager *ledAttach,
     PaletteManager *paletteAttach) : BaseMode(ledAttach),
                                      palette(paletteAttach)
-{}
+{   
+}
 
 void AnimationMode::setup()
 {
