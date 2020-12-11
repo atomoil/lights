@@ -24,6 +24,8 @@ protected:
     void updateFFT();
     void getFFT(int i, float n);
     void getMaxLevel();
+    int valueForLED(float value, int number, int maxnum);
+    float realValueForLED(float value, int number, int maxnum);
 
 public:
     void setup();
@@ -31,3 +33,4 @@ public:
     void loop();
     BaseFFTMode(LEDManager *ledAttach, PaletteManager *paletteAttach);
 };
+

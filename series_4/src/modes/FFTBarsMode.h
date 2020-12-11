@@ -1,18 +1,16 @@
 #include <Arduino.h>
 #include "../init.h"
-#include "../managers/LedManager.h"
-#include "BaseMode.h"
+#include "BaseFFTMode.h"
 
 
-
-class FFTBarsMode: public BaseMode
+class FFTBarsMode: public BaseFFTMode
 {
 private:
     
 
 public:
-    void setup();
-    void restart();
+    // void setup();
+    // void restart();
     void loop();
-    FFTBarsMode(LEDManager *ledAttach);
+    FFTBarsMode(LEDManager *ledAttach, PaletteManager *paletteAttach);
 };
