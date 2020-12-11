@@ -31,8 +31,11 @@ BLECharacteristic* pCharacteristic = NULL;
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
 //
-#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+// #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+// #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+// the first set of lamps used FFE0 and FFE1 as service and characteristic ID respectively (must work out what these _should_ be)
+#define SERVICE_UUID        "FFE0"
+#define CHARACTERISTIC_UUID "FFE1"
 
 class BTCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) 
