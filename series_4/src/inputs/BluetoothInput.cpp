@@ -8,7 +8,6 @@ void BluetoothInput::setup()
     BLE_Serial.begin(57600);
 
     ssData.reserve(200);
-    Serial.println("BluetoothInput::setup");
 }
 
 LampMessage BluetoothInput::loop()
@@ -27,19 +26,18 @@ LampMessage BluetoothInput::loop()
         {
             ssData += inChar;
         }
+        /*
         Serial.print("BT: ");
         Serial.print(inChar);
         Serial.print(" > '");
         Serial.print(ssData);
         Serial.println("'");
-        // if the incoming character is a newline, set a flag so the main loop can
-        // do something about it:
-    
+        */
     }
 
     if (stringComplete)
     {
-        Serial.print("BLE msg:'");
+        Serial.print("BLE recieved: '");
         Serial.print(ssData);
         Serial.println("'");
         // clear the string:
@@ -48,8 +46,8 @@ LampMessage BluetoothInput::loop()
         stringComplete = false;
         return msg;
     }
-    char* empty = "";
-    return {LAMP_NONE, 0, empty};
+    //char* empty = "";
+    return {LAMP_NONE, 0, ""};
 }
 
 LampMessage BluetoothInput::processMessage(String msg)
