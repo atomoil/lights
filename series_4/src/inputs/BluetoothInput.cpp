@@ -54,7 +54,7 @@ LampMessage BluetoothInput::loop()
 
 LampMessage BluetoothInput::processMessage(String msg)
 {
-    char* empty; // for returns with no value;
+    String empty = ""; // for returns with no value;
     //on
     if (msg == "st:on")
     {
@@ -123,9 +123,12 @@ LampMessage BluetoothInput::processMessage(String msg)
     //
     if (msg.startsWith("pl"))
     { // pl is for palette
+        
         char input[100];
         ssData.toCharArray(input, 99);
-        return {SET_PALETTE, 0, input};
+        Serial.print("PALETTE: ");
+        Serial.println(input);
+        return {SET_PALETTE, 0, ssData};
         /*
         char *text = strtok(input, ":");
         int col = 0;
@@ -199,7 +202,7 @@ LampMessage BluetoothInput::processMessage(String msg)
     }
 #endif
 
-    Serial.print("unknown incoming message '");
+    Serial.print("Message unknown '");
     Serial.print(msg);
     Serial.println("'");
     // return a default

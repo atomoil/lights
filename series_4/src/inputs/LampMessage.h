@@ -16,7 +16,7 @@ enum LampMessageType {
 struct LampMessage {
     LampMessageType type;
     float number;
-    char* string;
+    String string;
 };
 
 #endif

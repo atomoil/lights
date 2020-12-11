@@ -32,8 +32,14 @@ void PaletteManager::savePalette() {
 // pl:10:11:20:21:30:31:40:41:50:51:60:61
 // pl:10:100:20:100:30:100:40:100:50:100
 //
-void PaletteManager::setPaletteFromPlCode(char input[100])
+void PaletteManager::setPaletteFromPlCode(String stringInput)
 {
+    char input[100];
+    stringInput.toCharArray(input, 99);
+    Serial.print("PaletteManager::setPaletteFromPlCode: '");
+    Serial.print(input);
+    Serial.print("' ");
+    Serial.println(totalPalettes);
     char *text = strtok(input, ":"); // remove first 'pl'
     int col = 0;
     int i = 0;
@@ -60,6 +66,7 @@ void PaletteManager::setPaletteFromPlCode(char input[100])
         Serial.println(col);
         i++;
     }
+    savePalette();
 }
 
 int PaletteManager::convertHue(float f)

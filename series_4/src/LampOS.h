@@ -13,7 +13,7 @@
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
-#define INITIAL_TOUCH_DOWN_TIME 2000
+#define INITIAL_TOUCH_DOWN_TIME 1200
 
 enum LampState
 {

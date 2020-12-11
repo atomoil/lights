@@ -12,7 +12,7 @@ LampOS::LampOS()
     int cols_1[30] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
     rgbMode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
     
-    int cols_2[30] = {5, 5, 5, /* */ 240, 250, 240, /* */ 10, 10, 10, /* */ 240, 240, 250};
+    int cols_2[30] = {40, 55, 45, /* */ 240, 250, 245, /* */ 10, 10, 10, /* */ 240, 245, 250};
     touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
 
     animationMode = new AnimationMode(leds, palette);
@@ -147,9 +147,9 @@ void LampOS::processTouchData(std::tuple<TOUCH_STATE, float> val)
     }
 }
 
-void LampOS::processLampMessage(LampMessage message)
+void LampOS::processLampMessage(LampMessage lampMsg)
 {
-    LampMessageType type = message.type;
+    LampMessageType type = lampMsg.type;
     switch (type)
     {
     case LAMP_NONE:
@@ -186,7 +186,7 @@ void LampOS::processLampMessage(LampMessage message)
     break;
     case SET_ANIM_SPEED:
     {
-        animationMode->setAnimationSpeed(message.number);
+        animationMode->setAnimationSpeed(lampMsg.number);
         if (mode != animationMode)
         {
             lampState = ON;
@@ -198,7 +198,7 @@ void LampOS::processLampMessage(LampMessage message)
     case MULT_ANIM_SPEED:
     {
         float speed = animationMode->getAnimationSpeed();
-        speed *= message.number;
+        speed *= lampMsg.number;
         animationMode->setAnimationSpeed(speed);
         if (mode != animationMode)
         {
@@ -215,7 +215,10 @@ void LampOS::processLampMessage(LampMessage message)
     break;
     case SET_PALETTE:
     {
-        palette->setPaletteFromPlCode(message.string);
+        Serial.print("LampOS:processLampMessage: '");
+        Serial.print(lampMsg.string);
+        Serial.println("'");
+        palette->setPaletteFromPlCode(lampMsg.string);
     }
     break;
     case GET_VERSION:
