@@ -272,7 +272,13 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     }
     break;
     case DEBUG_SENSITIVITY:
-
+        // 
+        if (lampMsg.number >= 1) {
+            debugTouchAmount = true;
+        } else {
+            debugTouchAmount = false;
+        }
+        
         break;
     case FFT_MODE:
 #ifdef SUPPORTS_FFT

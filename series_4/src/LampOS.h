@@ -59,6 +59,8 @@ private:
     BaseMode *mode;
     LampState lampState;
     elapsedMillis frameMs;
+    boolean debugTouchAmount = false;
+    
     void processTouchData(std::tuple<TOUCH_STATE, float> val);
     void processLampMessage(LampMessage);
 
