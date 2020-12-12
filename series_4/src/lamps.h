@@ -3,7 +3,7 @@
 //const int touchTriggerOff = 500; // 500
 #define TOUCH_ON 700
 #define TOUCH_OFF 500
-//#define SUPPORTS_FFT 1
+// #define SUPPORTS_FFT 1
 
 //char hardware_version[] = "4.2";
 #define LAMP_HARDWARE_VERSION "4.2"

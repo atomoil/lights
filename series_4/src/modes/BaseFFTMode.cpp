@@ -9,12 +9,3 @@ BaseFFTMode::BaseFFTMode(
 {
 
 }
-
-void BaseFFTMode::setup()
-{
-    restart();
-}
-
-void BaseFFTMode::restart()
-{
-}

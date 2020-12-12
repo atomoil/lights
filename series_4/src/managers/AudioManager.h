@@ -20,7 +20,7 @@ private:
     float realValueForLED(float value, int number, int maxnum);
 
 public:
-    
+    void setup();
     void update();
     int valueForLED(int band, int number, int maxnum);
     AudioManager();

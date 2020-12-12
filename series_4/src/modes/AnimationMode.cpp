@@ -126,7 +126,7 @@ void AnimationMode::setAnimationSpeed(float newSpeed)
     {
         currentAnimatingSpeed = 150;
     }
-    Serial.print("currentAnimatingSpeed");
+    Serial.print("currentAnimatingSpeed: ");
     Serial.println(currentAnimatingSpeed);
 
     float timeElapsed = currentAnimatingSpeed / 500.0; // eh?

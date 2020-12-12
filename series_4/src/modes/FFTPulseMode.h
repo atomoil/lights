@@ -6,8 +6,8 @@
 class FFTPulseMode: public BaseFFTMode
 {
 public:
-    // void setup(); 
-    // xsvoid restart();
+    void setup(); 
+    void restart();
     void loop();
     FFTPulseMode(LEDManager *ledAttach, PaletteManager *paletteAttach, AudioManager *audioAttach);
 };

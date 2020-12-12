@@ -2,7 +2,10 @@
 
 
 AudioManager::AudioManager() {
-    
+}
+
+void AudioManager::setup() {
+    Serial.println("AudioManager::setup");
     AudioInputAnalog adc1 = AudioInputAnalog(A0);
     FFT = AudioAnalyzeFFT256();
     patchCord = new AudioConnection(adc1, FFT);
@@ -12,6 +15,8 @@ AudioManager::AudioManager() {
     FFT.averageTogether(8);
     FFT.windowFunction(AudioWindowHanning256);
     
+
+    Serial.println("AudioManager::setup complete");
 }
 
 

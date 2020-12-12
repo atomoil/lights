@@ -13,8 +13,6 @@ protected:
     AudioManager *audio;
 
 public:
-    void setup();
-    void restart();
     BaseFFTMode(LEDManager *ledAttach, PaletteManager *paletteAttach, AudioManager *audioAttach);
 };
 

@@ -7,11 +7,15 @@ FFTBarsMode::FFTBarsMode(
 {
 }
 
-/*
+
 void FFTBarsMode::setup() {
+    Serial.println("FFTBarsMode::setup");
+}
+
+
+void FFTBarsMode::restart() {
     
 }
-*/
 
 void FFTBarsMode::loop()
 {

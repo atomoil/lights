@@ -27,15 +27,15 @@ LampOS::LampOS()
 #ifdef SUPPORTS_FFT
 
     audio = new AudioManager();
-    // fftBarsMode = new FFTBarsMode(leds, palette, audio);
-    // fftPulseMode = new FFTPulseMode(leds, palette, audio);
+    fftBarsMode = new FFTBarsMode(leds, palette, audio);
+    fftPulseMode = new FFTPulseMode(leds, palette, audio);
 
 #endif
 
     // set the first mode
-    //mode = rgbMode;
+    mode = rgbMode;
     //mode = animationMode;
-    mode = offMode;
+    //mode = offMode;
 };
 
 void LampOS::setup()
@@ -62,10 +62,11 @@ void LampOS::setup()
 
 #ifdef SUPPORTS_FFT
 
-    Serial.println("FFT is supported!!!");
+    Serial.println("FFT is supported!!");
+    audio->setup();
 
-    //fftBarsMode->setup();
-    //fftPulseMode->setup();
+    fftBarsMode->setup();
+    fftPulseMode->setup();
 
 #else
     Serial.println("FFT not supported");
@@ -275,6 +276,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         break;
     case FFT_MODE:
 #ifdef SUPPORTS_FFT
+{
         int fft_mode = int(lampMsg.number);
         switch (fft_mode)
         {
@@ -297,6 +299,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         }
         break;
         }
+}
 #endif
         break;
     }
