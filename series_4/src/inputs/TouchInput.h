@@ -16,10 +16,12 @@ private:
     elapsedMillis nextFrameMs;
     FilterOnePole filterLP;
     FilterOnePole filterLP2;
+    float touchAmount;
 
 public:
     TouchInput(int on, int off);
     void setup();
     std::tuple<TOUCH_STATE,float> loop(); // should be Actions loop(); but one thing at a time!
+    float getCurrentTouchAmount();
 };
 

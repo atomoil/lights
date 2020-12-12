@@ -38,7 +38,7 @@ std::tuple<TOUCH_STATE, float> TouchInput::loop()
     {
         isTouching = false;
     }
-    //}
+    touchAmount = filt;
 
     TOUCH_STATE returnState = NONE;
     float returnValue = 0;
@@ -70,6 +70,12 @@ std::tuple<TOUCH_STATE, float> TouchInput::loop()
         }
     }
 
+    
+
     // @TODO (??) handle broadcasting touch level (for v0.9 iOS app not v1.0 app)
     return std::tuple<TOUCH_STATE, float>(returnState, returnValue);
+}
+
+float TouchInput::getCurrentTouchAmount() {
+    return touchAmount;
 }
