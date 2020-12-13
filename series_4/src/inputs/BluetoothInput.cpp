@@ -83,9 +83,10 @@ LampMessage BluetoothInput::processMessage(String msg)
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
         text = strtok(0, ":");
-        float duration = atof(text);
+        float duration = float(atoi(text));
+        Serial.println(duration);
         //setAnimatingSpeed(duration);
-        return {MULT_ANIM_SPEED, duration, empty};
+        return {SET_ANIM_SPEED, duration, empty};
     }
 
     if (msg.startsWith("am"))
