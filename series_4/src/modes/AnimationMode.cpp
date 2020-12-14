@@ -4,7 +4,7 @@ AnimationMode::AnimationMode(
     LEDManager *ledAttach,
     PaletteManager *paletteAttach) : BaseMode(ledAttach),
                                      palette(paletteAttach)
-{   
+{
 }
 
 void AnimationMode::setup()
@@ -62,55 +62,59 @@ void AnimationMode::restart()
 
 void AnimationMode::loop()
 {
-    // Serial.println("AnimationMode::loop");
-    for (int c = 0; c < NUM_COLUMNS; c++)
+    if (frameMs > frameSize)
     {
-        for (int d = 0; d < NUM_LEDS; d++)
+        frameMs = 0;
+        // Serial.println("AnimationMode::loop");
+        for (int c = 0; c < NUM_COLUMNS; c++)
         {
-            LightDot dot = lights[c][d];
-            // update the dot
-            dot.currentValue = dot.currentValue + dot.increment;
-            // check for hitting boundaries
-            if ((dot.increment < 0) && (dot.currentValue < dot.minimumValue))
+            for (int d = 0; d < NUM_LEDS; d++)
             {
-                // if we're heading down and have hit the bottom
-                dot.currentValue = dot.minimumValue;
-                dot.increment = abs(dot.increment);
-                // recycle the dot
-                dot.colourId = dot.colourId + 1;
-                if (dot.colourId >= palette->totalSwatches())
+                LightDot dot = lights[c][d];
+                // update the dot
+                dot.currentValue = dot.currentValue + dot.increment;
+                // check for hitting boundaries
+                if ((dot.increment < 0) && (dot.currentValue < dot.minimumValue))
                 {
-                    dot.colourId = 0;
+                    // if we're heading down and have hit the bottom
+                    dot.currentValue = dot.minimumValue;
+                    dot.increment = abs(dot.increment);
+                    // recycle the dot
+                    dot.colourId = dot.colourId + 1;
+                    if (dot.colourId >= palette->totalSwatches())
+                    {
+                        dot.colourId = 0;
+                    }
+                    dot.hue = palette->hueForSwatch(dot.colourId);
+                    dot.sat = palette->satForSwatch(dot.colourId);
                 }
-                dot.hue = palette->hueForSwatch(dot.colourId);
-                dot.sat = palette->satForSwatch(dot.colourId);
-            }
-            else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue)
-            {
-                // if we've heading up and have hit the top
-                dot.currentValue = dot.maximumValue;
-                dot.increment = -abs(dot.increment);
-                //dot = dotHasReachedHighestValue(dot);
-            }
-            lights[c][d] = dot;
+                else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue)
+                {
+                    // if we've heading up and have hit the top
+                    dot.currentValue = dot.maximumValue;
+                    dot.increment = -abs(dot.increment);
+                    //dot = dotHasReachedHighestValue(dot);
+                }
+                lights[c][d] = dot;
 
-            // apply the colour to the LED
-            // value < 0 means off, greater than 255 is on
-            // keep colour within bounds as dot can go higher and lower (to stay on or off for longer)
-            if (dot.currentValue > 0)
-            {
-                int rawVal = min(255, dot.currentValue);
-                //int val = int(float(rawVal) * dotBrightness);
-                //CHSV colour = CHSV(dot.hue, dot.sat, val);
-                //CHSV colour = CHSV( 125, 255, val );
-                //leds[c][dot.led] = colour;
-                //leds->setRGB(dot.)
-                // leds->setRGB( dot.column, dot.led, )
-                leds->setHSV(dot.column, dot.led, dot.hue, dot.sat, rawVal, 0);
-            }
-            else
-            {
-                leds->setRGB(dot.column, dot.led, 0, 0, 0, 0);
+                // apply the colour to the LED
+                // value < 0 means off, greater than 255 is on
+                // keep colour within bounds as dot can go higher and lower (to stay on or off for longer)
+                if (dot.currentValue > 0)
+                {
+                    int rawVal = min(255, dot.currentValue);
+                    //int val = int(float(rawVal) * dotBrightness);
+                    //CHSV colour = CHSV(dot.hue, dot.sat, val);
+                    //CHSV colour = CHSV( 125, 255, val );
+                    //leds[c][dot.led] = colour;
+                    //leds->setRGB(dot.)
+                    // leds->setRGB( dot.column, dot.led, )
+                    leds->setHSV(dot.column, dot.led, dot.hue, dot.sat, rawVal, 0);
+                }
+                else
+                {
+                    leds->setRGB(dot.column, dot.led, 0, 0, 0, 0);
+                }
             }
         }
     }
@@ -144,6 +148,7 @@ void AnimationMode::setAnimationSpeed(float newSpeed)
     }
 }
 
-float AnimationMode::getAnimationSpeed() {
+float AnimationMode::getAnimationSpeed()
+{
     return currentAnimatingSpeed;
 }
