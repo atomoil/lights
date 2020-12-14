@@ -11,7 +11,7 @@ void IRInput::setup()
 
 LampMessage IRInput::loop()
 {
-    char* empty; // for returns with no value;
+    String empty = ""; // for returns with no value;
     if (irrecv->decode(&results))
     {
         Serial.println("IRInput::loop got decode");
