@@ -159,6 +159,7 @@ void LampOS::processTouchData(std::tuple<TOUCH_STATE, float> val)
             else
             {
                 mode = animationMode;
+                animationMode->setAnimationSpeed(touchValue);
                 mode->restart();
             }
         }
