@@ -41,7 +41,7 @@ LampOS::LampOS()
 void LampOS::setup()
 {
     Serial.println("LampOS::setup start");
-
+    frameSize = 1000.0 / 60;
     lampState = OFF;
 
     leds->setup();
@@ -71,21 +71,36 @@ void LampOS::setup()
 #else
     Serial.println("FFT not supported");
 #endif
+
+    //debugTouchAmount = true;
+
     Serial.println("LampOS::setup complete");
 }
 
 void LampOS::loop()
 {
 
-    // get inputs first
-    std::tuple<TOUCH_STATE, float> touchData = touch->loop();
-    processTouchData(touchData);
-    //
-    LampMessage bleData = bluetooth->loop();
-    processLampMessage(bleData);
-    //
-    LampMessage irData = remoteControl->loop();
-    processLampMessage(irData);
+    if (frameMs > frameSize)
+    {
+        frameMs = 0;
+        // get inputs first
+        std::tuple<TOUCH_STATE, float> touchData = touch->loop();
+        processTouchData(touchData);
+        //
+        LampMessage bleData = bluetooth->loop();
+        processLampMessage(bleData);
+        //
+        LampMessage irData = remoteControl->loop();
+        processLampMessage(irData);
+
+        if (debugTouchAmount == true)
+        {
+            float touchAmount = touch->getCurrentTouchAmount();
+            char touch_message[80];
+            sprintf(touch_message, "<t=%0.0f/>", touchAmount);
+            bluetooth->sendMessage(touch_message);
+        }
+    }
 
     mode->loop(); // update the mode after input but before leds
     leds->loop(); // update leds last
@@ -273,17 +288,20 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     }
     break;
     case DEBUG_SENSITIVITY:
-        // 
-        if (lampMsg.number >= 1) {
+        //
+        if (lampMsg.number >= 1)
+        {
             debugTouchAmount = true;
-        } else {
+        }
+        else
+        {
             debugTouchAmount = false;
         }
-        
+
         break;
     case FFT_MODE:
 #ifdef SUPPORTS_FFT
-{
+    {
         int fft_mode = int(lampMsg.number);
         switch (fft_mode)
         {
@@ -306,8 +324,8 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         }
         break;
         }
-}
+    }
 #endif
-        break;
+    break;
     }
 }

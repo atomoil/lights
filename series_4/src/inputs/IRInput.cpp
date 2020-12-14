@@ -6,7 +6,7 @@ IRInput::IRInput() {
 
 void IRInput::setup()
 {
-    //irrecv->enableIRIn(); // Start the IR receiver
+    irrecv->enableIRIn(); // Start the IR receiver
 }
 
 LampMessage IRInput::loop()
@@ -14,12 +14,13 @@ LampMessage IRInput::loop()
     String empty = ""; // for returns with no value;
     if (irrecv->decode(&results))
     {
-        Serial.println("IRInput::loop got decode");
+        irrecv->resume();
         if (results.value == POWER)
         {
+            Serial.println("POWER");
             return {LAMP_TOGGLE_ON, 0, empty};
             /*
-            Serial.println("POWER");
+            
 
             if (app_mode != MODE_REACTIVE)
             {
@@ -102,7 +103,7 @@ LampMessage IRInput::loop()
         {
             Serial.println("SELECT");
         }
-        irrecv->resume();
+
     }
     return {LAMP_NONE, 0, empty};
 }
