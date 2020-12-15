@@ -19,9 +19,7 @@ void AnimationMode::setup()
             // Serial.println(i); // for example
             float minValue = 0.0;
             float maxValue = 255.0;
-            int hue = 80;
-            int sat = 255;
-            LightDot light = {c, i, 0.0, 0.0, minValue, maxValue, 0, hue, sat};
+            LightDot light = {c, i, 0.0, 0.0, minValue, maxValue, 0};
             lights[c][i] = light;
         }
     }
@@ -44,8 +42,6 @@ void AnimationMode::restart()
             // set the initial colour
             int colourInPalette = (d % palette->totalSwatches());
             dot.colourId = colourInPalette;
-            dot.hue = palette->hueForSwatch(dot.colourId); // [ dot.colourId ][ PALETTE_HUE ];
-            dot.sat = palette->satForSwatch(dot.colourId); // [ dot.colourId ][ PALETTE_SATURATION ];
             // set initial current value - make some on, some off and some in between
             dot.currentValue = ((c % 3) + (d % 3)) * (255 / 6.0);
             // make increment vary
@@ -85,8 +81,6 @@ void AnimationMode::loop()
                     {
                         dot.colourId = 0;
                     }
-                    dot.hue = palette->hueForSwatch(dot.colourId);
-                    dot.sat = palette->satForSwatch(dot.colourId);
                 }
                 else if ((dot.increment > 0) && dot.currentValue > dot.maximumValue)
                 {
@@ -109,7 +103,9 @@ void AnimationMode::loop()
                     //leds[c][dot.led] = colour;
                     //leds->setRGB(dot.)
                     // leds->setRGB( dot.column, dot.led, )
-                    leds->setHSV(dot.column, dot.led, dot.hue, dot.sat, rawVal, 0);
+                    int hue = palette->hueForSwatch(dot.colourId);
+                    int sat = palette->satForSwatch(dot.colourId);
+                    leds->setHSV(dot.column, dot.led, hue, sat, rawVal, 0);
                 }
                 else
                 {

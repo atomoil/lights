@@ -18,8 +18,6 @@ struct LightDot {
   float minimumValue;
   float maximumValue;
   int colourId;
-  int hue;
-  int sat;
 };
 
 
