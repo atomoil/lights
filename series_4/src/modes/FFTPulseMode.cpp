@@ -13,7 +13,7 @@ void FFTPulseMode::setup() {
 }
 
 void FFTPulseMode::restart() {
-
+    Serial.println("FFTPulseMode::restart");
 }
 
 void FFTPulseMode::loop()

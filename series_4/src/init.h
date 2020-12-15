@@ -34,5 +34,6 @@
 // REMOTE
 #define IR_RECV_PIN 5
 
+#include "lamps.h"
 
 #endif

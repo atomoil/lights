@@ -311,27 +311,33 @@ void LampOS::processLampMessage(LampMessage lampMsg)
 #ifdef SUPPORTS_FFT
     {
         int fft_mode = int(lampMsg.number);
+        Serial.print("FFT Mode: ");
+        Serial.println(fft_mode);
         switch (fft_mode)
         {
         case 0:
         {
+            lampState = ON;
             mode = animationMode;
             mode->restart();
         }
         break;
         case 1:
         {
+            lampState = ON;
             mode = fftBarsMode;
             mode->restart();
         }
         break;
         case 2:
         {
+            lampState = ON;
             mode = fftPulseMode;
             mode->restart();
         }
         break;
         }
+        Serial.println("FFT Mode set");
     }
 #endif
     break;

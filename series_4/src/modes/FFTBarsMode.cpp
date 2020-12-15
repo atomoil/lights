@@ -14,11 +14,13 @@ void FFTBarsMode::setup() {
 
 
 void FFTBarsMode::restart() {
-    
+    Serial.println("FFTBarsMode::restart");
 }
 
 void FFTBarsMode::loop()
 {
+    Serial.println("FFTBarsMode::loop");
+    audio->update();
     for (int i = 0; i < NUM_LEDS; i++)
     {
         for (int x = 0; x < NUM_COLUMNS; x++)
