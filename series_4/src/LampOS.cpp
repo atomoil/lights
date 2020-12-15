@@ -100,6 +100,14 @@ void LampOS::loop()
             sprintf(touch_message, "<t=%0.0f/>", touchAmount);
             bluetooth->sendMessage(touch_message);
         }
+#ifdef LAMP_OS_DEBUG
+        debugTick++;
+        if (debugTick > 60)
+        {
+            Serial.println("LampOS::loop");
+            debugTick = 0;
+        }
+#endif
     }
 
     mode->loop(); // update the mode after input but before leds

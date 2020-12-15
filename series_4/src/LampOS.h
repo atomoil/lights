@@ -1,6 +1,8 @@
 #ifndef LAMP_OS_HPP_INCLUDED
 #define LAMP_OS_HPP_INCLUDED
 
+#define LAMP_OS_DEBUG
+
 #include <Arduino.h>
 #include "init.h"
 #include "lamps.h"
@@ -61,6 +63,9 @@ private:
     elapsedMillis frameMs;
     float frameSize;
     boolean debugTouchAmount = false;
+#ifdef LAMP_OS_DEBUG
+    int debugTick = 5000;
+#endif
     
     void processTouchData(std::tuple<TOUCH_STATE, float> val);
     void processLampMessage(LampMessage);
