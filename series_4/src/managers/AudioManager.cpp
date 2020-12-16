@@ -41,7 +41,8 @@ void AudioManager::update()
     }
     else
     {
-        Serial.println("FFT not ready");
+        Serial.print("FFT not ready ");
+        Serial.println(FFT->read(20, 47));
     }
 }
 
