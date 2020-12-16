@@ -34,7 +34,7 @@ LampOS::LampOS()
 
     // set the first mode
     // mode = rgbMode;
-    //mode = animationMode;
+    // mode = animationMode;
     mode = offMode;
 };
 

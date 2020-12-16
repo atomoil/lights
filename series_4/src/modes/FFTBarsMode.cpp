@@ -19,7 +19,6 @@ void FFTBarsMode::restart() {
 
 void FFTBarsMode::loop()
 {
-    Serial.println("FFTBarsMode::loop");
     audio->update();
     for (int i = 0; i < NUM_LEDS; i++)
     {

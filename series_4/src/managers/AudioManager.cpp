@@ -3,6 +3,10 @@
 // extern in .h
 //AudioAnalyzeFFT256 FFT;
 
+AudioInputAnalog adc1(A0);   
+AudioAnalyzeFFT256 FFT; 
+AudioConnection patchCord(adc1, FFT);
+
 AudioManager::AudioManager()
 {
 }
@@ -10,39 +14,28 @@ AudioManager::AudioManager()
 void AudioManager::setup()
 {
     Serial.println("AudioManager::setup");
-    AudioInputAnalog adc1(A0);   
-    AudioAnalyzeFFT256 _FFT; 
-    AudioConnection patchCord(adc1, _FFT);
-
-    this->FFT = &_FFT;
-
     // following was in setup, but maybe better here(?)
     AudioMemory(4);
-    Serial.println("AudioManager::setup created instances, next up .averageTogether(8)");
-    FFT->averageTogether(8);
-    Serial.println("AudioManager::setup created instances, next up .windowFunction(AudioWindowHanning256)");
-    FFT->windowFunction(AudioWindowHanning256);
+    Serial.println("AudioManager::setup created instances");
+    FFT.averageTogether(8);
+    Serial.println("AudioManager::setup ran .averageTogether(8)");
+    FFT.windowFunction(AudioWindowHanning256);
+    Serial.println("AudioManager::setup ran .windowFunction(AudioWindowHanning256)");
 
     Serial.println("AudioManager::setup complete");
 }
 
 void AudioManager::update()
 {
-    
-    if (FFT->available())
+    if (FFT.available())
     {
-        getFFT(0, FFT->read(0, 2));
-        getFFT(1, FFT->read(3, 7));
-        getFFT(2, FFT->read(8, 19));
-        getFFT(3, FFT->read(20, 47));
-        getFFT(4, FFT->read(48, 110));
-        getFFT(5, FFT->read(111, 255));
+        getFFT(0, FFT.read(0, 2));
+        getFFT(1, FFT.read(3, 7));
+        getFFT(2, FFT.read(8, 19));
+        getFFT(3, FFT.read(20, 47));
+        getFFT(4, FFT.read(48, 110));
+        getFFT(5, FFT.read(111, 255));
         getMaxLevel();
-    }
-    else
-    {
-        Serial.print("FFT not ready ");
-        Serial.println(FFT->read(20, 47));
     }
 }
 

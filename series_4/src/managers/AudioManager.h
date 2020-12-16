@@ -5,15 +5,9 @@
 #include <Audio.h>
 #include <math.h>
 
-//extern AudioAnalyzeFFT256 FFT;
-
 class AudioManager {
 
 private:
-    //AudioInputAnalog adc1;
-    AudioAnalyzeFFT256 *FFT; // why is this not a pointer? AudioConnection signature is called by reference.
-    //AudioConnection patchCord;
-
     float fft_max_band = 0.0;
     float fft_mult = 1.0;
     float fftVals[6];
