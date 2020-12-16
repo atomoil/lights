@@ -55,7 +55,7 @@ void LEDManager::updateLEDs()
             data.g = updateColour(data.g);
             data.b = updateColour(data.b);
 
-            leds[x][y] = CRGB(int(data.r.current), int(data.g.current), int(data.b.current));
+            leds[x][y] = CRGB(int(data.r.current * brightness), int(data.g.current * brightness), int(data.b.current * brightness));
             matrix[x][y] = data;
         }
     }
@@ -132,9 +132,14 @@ void LEDManager::setHSV(int x, int y, int h, int s, int v, float timeInMilliseco
 
 void LEDManager::setBrightness(float level)
 {
-    // @TODO - clamp values to 0 - 1
-    brightness = level;
-
+    // @TODO - clamp values to 0.1 - 1
+    if (level > 1) {
+        brightness = 1;
+    } else if (level < 0.1) {
+        brightness = 0.1;
+    } else {
+         brightness = level;
+    }
 }
 float LEDManager::getBrightness()
 {
