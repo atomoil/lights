@@ -17,7 +17,7 @@ void AudioManager::setup()
     this->FFT = &_FFT;
 
     // following was in setup, but maybe better here(?)
-    //AudioMemory(4);
+    AudioMemory(4);
     Serial.println("AudioManager::setup created instances, next up .averageTogether(8)");
     FFT->averageTogether(8);
     Serial.println("AudioManager::setup created instances, next up .windowFunction(AudioWindowHanning256)");
