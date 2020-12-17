@@ -21,7 +21,7 @@ LampOS::LampOS()
 
     brightMode = new SingleColourMode(leds, 0, 255, 255, 255);
 
-    switchOffMode = new SingleColourMode(leds, 5000, 0, 0, 0);
+    switchOffMode = new SingleColourMode(leds, 2000, 0, 0, 0);
     offMode = new SingleColourMode(leds, 0, 0, 0, 0);
 
 #ifdef SUPPORTS_FFT
