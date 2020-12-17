@@ -17,7 +17,7 @@ LampOS::LampOS()
 
     animationMode = new AnimationMode(leds, palette);
 
-    brightFadeInMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 255, 255, 255);
+    brightFadeInMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
 
     brightMode = new SingleColourMode(leds, 0, 255, 255, 255);
 
