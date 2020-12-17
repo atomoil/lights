@@ -40,6 +40,7 @@ LampOS::LampOS()
 
 void LampOS::setup()
 {
+    delay(2000); // wait for Serial to be ready so we can debug stuff
     Serial.println("LampOS::setup start");
     frameSize = 1000.0 / 60;
     lampState = OFF;
@@ -269,6 +270,11 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         leds->setBrightness(dotBrightness);
     }
     break;
+    case SET_BRIGHTNESS:
+    {
+        leds->setBrightness(lampMsg.number);
+    }
+    break;
     case SET_PALETTE:
     {
         Serial.print("LampOS:processLampMessage: '");
@@ -279,6 +285,16 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         Serial.println(palette->getPaletteAsPlCode());
     }
     break;
+    case GET_PALETTE:
+    {
+        String pal = palette->getPaletteAsPlCode(); // @TODO get this working!
+        bluetooth->sendMessage(pal);
+    }
+    case SET_COLOUR:
+    {
+        // @TODO break lampMsg.string into 2 values
+        // pass the 2 values to a mode to act on them.
+    }
     case GET_VERSION:
     {
         char version_message[80];

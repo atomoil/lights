@@ -11,8 +11,8 @@ private:
     int totalPalettes;
     void loadPalette();
     void savePalette();
-    int importHue(float f);
-    int importSat(float f);
+    int importHue(int i);
+    int importSat(int i);
     int exportHue(int i);
     int exportSat(int i);
 public:

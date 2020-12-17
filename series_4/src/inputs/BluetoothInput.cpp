@@ -104,17 +104,26 @@ LampMessage BluetoothInput::processMessage(String msg)
     }
 
     if (msg.startsWith("br"))
-    { // am is for brightness
+    { // br is for multiply brightness
         char input[100];
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
         text = strtok(0, ":");
         float mult = atof(text);
-        // incDotBrightness(mult);
-        Serial.print("incDotBrightness ");
-        Serial.println(mult);
         return {INC_BRIGHTNESS, mult, empty};
         
+    }
+
+    if (msg.startsWith("bs"))
+    {
+        // bs is for set brightness
+        char input[100];
+        ssData.toCharArray(input, 99);
+        char *text = strtok(input, ":");
+        text = strtok(0, ":");
+        float value = atof(text);
+        Serial.println(value);
+        return {SET_BRIGHTNESS, value, empty};
     }
 
     // pl:10:11:20:21:30:31:40:41:50:51:60:61
@@ -122,43 +131,25 @@ LampMessage BluetoothInput::processMessage(String msg)
     //
     if (msg.startsWith("pl"))
     { // pl is for palette
-        
         char input[100];
         ssData.toCharArray(input, 99);
         Serial.print("PALETTE: ");
         Serial.println(input);
         return {SET_PALETTE, 0, ssData};
-        /*
+    }
+
+    if (msg.startsWith("pg"))
+    {
+        return {GET_PALETTE, 0, empty};
+    }
+
+    if (msg.startsWith("cs"))
+    {
+        char input[100];
+        ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
-        int col = 0;
-        int i = 0;
-        int row = 0;
-        int elem = 0;
-        while (text != 0 && i < totalPalettes * 2)
-        {
-            row = i / 2;
-            elem = i % 2;
-            text = strtok(0, ":");
-            col = atoi(text);
-            if (elem == 0)
-            {
-                palette[row][0] = convertHue(col);
-            }
-            else
-            {
-                palette[row][1] = convertSat(col);
-            }
-            Serial.print(row);
-            Serial.print("/");
-            Serial.print(elem);
-            Serial.print(": ");
-            Serial.println(col);
-            i++;
-        }
-        resetPaletteOnAllDots();
-        // save the palette to permanent storage
-        EEPROM.put(0, palette);
-        */
+        text = strtok(0, ":");
+        return {SET_COLOUR, 0, text};
     }
 
     if (msg.startsWith("v:get"))

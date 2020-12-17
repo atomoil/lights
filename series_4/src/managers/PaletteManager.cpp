@@ -91,14 +91,16 @@ void PaletteManager::setPaletteFromPlCode(String stringInput)
     savePalette();
 }
 
-int PaletteManager::importHue(float f)
+int PaletteManager::importHue(int i)
 {
-    return (f / 360.0) * 255.0;
+    float f = float(i);
+    return round((f / 360.0) * 255.0);
 }
 
-int PaletteManager::importSat(float f)
+int PaletteManager::importSat(int i)
 {
-    return (f / 100.0) * 255.0;
+    float f = float(i);
+    return round((f / 100.0) * 255.0);
 }
 
 String PaletteManager::getPaletteAsPlCode() {
@@ -116,13 +118,13 @@ String PaletteManager::getPaletteAsPlCode() {
 int PaletteManager::exportHue(int i)
 {
     float f = float(i);
-    return int((f / 255.0) * 360.0);
+    return round((f / 255.0) * 360.0);
 }
 
 int PaletteManager::exportSat(int i)
 {
     float f = float(i);
-    return int((f / 255.0) * 100.0);
+    return round((f / 255.0) * 100.0);
 }
 
 int PaletteManager::hueForSwatch(int swatch_id)
