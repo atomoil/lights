@@ -275,6 +275,8 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         Serial.print(lampMsg.string);
         Serial.println("'");
         palette->setPaletteFromPlCode(lampMsg.string);
+        Serial.print("getPalette: ");
+        Serial.println(palette->getPaletteAsPlCode());
     }
     break;
     case GET_VERSION:

@@ -11,11 +11,14 @@ private:
     int totalPalettes;
     void loadPalette();
     void savePalette();
-    int convertHue(float f);
-    int convertSat(float f);
+    int importHue(float f);
+    int importSat(float f);
+    int exportHue(int i);
+    int exportSat(int i);
 public:
     void setup();
     void setPaletteFromPlCode(String input);
+    String getPaletteAsPlCode();
     int hueForSwatch(int swatch_id);
     int satForSwatch(int swatch_id);
     int totalSwatches();
