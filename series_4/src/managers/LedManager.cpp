@@ -1,4 +1,5 @@
 #include "LedManager.h"
+#include "../jesusgollonet-ofpennereasing-PennerEasing/Sine.h"
 
 void LEDManager::setup()
 {
@@ -24,7 +25,7 @@ void LEDManager::setup()
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
-            matrix[x][y] = {x, y, 0, 0, 0};
+            matrix[x][y] = {x, y, { 0, NO_TWEEN, 0, 0, 0 }, { 0, NO_TWEEN, 0, 0, 0 }, { 0, NO_TWEEN, 0, 0, 0 }};
             leds[x][y] = CRGB(0, 0, 0);
         }
     }
@@ -46,14 +47,18 @@ void LEDManager::loop()
 
 void LEDManager::updateLEDs()
 {
+    float time = float(tweenMs);
+    boolean debug = true;
+    //Serial.println(time);
     for (int x = 0; x < NUM_COLUMNS; x++)
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
             LedData data = matrix[x][y];
-            data.r = updateColour(data.r);
-            data.g = updateColour(data.g);
-            data.b = updateColour(data.b);
+            data.r = updateColour(time, data.r, debug);
+            data.g = updateColour(time, data.g, false);
+            data.b = updateColour(time, data.b, false);
+            debug = false;
 
             leds[x][y] = CRGB(int(data.r.current * brightness), int(data.g.current * brightness), int(data.b.current * brightness));
             matrix[x][y] = data;
@@ -61,8 +66,24 @@ void LEDManager::updateLEDs()
     }
 }
 
-LedColour LEDManager::updateColour(LedColour colour)
+LedColourTween LEDManager::updateColour(float time, LedColourTween colour, boolean debug)
 {
+
+    if (colour.tweenType == SINE) {
+        colour.current = Sine::easeInOut(time, colour.begin, colour.change, colour.duration);
+        
+
+    }
+    if (time >= colour.duration){
+        colour.tweenType = NO_TWEEN;
+    }
+    /*
+    if (debug == true) {
+        char msg[80];
+        sprintf(msg, "Sine::easeInOut(%0.2f, %0.2f, %0.2f, %0.2f) = 0.2f", time, colour.begin, colour.change, colour.duration, colour.current);
+        Serial.println(msg);
+    }*/
+    /*
     if (colour.changeValue > 0)
     {
         colour.current = colour.current + colour.changeValue;
@@ -81,6 +102,7 @@ LedColour LEDManager::updateColour(LedColour colour)
             colour.changeValue = 0;
         }
     }
+    */
     return colour;
 }
 
@@ -88,37 +110,38 @@ LedColour LEDManager::updateColour(LedColour colour)
 
 void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseconds)
 {
+    tweenMs = 0;
     if (x < NUM_COLUMNS && y < NUM_LEDS)
     {
-        //leds[x][y] = CRGB(r, g, b);
         LedData data = matrix[x][y];
         if (timeInMilliseconds <= 0)
         { // 0 value means set immediately
-            data.r.changeValue = 0;
             data.r.current = r;
-            data.r.desired = r;
+            data.r.tweenType = NO_TWEEN;
             //
-            data.g.changeValue = 0;
             data.g.current = g;
-            data.g.desired = g;
+            data.g.tweenType = NO_TWEEN;
             //
-            data.b.changeValue = 0;
             data.b.current = b;
-            data.b.desired = b;
+            data.b.tweenType = NO_TWEEN;
         }
         else
         {
-            // map seconds to 'frames'
-            float frames = timeInMilliseconds / LED_FRAME_RATE;
             //
-            data.r.desired = r;
-            data.r.changeValue = (data.r.desired - data.r.current) / frames;
+            data.r.begin = data.r.current;
+            data.r.change = r - data.r.current;
+            data.r.duration = timeInMilliseconds;
+            data.r.tweenType = SINE;
             //
-            data.g.desired = g;
-            data.g.changeValue = (data.g.desired - data.g.current) / frames;
+            data.g.begin = data.g.current;
+            data.g.change = g - data.g.current;
+            data.g.duration = timeInMilliseconds;
+            data.g.tweenType = SINE;
             //
-            data.b.desired = b;
-            data.b.changeValue = (data.b.desired - data.b.current) / frames;
+            data.b.begin = data.b.current;
+            data.b.change = b - data.b.current;
+            data.b.duration = timeInMilliseconds;
+            data.b.tweenType = SINE;
         }
         matrix[x][y] = data;
     }

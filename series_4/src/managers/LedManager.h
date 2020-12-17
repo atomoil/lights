@@ -6,25 +6,24 @@
 
 #define LED_FRAME_RATE 60.0
 
-/*
-enum LedColourChangeType {
-    MULTIPLY, LINEAR
+enum LedColourTweenType {
+    NO_TWEEN, SINE
 };
-*/
 
-struct LedColour {
+struct LedColourTween {
     float current;
-    float desired;
-    float changeValue;
-    //LedColourChangeType changeType; // @TODO maybe add this... maybe
+    LedColourTweenType tweenType;
+    float begin;
+    float change;
+    float duration;
 };
 
 struct LedData {
     int x;
     int y;
-    LedColour r;
-    LedColour g;
-    LedColour b;
+    LedColourTween r;
+    LedColourTween g;
+    LedColourTween b;
 };
 
 class LEDManager
@@ -33,10 +32,11 @@ private:
     LedData matrix[NUM_COLUMNS][NUM_LEDS];
     CRGB leds[NUM_COLUMNS][NUM_LEDS];
     elapsedMillis frameMs;
+    elapsedMillis tweenMs;
     float frameSize;
     float brightness;
     void updateLEDs();
-    LedColour updateColour(LedColour colour);
+    LedColourTween updateColour(float time, LedColourTween colour, boolean debug);
 public:
     void setup();
     void loop();
