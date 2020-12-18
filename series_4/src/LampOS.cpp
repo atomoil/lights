@@ -296,12 +296,14 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         palette->getPaletteAsPlCode(palette_char);
         bluetooth->sendMessage(palette_char);
     }
+    break;
     case SET_COLOUR:
     {
         singleColourAnimatingMode->updateColour( lampMsg.number, lampMsg.number2 );
         mode = singleColourAnimatingMode;
         mode->restart();
     }
+    break;
     case GET_VERSION:
     {
         char version_message[80];

@@ -18,86 +18,62 @@ LampMessage IRInput::loop()
         if (results.value == POWER)
         {
             Serial.println("POWER");
-            return {LAMP_TOGGLE_ON, 0, empty};
-            /*
-            
+            return {LAMP_TOGGLE_ON, 0, 0, empty};
 
-            if (app_mode != MODE_REACTIVE)
-            {
-                // we're in FFT mode
-                allLightsOff();
-            }
-            else
-            {
-                // we're in REACTIVE mode
-                if (currentState == STATE_ON_BRIGHT)
-                {
-                    allLightsOff();
-                }
-                else if (currentState == STATE_ON_ANIMATED)
-                {
-                    allLightsFadeDown();
-                }
-                else
-                {
-                    allLightsOn();
-                }
-            }
-            */
         }
 #ifdef SUPPORTS_FFT
         if (results.value == A)
         {
             Serial.println("A");
-            return {FFT_MODE, 0, empty};
+            return {FFT_MODE, 0, 0, empty};
         }
         if (results.value == B)
         {
             Serial.println("B");
-            return {FFT_MODE, 1, empty};
+            return {FFT_MODE, 1, 0, empty};
         }
         if (results.value == C)
         {
             Serial.println("C");
-            return {FFT_MODE, 2, empty};
+            return {FFT_MODE, 2, 0, empty};
         }
 #else
         if (results.value == A)
         {
             Serial.println("A");
-            return {SET_ANIM_SPEED, 200, empty};
+            return {SET_ANIM_SPEED, 200, 0, empty};
         }
         if (results.value == B)
         {
             Serial.println("B");
-            return {SET_ANIM_SPEED, 5000, empty};
+            return {SET_ANIM_SPEED, 5000, 0, empty};
         }
         if (results.value == C)
         {
             Serial.println("C");
-            return {SET_ANIM_SPEED, 20000, empty};
+            return {SET_ANIM_SPEED, 20000, 0, empty};
         }
 #endif
 
         if (results.value == UP)
         {
             Serial.println("UP");
-            return {MULT_ANIM_SPEED, 1.25, empty};
+            return {MULT_ANIM_SPEED, 1.25, 0, empty};
         }
         if (results.value == DOWN)
         {
             Serial.println("DOWN");
-            return {MULT_ANIM_SPEED, 0.75, empty};
+            return {MULT_ANIM_SPEED, 0.75, 0, empty};
         }
         if (results.value == LEFT)
         {
             Serial.println("LEFT");
-            return {INC_BRIGHTNESS, -0.1, empty};
+            return {INC_BRIGHTNESS, -0.1, 0, empty};
         }
         if (results.value == RIGHT)
         {
             Serial.println("RIGHT");
-            return {INC_BRIGHTNESS, 0.1, empty};
+            return {INC_BRIGHTNESS, 0.1, 0, empty};
         }
         if (results.value == SELECT)
         {
@@ -105,5 +81,5 @@ LampMessage IRInput::loop()
         }
 
     }
-    return {LAMP_NONE, 0, empty};
+    return {LAMP_NONE, 0, 0, empty};
 }

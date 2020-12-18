@@ -34,6 +34,8 @@ void SingleColourAnimatingMode::loop() {
 
 
 void SingleColourAnimatingMode::updateColour(int h, int s) {
-    hue = hue;
-    sat = sat;
+    // Serial.print("SingleColourAnimatingMode::updateColour: ");
+    // Serial.print()
+    hue = h;
+    sat = s;
 }

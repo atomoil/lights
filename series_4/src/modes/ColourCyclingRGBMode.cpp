@@ -1,4 +1,4 @@
-#include "ColourCyclingMode.h"
+#include "ColourCyclingRGBMode.h"
 
 
 ColourCyclingRGBMode::ColourCyclingRGBMode(

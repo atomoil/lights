@@ -1,7 +1,7 @@
 #ifndef LAMP_OS_HPP_INCLUDED
 #define LAMP_OS_HPP_INCLUDED
 
-#define LAMP_OS_DEBUG
+// #define LAMP_OS_DEBUG
 
 #include <Arduino.h>
 #include "init.h"

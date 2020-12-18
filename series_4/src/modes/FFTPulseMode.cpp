@@ -9,7 +9,7 @@ FFTPulseMode::FFTPulseMode(
 
 
 void FFTPulseMode::setup() {
-    Serial.println("FFTBarsMode::setup");
+    Serial.println("FFTPulseMode::setup");
 }
 
 void FFTPulseMode::restart() {

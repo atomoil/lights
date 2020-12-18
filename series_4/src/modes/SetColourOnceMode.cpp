@@ -1,4 +1,4 @@
-#include "SingleColourMode.h"
+#include "SetColourOnceMode.h"
 
 SetColourOnceMode::SetColourOnceMode(
     LEDManager *ledAttach,
