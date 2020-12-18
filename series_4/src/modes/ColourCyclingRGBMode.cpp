@@ -1,7 +1,7 @@
 #include "ColourCyclingMode.h"
 
 
-ColourCyclingMode::ColourCyclingMode(
+ColourCyclingRGBMode::ColourCyclingRGBMode(
     LEDManager *ledAttach, 
     unsigned int howOftenToChangeAttach,
     float transitionTimeMsAttach,
@@ -26,8 +26,8 @@ ColourCyclingMode::ColourCyclingMode(
     }
 }
 
-void ColourCyclingMode::setup() {
-    setAllLEDsTo(255,255,255,0); // this should never actually be seen!
+void ColourCyclingRGBMode::setup() {
+    setAllLEDsToRGB(255,255,255,0); // this should never actually be seen!
     restart();
     /*
     // debug for passing in array
@@ -40,13 +40,13 @@ void ColourCyclingMode::setup() {
     }*/
 }
 
-void ColourCyclingMode::restart()
+void ColourCyclingRGBMode::restart()
 {
     timeSw = howOftenToChange; // get triggered immediately
     count = 0;
 }
 
-void ColourCyclingMode::loop()
+void ColourCyclingRGBMode::loop()
 {
     // put your main code here, to run repeatedly:
     // LEDs
@@ -61,7 +61,7 @@ void ColourCyclingMode::loop()
         int r = colours[col_index];
         int g = colours[col_index+1];
         int b = colours[col_index+2];
-        setAllLEDsTo( r, g, b, transitionTimeMs );
+        setAllLEDsToRGB( r, g, b, transitionTimeMs );
 
         count++;
     }

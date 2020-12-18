@@ -7,7 +7,7 @@
 #define COLOURCYCLING_MAX_PALETTE 30
 #endif
 
-class ColourCyclingMode: public BaseMode
+class ColourCyclingRGBMode: public BaseMode
 {
 private:
     unsigned int howOftenToChange;
@@ -23,5 +23,5 @@ public:
     void setup();
     void restart();
     void loop();
-    ColourCyclingMode(LEDManager *ledAttach, unsigned int howOftenToChangeAttach, float transitionTimeMs, int coloursAttach[], int countColours);
+    ColourCyclingRGBMode(LEDManager *ledAttach, unsigned int howOftenToChangeAttach, float transitionTimeMs, int coloursAttach[], int countColours);
 };

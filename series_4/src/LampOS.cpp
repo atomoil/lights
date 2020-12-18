@@ -10,19 +10,21 @@ LampOS::LampOS()
     remoteControl = new IRInput();
 
     int cols_1[30] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
-    rgbMode = new ColourCyclingMode(leds, 1500, float(1300), cols_1, 3);
+    rgbMode = new ColourCyclingRGBMode(leds, 1500, float(1300), cols_1, 3);
 
     int cols_2[30] = {40, 55, 45, /* */ 240, 250, 245, /* */ 10, 10, 10, /* */ 240, 245, 250};
-    touchdownCyclingMode = new ColourCyclingMode(leds, 2000, float(2000), cols_2, 4);
+    touchdownCyclingMode = new ColourCyclingRGBMode(leds, 1000, float(2000), cols_2, 4);
 
     animationMode = new AnimationMode(leds, palette);
 
-    brightFadeInMode = new SingleColourMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
+    brightFadeInMode = new SetColourOnceMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
 
-    brightMode = new SingleColourMode(leds, 0, 255, 255, 255);
+    brightMode = new SetColourOnceMode(leds, 0, 255, 255, 255);
 
-    switchOffMode = new SingleColourMode(leds, 2000, 0, 0, 0);
-    offMode = new SingleColourMode(leds, 0, 0, 0, 0);
+    switchOffMode = new SetColourOnceMode(leds, 2000, 0, 0, 0);
+    offMode = new SetColourOnceMode(leds, 0, 0, 0, 0);
+
+    singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
 #ifdef SUPPORTS_FFT
 
@@ -296,8 +298,9 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     }
     case SET_COLOUR:
     {
-        // @TODO break lampMsg.string into 2 values
-        // pass the 2 values to a mode to act on them.
+        singleColourAnimatingMode->updateColour( lampMsg.number, lampMsg.number2 );
+        mode = singleColourAnimatingMode;
+        mode->restart();
     }
     case GET_VERSION:
     {

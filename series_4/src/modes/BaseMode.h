@@ -9,7 +9,8 @@ class BaseMode
 {
 protected:
     LEDManager *leds;
-    void setAllLEDsTo(int r, int g, int b, float transitionTime); // this would be useful to be shared...
+    void setAllLEDsToRGB(int r, int g, int b, float transitionTime);
+    void setAllLEDsToHSV(int h, int s, int v, float transitionTime);
 public:
     BaseMode(LEDManager *ledAttach);
     virtual void setup() = 0;

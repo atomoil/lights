@@ -1,6 +1,6 @@
 #include "SingleColourMode.h"
 
-SingleColourMode::SingleColourMode(
+SetColourOnceMode::SetColourOnceMode(
     LEDManager *ledAttach,
     float transitionTimeMsAttach,
     int rAttach,
@@ -14,17 +14,17 @@ SingleColourMode::SingleColourMode(
 }
 
 
-void SingleColourMode::setup() {
+void SetColourOnceMode::setup() {
     restart();
 }
 
-void SingleColourMode::restart() {
+void SetColourOnceMode::restart() {
     hasTriggered = false;
 }
 
-void SingleColourMode::loop() {
+void SetColourOnceMode::loop() {
     if (hasTriggered == false) {
         hasTriggered = true;
-        setAllLEDsTo(r, g, b, transitionTimeMs);
+        setAllLEDsToRGB(r, g, b, transitionTimeMs);
     }
 }

@@ -5,7 +5,7 @@
 
 
 
-class SingleColourMode: public BaseMode
+class SetColourOnceMode: public BaseMode
 {
 private:
     float transitionTimeMs;
@@ -17,5 +17,5 @@ public:
     void setup();
     void restart();
     void loop();
-    SingleColourMode(LEDManager *ledAttach, float transitionTimeMs, int r, int g, int b);
+    SetColourOnceMode(LEDManager *ledAttach, float transitionTimeMs, int r, int g, int b);
 };

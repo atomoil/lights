@@ -15,9 +15,10 @@
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
-#include "modes/ColourCyclingMode.h"
-#include "modes/SingleColourMode.h"
 #include "modes/AnimationMode.h"
+#include "modes/SetColourOnceMode.h"
+#include "modes/ColourCyclingRGBMode.h"
+#include "modes/SingleColourAnimatingMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -26,7 +27,7 @@
 
 #endif
 
-#define INITIAL_TOUCH_DOWN_TIME 1200
+#define INITIAL_TOUCH_DOWN_TIME 1500
 
 enum LampState
 {
@@ -44,13 +45,14 @@ private:
     TouchInput *touch;
     BluetoothInput *bluetooth;
     IRInput *remoteControl;
-    ColourCyclingMode *rgbMode;
-    ColourCyclingMode *touchdownCyclingMode;
+    ColourCyclingRGBMode *rgbMode;
+    ColourCyclingRGBMode *touchdownCyclingMode;
     AnimationMode *animationMode;
-    SingleColourMode *brightFadeInMode;
-    SingleColourMode *brightMode;
-    SingleColourMode *switchOffMode;
-    SingleColourMode *offMode;
+    SetColourOnceMode *brightFadeInMode;
+    SetColourOnceMode *brightMode;
+    SetColourOnceMode *switchOffMode;
+    SetColourOnceMode *offMode;
+    SingleColourAnimatingMode *singleColourAnimatingMode;
 
 #ifdef SUPPORTS_FFT
     AudioManager *audio;

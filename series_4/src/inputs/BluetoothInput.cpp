@@ -47,7 +47,7 @@ LampMessage BluetoothInput::loop()
         return msg;
     }
     //char* empty = "";
-    return {LAMP_NONE, 0, ""};
+    return {LAMP_NONE, 0, 0, ""};
 }
 
 LampMessage BluetoothInput::processMessage(String msg)
@@ -57,26 +57,24 @@ LampMessage BluetoothInput::processMessage(String msg)
     if (msg == "st:on")
     {
         Serial.println("LAMP_ON!");
-        return {LAMP_ON, 0, empty};
+        return {LAMP_ON, 0, 0, empty};
         //allLightsOn();
     }
 
     if (msg == "st:off")
     {
-        return {LAMP_OFF, 0, empty};
-        // allLightsOff();
+        return {LAMP_OFF, 0, 0, empty};
     }
 
     if (msg == "an:slow")
     { // an is for animation
-        return {SET_ANIM_SPEED, 10000, empty};
-        //setAnimatingSpeed(10000);
+        return {SET_ANIM_SPEED, 10000, 0, empty};
     }
     else if (msg == "an:fast")
     {
-        return {SET_ANIM_SPEED, 100, empty};
-        //setAnimatingSpeed(100);
+        return {SET_ANIM_SPEED, 100, 0, empty};
     }
+
     else if (msg.startsWith("an"))
     {
         char input[100];
@@ -85,8 +83,7 @@ LampMessage BluetoothInput::processMessage(String msg)
         text = strtok(0, ":");
         float duration = float(atoi(text));
         Serial.println(duration);
-        //setAnimatingSpeed(duration);
-        return {SET_ANIM_SPEED, duration, empty};
+        return {SET_ANIM_SPEED, duration, 0, empty};
     }
 
     if (msg.startsWith("am"))
@@ -96,11 +93,8 @@ LampMessage BluetoothInput::processMessage(String msg)
         char *text = strtok(input, ":");
         text = strtok(0, ":");
         float mult = atof(text);
-        // multAnimatingSpeed(mult);
 
-        return {MULT_ANIM_SPEED, mult, empty};
-        //Serial.print("multAnimatingSpeed ");
-        //Serial.println(mult);
+        return {MULT_ANIM_SPEED, mult, 0, empty};
     }
 
     if (msg.startsWith("br"))
@@ -110,7 +104,7 @@ LampMessage BluetoothInput::processMessage(String msg)
         char *text = strtok(input, ":");
         text = strtok(0, ":");
         float mult = atof(text);
-        return {INC_BRIGHTNESS, mult, empty};
+        return {INC_BRIGHTNESS, mult, 0, empty};
         
     }
 
@@ -123,7 +117,7 @@ LampMessage BluetoothInput::processMessage(String msg)
         text = strtok(0, ":");
         float value = atof(text);
         Serial.println(value);
-        return {SET_BRIGHTNESS, value, empty};
+        return {SET_BRIGHTNESS, value, 0, empty};
     }
 
     // pl:10:11:20:21:30:31:40:41:50:51:60:61
@@ -135,12 +129,12 @@ LampMessage BluetoothInput::processMessage(String msg)
         ssData.toCharArray(input, 99);
         Serial.print("PALETTE: ");
         Serial.println(input);
-        return {SET_PALETTE, 0, ssData};
+        return {SET_PALETTE, 0, 0, ssData};
     }
 
     if (msg.startsWith("pg"))
     {
-        return {GET_PALETTE, 0, empty};
+        return {GET_PALETTE, 0, 0, empty};
     }
 
     if (msg.startsWith("cs"))
@@ -149,46 +143,49 @@ LampMessage BluetoothInput::processMessage(String msg)
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
         text = strtok(0, ":");
-        return {SET_COLOUR, 0, text};
+        float hue = atof(text);
+        text = strtok(0, ":");
+        float sat = atof(text); // @TODO handle this if it's null :-/
+        return {SET_COLOUR, hue, sat, text};
     }
 
     if (msg.startsWith("v:get"))
     {
         Serial.println("v:get");
-        return {GET_VERSION, 0, empty};
+        return {GET_VERSION, 0, 0, empty};
         // sendVersionOverBluetooth();
     }
 
     if (msg.startsWith("v:lvl"))
     {
         Serial.println("v:lvl");
-        return {GET_LEVELS, 0, empty};
+        return {GET_LEVELS, 0, 0, empty};
         // sendLevelsOverBluetooth();
     }
 
     if (msg.startsWith("d:sendsens:1"))
     {
-        return {DEBUG_SENSITIVITY, 1, empty};
+        return {DEBUG_SENSITIVITY, 1, 0, empty};
         // sendTouchValue = true;
     }
     else if (msg.startsWith("d:sendsens:0"))
     {
-        return {DEBUG_SENSITIVITY, 0, empty};
+        return {DEBUG_SENSITIVITY, 0, 0, empty};
         // sendTouchValue = false;
     }
 
 #ifdef SUPPORTS_FFT
     if (msg.startsWith("md:0"))
     {
-        return {FFT_MODE, 0, empty}; //
+        return {FFT_MODE, 0, 0, empty}; //
     }
     else if (msg.startsWith("md:1"))
     {
-        return {FFT_MODE, 1, empty}; //
+        return {FFT_MODE, 1, 0, empty}; //
     }
     else if (msg.startsWith("md:2"))
     {
-        return {FFT_MODE, 2, empty}; //
+        return {FFT_MODE, 2, 0, empty}; //
     }
 #endif
 
@@ -197,7 +194,7 @@ LampMessage BluetoothInput::processMessage(String msg)
     Serial.println("'");
     // return a default
     
-    return {LAMP_NONE, 0, empty};
+    return {LAMP_NONE, 0, 0, empty};
 }
 
 void BluetoothInput::sendMessage(char* message) {

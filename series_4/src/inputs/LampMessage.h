@@ -18,6 +18,7 @@ enum LampMessageType {
 struct LampMessage {
     LampMessageType type;
     float number;
+    float number2;
     String string;
 };
 
