@@ -18,7 +18,7 @@ private:
 public:
     void setup();
     void setPaletteFromPlCode(String input);
-    String getPaletteAsPlCode();
+    void getPaletteAsPlCode(char *palette_char);
     int hueForSwatch(int swatch_id);
     int satForSwatch(int swatch_id);
     int totalSwatches();

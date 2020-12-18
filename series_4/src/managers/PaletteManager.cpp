@@ -103,8 +103,8 @@ int PaletteManager::importSat(int i)
     return round((f / 100.0) * 255.0);
 }
 
-String PaletteManager::getPaletteAsPlCode() {
-    char palette_char[100];
+String PaletteManager::getPaletteAsPlCode(char *palette_char) {
+    //char palette_char[100];
     sprintf(palette_char, "pl:%i:%i:%i:%i:%i:%i:%i:%i:%i:%i", 
         exportHue(palette[0][0]), exportSat(palette[0][1]),
         exportHue(palette[1][0]), exportSat(palette[1][1]),
@@ -112,7 +112,7 @@ String PaletteManager::getPaletteAsPlCode() {
         exportHue(palette[3][0]), exportSat(palette[3][1]),
         exportHue(palette[4][0]), exportSat(palette[4][1])
     );
-    return String(palette_char);
+    //return String(palette_char);
 }
 
 int PaletteManager::exportHue(int i)

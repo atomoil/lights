@@ -281,14 +281,18 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         Serial.print(lampMsg.string);
         Serial.println("'");
         palette->setPaletteFromPlCode(lampMsg.string);
+        // debugging:
         Serial.print("getPalette: ");
-        Serial.println(palette->getPaletteAsPlCode());
+        char palette_char[100];
+        palette->getPaletteAsPlCode(palette_char);
+        Serial.println(palette_char);
     }
     break;
     case GET_PALETTE:
     {
-        String pal = palette->getPaletteAsPlCode(); // @TODO get this working!
-        bluetooth->sendMessage(pal);
+        char palette_char[100];
+        palette->getPaletteAsPlCode(palette_char);
+        bluetooth->sendMessage(palette_char);
     }
     case SET_COLOUR:
     {
