@@ -26,6 +26,8 @@ LampOS::LampOS()
 
     singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
+    colourWipeMode = new ColourWipeMode(leds, palette, 500, 2000);
+
 #ifdef SUPPORTS_FFT
 
     audio = new AudioManager();
@@ -35,9 +37,9 @@ LampOS::LampOS()
 #endif
 
     // set the first mode
-    // mode = rgbMode;
-    // mode = animationMode;
-    mode = offMode;
+    //mode = rgbMode;
+    mode = colourWipeMode;
+    //mode = offMode;
 };
 
 void LampOS::setup()
@@ -62,6 +64,8 @@ void LampOS::setup()
     brightMode->setup();
     switchOffMode->setup();
     offMode->setup();
+    singleColourAnimatingMode->setup();
+    colourWipeMode->setup();
 
 #ifdef SUPPORTS_FFT
 
@@ -235,6 +239,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case SET_ANIM_SPEED:
     {
+        // @TODO make a shared maanager for animation speed!
         animationMode->setAnimationSpeed(lampMsg.number);
         if (mode != animationMode)
         {

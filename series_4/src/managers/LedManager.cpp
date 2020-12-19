@@ -47,13 +47,14 @@ void LEDManager::loop()
 
 void LEDManager::updateLEDs()
 {
-    float time = float(tweenMs);
+    //float time = float(tweenMs);
     boolean debug = true;
     //Serial.println(time);
     for (int x = 0; x < NUM_COLUMNS; x++)
     {
         for (int y = 0; y < NUM_LEDS; y++)
         {
+            float time = float(tweenMs[x][y]);
             LedData data = matrix[x][y];
             data.r = updateColour(time, data.r, debug);
             data.g = updateColour(time, data.g, false);
@@ -71,8 +72,6 @@ LedColourTween LEDManager::updateColour(float time, LedColourTween colour, boole
 
     if (colour.tweenType == SINE) {
         colour.current = Sine::easeInOut(time, colour.begin, colour.change, colour.duration);
-        
-
     }
     if (time >= colour.duration){
         colour.tweenType = NO_TWEEN;
@@ -110,9 +109,10 @@ LedColourTween LEDManager::updateColour(float time, LedColourTween colour, boole
 
 void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseconds)
 {
-    tweenMs = 0;
+    //tweenMs = 0;
     if (x < NUM_COLUMNS && y < NUM_LEDS)
     {
+        tweenMs[x][y] = 0;
         LedData data = matrix[x][y];
         if (timeInMilliseconds <= 0)
         { // 0 value means set immediately

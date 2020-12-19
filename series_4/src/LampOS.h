@@ -1,7 +1,7 @@
 #ifndef LAMP_OS_HPP_INCLUDED
 #define LAMP_OS_HPP_INCLUDED
 
-// #define LAMP_OS_DEBUG
+#define LAMP_OS_DEBUG
 
 #include <Arduino.h>
 #include "init.h"
@@ -19,6 +19,7 @@
 #include "modes/SetColourOnceMode.h"
 #include "modes/ColourCyclingRGBMode.h"
 #include "modes/SingleColourAnimatingMode.h"
+#include "modes/ColourWipeMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -53,6 +54,7 @@ private:
     SetColourOnceMode *switchOffMode;
     SetColourOnceMode *offMode;
     SingleColourAnimatingMode *singleColourAnimatingMode;
+    ColourWipeMode *colourWipeMode;
 
 #ifdef SUPPORTS_FFT
     AudioManager *audio;
