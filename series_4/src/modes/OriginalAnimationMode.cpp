@@ -1,15 +1,15 @@
-#include "AnimationMode.h"
+#include "OriginalAnimationMode.h"
 
-AnimationMode::AnimationMode(
+OriginalAnimationMode::OriginalAnimationMode(
     LEDManager *ledAttach,
-    PaletteManager *paletteAttach) : BaseMode(ledAttach),
-                                     palette(paletteAttach)
+    PaletteManager *paletteAttach,
+    AnimationManager *animationAttach) : BaseAnimationMode(ledAttach, paletteAttach, animationAttach)
 {
 }
 
-void AnimationMode::setup()
+void OriginalAnimationMode::setup()
 {
-    frameSize = 1000 / ANIMATION_FRAME_RATE;
+    frameSize = animation->getSpeed() / ANIMATION_FRAME_RATE;
     // create the dots
     for (int c = 0; c < NUM_COLUMNS; c++)
     {
@@ -26,10 +26,11 @@ void AnimationMode::setup()
     restart();
 }
 
-void AnimationMode::restart()
+void OriginalAnimationMode::restart()
 {
     Serial.println("AnimationMode::restart");
-    float timeElapsed = currentAnimatingSpeed / 500.0;
+    currentAnimatingSpeed = animation->getSpeed();
+    float timeElapsed = animation->getSpeed() / 500.0;
     float margin = (timeElapsed / 10.0);
     // int deltaUpdate = 60; // @TODO every 60ms or 16fps - doesn't seem right
 
@@ -56,9 +57,26 @@ void AnimationMode::restart()
     }
 }
 
-void AnimationMode::loop()
+void OriginalAnimationMode::loop()
 {
-    if (frameMs > frameSize)
+    if (currentAnimatingSpeed != animation->getSpeed()) {
+        currentAnimatingSpeed = animation->getSpeed();
+
+            float timeElapsed = currentAnimatingSpeed / 500.0; // eh?
+    float margin = (timeElapsed / 10.0);
+
+    for (int c = 0; c < NUM_COLUMNS; c++)
+    {
+        for (int d = 0; d < NUM_LEDS; d++)
+        {
+            LightDot dot = lights[c][d];
+            float durationToReach = timeElapsed + ((d % 10) * margin);
+            dot.increment = 1 / (durationToReach / frameSize);
+            lights[c][d] = dot;
+        }
+    }
+    }
+    if (frameMs > (animation->getSpeed() / ANIMATION_FRAME_RATE))
     {
         frameMs = 0;
         // Serial.println("AnimationMode::loop");
@@ -116,7 +134,9 @@ void AnimationMode::loop()
     }
 }
 
-void AnimationMode::setAnimationSpeed(float newSpeed)
+/*
+// we're losing this, so what changes... ?
+void OriginalAnimationMode::setAnimationSpeed(float newSpeed)
 {
     if (newSpeed >= 150)
     {
@@ -144,7 +164,8 @@ void AnimationMode::setAnimationSpeed(float newSpeed)
     }
 }
 
-float AnimationMode::getAnimationSpeed()
+float OriginalAnimationMode::getAnimationSpeed()
 {
     return currentAnimatingSpeed;
 }
+*/

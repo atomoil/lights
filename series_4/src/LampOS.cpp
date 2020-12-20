@@ -4,6 +4,7 @@ LampOS::LampOS()
 {
     leds = new LEDManager();
     palette = new PaletteManager();
+    animation = new AnimationManager();
 
     touch = new TouchInput(TOUCH_ON, TOUCH_OFF);
     bluetooth = new BluetoothInput();
@@ -15,7 +16,7 @@ LampOS::LampOS()
     int cols_2[30] = {40, 55, 45, /* */ 240, 250, 245, /* */ 10, 10, 10, /* */ 240, 245, 250};
     touchdownCyclingMode = new ColourCyclingRGBMode(leds, 1000, float(2000), cols_2, 4);
 
-    animationMode = new AnimationMode(leds, palette);
+    animationMode = new OriginalAnimationMode(leds, palette, animation);
 
     brightFadeInMode = new SetColourOnceMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
 
@@ -26,6 +27,8 @@ LampOS::LampOS()
 
     singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
+    colourWipeMode = new ColourWipeMode(leds, palette, animation);
+
 #ifdef SUPPORTS_FFT
 
     audio = new AudioManager();
@@ -35,9 +38,9 @@ LampOS::LampOS()
 #endif
 
     // set the first mode
-    // mode = rgbMode;
-    // mode = animationMode;
-    mode = offMode;
+    //mode = rgbMode;
+    mode = colourWipeMode;
+    //mode = offMode;
 };
 
 void LampOS::setup()
@@ -62,6 +65,8 @@ void LampOS::setup()
     brightMode->setup();
     switchOffMode->setup();
     offMode->setup();
+    singleColourAnimatingMode->setup();
+    colourWipeMode->setup();
 
 #ifdef SUPPORTS_FFT
 
@@ -184,8 +189,8 @@ void LampOS::processTouchData(std::tuple<TOUCH_STATE, float> val)
             }
             else
             {
+                animation->setSpeed(touchValue);
                 mode = animationMode;
-                animationMode->setAnimationSpeed(touchValue);
                 mode->restart();
             }
         }
@@ -235,8 +240,10 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case SET_ANIM_SPEED:
     {
-        animationMode->setAnimationSpeed(lampMsg.number);
-        if (mode != animationMode)
+        // @TODO make a shared maanager for animation speed!
+        //animationMode->setAnimationSpeed(lampMsg.number);
+        animation->setSpeed(lampMsg.number);
+        if (mode != animationMode && mode != colourWipeMode) // @TODO this is ugly, can we improve it?
         {
             lampState = ON;
             mode = animationMode;
@@ -246,13 +253,13 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case MULT_ANIM_SPEED:
     {
-        float speed = animationMode->getAnimationSpeed();
+        float speed = animation->getSpeed();
         speed *= lampMsg.number;
-        animationMode->setAnimationSpeed(speed);
-        if (mode != animationMode)
+        animation->setSpeed(speed);
+        if (mode != animationMode && mode != colourWipeMode)
         {
             lampState = ON;
-            mode = animationMode;
+            mode = animationMode; // animationMode is the default animation - @TODO configure default animation!
             mode->restart();
         }
     }
@@ -317,8 +324,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     case GET_LEVELS:
     {
         char levels_message[80];
-        sprintf(levels_message, "<s=%.2f/><b=%.3f>", animationMode->getAnimationSpeed(), leds->getBrightness());
-
+        sprintf(levels_message, "<s=%.2f/><b=%.3f>", animation->getSpeed(), leds->getBrightness());
         bluetooth->sendMessage(levels_message);
     }
     break;

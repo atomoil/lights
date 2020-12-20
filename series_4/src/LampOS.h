@@ -1,7 +1,7 @@
 #ifndef LAMP_OS_HPP_INCLUDED
 #define LAMP_OS_HPP_INCLUDED
 
-// #define LAMP_OS_DEBUG
+#define LAMP_OS_DEBUG
 
 #include <Arduino.h>
 #include "init.h"
@@ -10,15 +10,17 @@
 
 #include "managers/LedManager.h"
 #include "managers/AudioManager.h"
+#include "managers/AnimationManager.h"
 
 #include "inputs/TouchInput.h"
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
-#include "modes/AnimationMode.h"
+#include "modes/OriginalAnimationMode.h"
 #include "modes/SetColourOnceMode.h"
 #include "modes/ColourCyclingRGBMode.h"
 #include "modes/SingleColourAnimatingMode.h"
+#include "modes/ColourWipeMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -42,17 +44,19 @@ class LampOS
 private:
     LEDManager *leds;
     PaletteManager *palette;
+    AnimationManager *animation;
     TouchInput *touch;
     BluetoothInput *bluetooth;
     IRInput *remoteControl;
     ColourCyclingRGBMode *rgbMode;
     ColourCyclingRGBMode *touchdownCyclingMode;
-    AnimationMode *animationMode;
+    OriginalAnimationMode *animationMode;
     SetColourOnceMode *brightFadeInMode;
     SetColourOnceMode *brightMode;
     SetColourOnceMode *switchOffMode;
     SetColourOnceMode *offMode;
     SingleColourAnimatingMode *singleColourAnimatingMode;
+    ColourWipeMode *colourWipeMode;
 
 #ifdef SUPPORTS_FFT
     AudioManager *audio;

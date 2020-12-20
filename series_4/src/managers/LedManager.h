@@ -32,7 +32,7 @@ private:
     LedData matrix[NUM_COLUMNS][NUM_LEDS];
     CRGB leds[NUM_COLUMNS][NUM_LEDS];
     elapsedMillis frameMs;
-    elapsedMillis tweenMs;
+    elapsedMillis tweenMs[NUM_COLUMNS][NUM_LEDS];
     float frameSize;
     float brightness;
     void updateLEDs();
