@@ -4,11 +4,7 @@
 ColourWipeMode::ColourWipeMode(
     LEDManager *ledAttach,
     PaletteManager *paletteAttach,
-    unsigned int howOftenToChangeAttach,
-    float transitionTimeMsAttach) : BaseMode(ledAttach),
-                                    palette(paletteAttach),
-                                    howOftenToChange(howOftenToChangeAttach),
-                                    transitionTimeMs(transitionTimeMsAttach)
+    AnimationManager *animationAttach) : BaseAnimationMode(ledAttach, paletteAttach, animationAttach)
 {
 }
 
@@ -25,11 +21,12 @@ void ColourWipeMode::restart()
 
 void ColourWipeMode::loop()
 {
-    if (timeSw > howOftenToChange) {
+    if (timeSw > animation->getSpeed()) {
         timeSw = 0;
 
         int hue = palette->hueForSwatch(currentSwatch);
         int sat = palette->satForSwatch(currentSwatch);
+        float transitionTimeMs = animation->getSpeed() * 3;
         for(int i=0;i<NUM_COLUMNS;i++){
             leds->setHSV(i, currentRow, hue, sat, 255, transitionTimeMs);
         }

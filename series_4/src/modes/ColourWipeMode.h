@@ -2,15 +2,13 @@
 #include "../init.h"
 #include "../managers/LedManager.h"
 #include "../managers/PaletteManager.h"
-#include "BaseMode.h"
+#include "../managers/AnimationManager.h"
+#include "BaseAnimationMode.h"
 
 
-class ColourWipeMode: public BaseMode
+class ColourWipeMode: public BaseAnimationMode
 {
 private:
-    PaletteManager *palette;
-    unsigned int howOftenToChange;
-    float transitionTimeMs;
     int currentRow;
     int currentSwatch;
     elapsedMillis timeSw;
@@ -19,5 +17,5 @@ public:
     void setup();
     void restart();
     void loop();
-    ColourWipeMode(LEDManager *ledAttach, PaletteManager *paletteAttach, unsigned int howOftenToChangeAttach, float transitionTimeMs);
+    ColourWipeMode(LEDManager *ledAttach, PaletteManager *paletteAttach, AnimationManager *animation);
 };

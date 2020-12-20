@@ -27,7 +27,7 @@ LampOS::LampOS()
 
     singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
-    colourWipeMode = new ColourWipeMode(leds, palette, 500, 2000);
+    colourWipeMode = new ColourWipeMode(leds, palette, animation);
 
 #ifdef SUPPORTS_FFT
 
