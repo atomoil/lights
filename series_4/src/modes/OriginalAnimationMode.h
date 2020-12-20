@@ -5,7 +5,8 @@
 #include "../init.h"
 #include "../managers/LedManager.h"
 #include "../managers/PaletteManager.h"
-#include "BaseMode.h"
+#include "../managers/AnimationManager.h"
+#include "BaseAnimationMode.h"
 
 #define ANIMATION_FRAME_RATE 30
 
@@ -21,10 +22,9 @@ struct LightDot {
 };
 
 
-class AnimationMode: public BaseMode
+class OriginalAnimationMode: public BaseAnimationMode
 {
 private:
-    PaletteManager *palette;
     LightDot lights[NUM_COLUMNS][NUM_LEDS];
     elapsedMillis frameMs;
     float frameSize;
@@ -34,9 +34,9 @@ public:
     void setup();
     void restart();
     void loop();
-    void setAnimationSpeed(float newSpeed);
-    float getAnimationSpeed();
-    AnimationMode(LEDManager *ledAttach, PaletteManager *palette);
+    // void setAnimationSpeed(float newSpeed);
+    // float getAnimationSpeed();
+    OriginalAnimationMode(LEDManager *ledAttach, PaletteManager *palette, AnimationManager *animation);
 };
 
 

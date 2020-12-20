@@ -10,12 +10,13 @@
 
 #include "managers/LedManager.h"
 #include "managers/AudioManager.h"
+#include "managers/AnimationManager.h"
 
 #include "inputs/TouchInput.h"
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
-#include "modes/AnimationMode.h"
+#include "modes/OriginalAnimationMode.h"
 #include "modes/SetColourOnceMode.h"
 #include "modes/ColourCyclingRGBMode.h"
 #include "modes/SingleColourAnimatingMode.h"
@@ -43,12 +44,13 @@ class LampOS
 private:
     LEDManager *leds;
     PaletteManager *palette;
+    AnimationManager *animation;
     TouchInput *touch;
     BluetoothInput *bluetooth;
     IRInput *remoteControl;
     ColourCyclingRGBMode *rgbMode;
     ColourCyclingRGBMode *touchdownCyclingMode;
-    AnimationMode *animationMode;
+    OriginalAnimationMode *animationMode;
     SetColourOnceMode *brightFadeInMode;
     SetColourOnceMode *brightMode;
     SetColourOnceMode *switchOffMode;
