@@ -26,7 +26,7 @@ void ColourWipeMode::loop()
 
         int hue = palette->hueForSwatch(currentSwatch);
         int sat = palette->satForSwatch(currentSwatch);
-        float transitionTimeMs = animation->getSpeed() * 3;
+        float transitionTimeMs = animation->getSpeed() * 4;
         for(int i=0;i<NUM_COLUMNS;i++){
             leds->setHSV(i, currentRow, hue, sat, 255, transitionTimeMs);
         }
