@@ -30,7 +30,7 @@ void OriginalAnimationMode::restart()
 {
     Serial.println("AnimationMode::restart");
     currentAnimatingSpeed = animation->getSpeed();
-    float timeElapsed = animation->getSpeed() / 500.0;
+    float timeElapsed = animation->getSpeed() / 100.0;
     float margin = (timeElapsed / 10.0);
     // int deltaUpdate = 60; // @TODO every 60ms or 16fps - doesn't seem right
 
