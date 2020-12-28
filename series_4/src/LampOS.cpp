@@ -252,7 +252,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         // @TODO make a shared maanager for animation speed!
         //animationMode->setAnimationSpeed(lampMsg.number);
         animation->setSpeed(lampMsg.number);
-        if (mode != animationMode && mode != colourWipeMode) // @TODO this is ugly, can we improve it?
+        if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode) // @TODO this is ugly, can we improve it?
         {
             lampState = ON;
             mode = animationMode;
@@ -265,7 +265,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         float speed = animation->getSpeed();
         speed *= lampMsg.number;
         animation->setSpeed(speed);
-        if (mode != animationMode && mode != colourWipeMode)
+        if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode)
         {
             lampState = ON;
             mode = animationMode; // animationMode is the default animation - @TODO configure default animation!
@@ -315,7 +315,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case SET_COLOUR:
     {
-        singleColourAnimatingMode->updateColour( lampMsg.number, lampMsg.number2 );
+        singleColourAnimatingMode->updateColour(lampMsg.number, lampMsg.number2);
         mode = singleColourAnimatingMode;
         mode->restart();
     }
@@ -382,6 +382,63 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         Serial.println("FFT Mode set");
     }
 #endif
+    break;
+    case CYCLE_FFT_MODE:
+    {
+        if (mode == fftBarsMode)
+        {
+            lampState = ON;
+            mode = fftPulseMode;
+            mode->restart();
+        }
+        else
+        {
+            lampState = ON;
+            mode = fftBarsMode;
+            mode->restart();
+        }
+    }
+    break;
+    case ANIM_MODE:
+    {
+        int anim_mode = int(lampMsg.number);
+        if (anim_mode == 0)
+        {
+            lampState = ON;
+            mode = animationMode;
+            mode->restart();
+        }
+        else if (anim_mode == 1)
+        {
+            lampState = ON;
+            mode = colourWipeMode;
+            mode->restart();
+        }
+        else if (anim_mode == 2)
+        {
+            lampState = ON;
+            mode = randomPixelMode;
+            mode->restart();
+        }
+    }
+    break;
+    case CYCLE_ANIM_MODE:
+    {
+        if (mode == animationMode)
+        {
+            mode = colourWipeMode;
+        }
+        else if (mode == colourWipeMode)
+        {
+            mode = randomPixelMode;
+        }
+        else
+        {
+            mode = animationMode;
+        }
+        lampState = ON;
+        mode->restart();
+    }
     break;
     }
 }

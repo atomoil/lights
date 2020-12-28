@@ -25,12 +25,14 @@ LampMessage IRInput::loop()
         if (results.value == A)
         {
             Serial.println("A");
-            return {FFT_MODE, 0, 0, empty};
+            //return {FFT_MODE, 0, 0, empty};
+            return {CYCLE_ANIM_MODE, 0, 0, empty};
         }
         if (results.value == B)
         {
             Serial.println("B");
-            return {FFT_MODE, 1, 0, empty};
+            //return {FFT_MODE, 1, 0, empty};
+            return {CYCLE_FFT_MODE, 0, 0, empty};
         }
         if (results.value == C)
         {

@@ -13,6 +13,9 @@ enum LampMessageType {
     GET_VERSION, GET_LEVELS, // nothing
     DEBUG_SENSITIVITY,  // boolean
     FFT_MODE, // number
+    ANIM_MODE, // number
+    CYCLE_ANIM_MODE, // nothing
+    CYCLE_FFT_MODE // nothing
 };
 
 struct LampMessage {
