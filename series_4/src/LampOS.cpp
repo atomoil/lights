@@ -28,6 +28,7 @@ LampOS::LampOS()
     singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
     colourWipeMode = new ColourWipeMode(leds, palette, animation);
+    randomPixelMode = new RandomPixelMode(leds, palette, animation);
 
 #ifdef SUPPORTS_FFT
 
@@ -39,13 +40,16 @@ LampOS::LampOS()
 
     // set the first mode
     //mode = rgbMode;
-    mode = colourWipeMode;
-    //mode = offMode;
+    //mode = colourWipeMode;
+    //mode = randomPixelMode;
+    mode = offMode;
 };
 
 void LampOS::setup()
 {
+//#ifdef LAMP_OS_DEBUG
     delay(2000); // wait for Serial to be ready so we can debug stuff
+//#endif
     Serial.println("LampOS::setup start");
     frameSize = 1000.0 / 60;
     lampState = OFF;
@@ -65,8 +69,13 @@ void LampOS::setup()
     brightMode->setup();
     switchOffMode->setup();
     offMode->setup();
+    Serial.println("offMode setup");
     singleColourAnimatingMode->setup();
+    Serial.println("singleColourAnimatingMode setup");
     colourWipeMode->setup();
+    Serial.println("colourWipeMode setup");
+    randomPixelMode->setup();
+    Serial.println("randomPixelMode setup");
 
 #ifdef SUPPORTS_FFT
 

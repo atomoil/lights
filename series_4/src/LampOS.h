@@ -21,6 +21,7 @@
 #include "modes/ColourCyclingRGBMode.h"
 #include "modes/SingleColourAnimatingMode.h"
 #include "modes/ColourWipeMode.h"
+#include "modes/RandomPixelMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -57,6 +58,7 @@ private:
     SetColourOnceMode *offMode;
     SingleColourAnimatingMode *singleColourAnimatingMode;
     ColourWipeMode *colourWipeMode;
+    RandomPixelMode *randomPixelMode;
 
 #ifdef SUPPORTS_FFT
     AudioManager *audio;
