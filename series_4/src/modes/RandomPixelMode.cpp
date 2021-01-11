@@ -38,7 +38,7 @@ void RandomPixelMode::restart()
 
 void RandomPixelMode::loop()
 {
-    if (timeSw > animation->getSpeed()) {
+    if (timeSw > (animation->getSpeed()/NUM_COLUMNS)) {
         timeSw = 0;
 
         // get position

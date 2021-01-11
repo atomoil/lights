@@ -8,7 +8,7 @@
 #include "../managers/AnimationManager.h"
 #include "BaseAnimationMode.h"
 
-#define ANIMATION_FRAME_RATE 30
+#define ANIMATION_FRAME_RATE 60
 
 // -- Dot State
 struct LightDot {

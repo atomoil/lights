@@ -59,22 +59,23 @@ void OriginalAnimationMode::restart()
 
 void OriginalAnimationMode::loop()
 {
-    if (currentAnimatingSpeed != animation->getSpeed()) {
+    if (currentAnimatingSpeed != animation->getSpeed())
+    {
         currentAnimatingSpeed = animation->getSpeed();
 
-            float timeElapsed = currentAnimatingSpeed / 500.0; // eh?
-    float margin = (timeElapsed / 10.0);
+        float timeElapsed = currentAnimatingSpeed / 100.0;
+        float margin = (timeElapsed / 10.0);
 
-    for (int c = 0; c < NUM_COLUMNS; c++)
-    {
-        for (int d = 0; d < NUM_LEDS; d++)
+        for (int c = 0; c < NUM_COLUMNS; c++)
         {
-            LightDot dot = lights[c][d];
-            float durationToReach = timeElapsed + ((d % 10) * margin);
-            dot.increment = 1 / (durationToReach / frameSize);
-            lights[c][d] = dot;
+            for (int d = 0; d < NUM_LEDS; d++)
+            {
+                LightDot dot = lights[c][d];
+                float durationToReach = timeElapsed + ((d % 10) * margin);
+                dot.increment = 1 / (durationToReach / frameSize);
+                lights[c][d] = dot;
+            }
         }
-    }
     }
     if (frameMs > (animation->getSpeed() / ANIMATION_FRAME_RATE))
     {
