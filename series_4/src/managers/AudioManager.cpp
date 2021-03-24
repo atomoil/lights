@@ -1,11 +1,21 @@
 #include "AudioManager.h"
 
+
+// BAND_MINIMUM around 0.191 doesn't pick up my laptop fan anymore - any lower and it does!
+#define BAND_MINIMUM 0.0191
+#define BAND_DECAY 0.9
+#define BAND_OFF_DECAY 0.6
+#define FFT_DECAY 0.95
+
 // extern in .h
 //AudioAnalyzeFFT256 FFT;
 
 AudioInputAnalog adc1(A0);   
 AudioAnalyzeFFT256 FFT; 
 AudioConnection patchCord(adc1, FFT);
+float fft_max_band = BAND_MINIMUM;
+float ff_max_band_decayed = BAND_MINIMUM;
+
 
 AudioManager::AudioManager()
 {
@@ -51,7 +61,7 @@ void AudioManager::getFFT(int i, float n)
     }
     else
     {
-        fftVals[i] = tmp * 0.95; //decay
+        fftVals[i] = tmp * FFT_DECAY; //decay
     }
 }
 
@@ -63,8 +73,6 @@ void AudioManager::getMaxLevel()
     {
         n = max(fftVals[i], n);
     }
-    //Serial.print(n);
-    //Serial.print(",");
     // 1 / level to get value to multiply bands with
     if (n > fft_max_band)
     {
@@ -72,13 +80,39 @@ void AudioManager::getMaxLevel()
     }
     else
     {
-        fft_max_band = fft_max_band * 0.9;
-        fft_max_band = max(fft_max_band, 0.005); // stop value getting too small / mult getting too large
+        fft_max_band = fft_max_band * BAND_DECAY;
+        fft_max_band = max(fft_max_band, BAND_MINIMUM); // stop value getting too small / mult getting too large
     }
-    //Serial.print(fft_max_band);
+
+    int updated = 0;
+
+    if (fft_max_band > BAND_MINIMUM) {
+        updated = 1;
+        ff_max_band_decayed = fft_max_band;
+        fft_mult = 1 / fft_max_band;
+    } else {
+        // actually need to keep tailing this off!
+        ff_max_band_decayed = max(ff_max_band_decayed*BAND_OFF_DECAY, 0.01);
+        if (ff_max_band_decayed > 0.01) {
+            fft_mult = 1 / ff_max_band_decayed;
+        } else {
+            fft_mult = 0;
+        }
+    }
+
+    Serial.print("fft_max_band: ");
+    Serial.print(updated);
+    Serial.print(",");
+    Serial.print(fft_max_band);
+    Serial.print(",");
+    Serial.print(ff_max_band_decayed);
+    Serial.print(",");
+    Serial.print(n);
+    Serial.print(",");
+    Serial.println(fft_mult);
     //Serial.print(">");
 
-    fft_mult = 1 / fft_max_band;
+    
 }
 
 int AudioManager::valueForLED(int band, int number, int maxnum)
