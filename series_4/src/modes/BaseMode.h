@@ -12,6 +12,8 @@ protected:
     void setAllLEDsToRGB(int r, int g, int b, float transitionTime);
     void setAllLEDsToHSV(int h, int s, int v, float transitionTime);
 public:
+    int modeId;
+    String modeName;
     BaseMode(LEDManager *ledAttach);
     virtual void setup() = 0;
     virtual void restart() = 0;

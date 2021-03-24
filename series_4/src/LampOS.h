@@ -31,6 +31,8 @@
 #endif
 
 #define INITIAL_TOUCH_DOWN_TIME 1500
+#define COUNT_ANIMATION_MODES 3
+#define COUNT_FFT_MODES 2
 
 enum LampState
 {
@@ -60,10 +62,13 @@ private:
     ColourWipeMode *colourWipeMode;
     RandomPixelMode *randomPixelMode;
 
+    BaseAnimationMode *animationModes[COUNT_ANIMATION_MODES];
+
 #ifdef SUPPORTS_FFT
     AudioManager *audio;
     FFTBarsMode *fftBarsMode;
     FFTPulseMode *fftPulseMode;
+    BaseFFTMode *fftModes[COUNT_FFT_MODES];
 #endif
 
     BaseMode *mode;

@@ -3,7 +3,10 @@
 BaseMode::BaseMode(
     LEDManager *ledAttach): 
         leds(ledAttach)
-{};
+{
+    modeId = 0;
+    modeName = "";
+};
 
 
 void BaseMode::setAllLEDsToRGB(int r, int g, int b, float transitionTime)

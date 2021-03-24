@@ -174,20 +174,14 @@ LampMessage BluetoothInput::processMessage(String msg)
         // sendTouchValue = false;
     }
 
-#ifdef SUPPORTS_FFT
-    if (msg.startsWith("md:0"))
-    {
-        return {FFT_MODE, 0, 0, empty}; //
+    if (msg.startsWith("md")){
+        char input[100];
+        ssData.toCharArray(input, 99);
+        char *text = strtok(input, ":");
+        text = strtok(0, ":");
+        float modeId = float(atoi(text));
+        return {SET_MODE, modeId, 0, empty};
     }
-    else if (msg.startsWith("md:1"))
-    {
-        return {FFT_MODE, 1, 0, empty}; //
-    }
-    else if (msg.startsWith("md:2"))
-    {
-        return {FFT_MODE, 2, 0, empty}; //
-    }
-#endif
 
     Serial.print("Message unknown '");
     Serial.print(msg);

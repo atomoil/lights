@@ -10,6 +10,9 @@ RandomPixelMode::RandomPixelMode(
 
 void RandomPixelMode::setup()
 {
+    modeId = 22;
+    modeName = "splatter";
+
     Serial.println("RandomPixelMode::setup");
     int i=0;
     for(int c=0; c < NUM_COLUMNS; c++){

@@ -9,6 +9,10 @@ OriginalAnimationMode::OriginalAnimationMode(
 
 void OriginalAnimationMode::setup()
 {
+    
+    modeId = 20;
+    modeName = "classic";
+    
     frameSize = animation->getSpeed() / ANIMATION_FRAME_RATE;
     // create the dots
     for (int c = 0; c < NUM_COLUMNS; c++)

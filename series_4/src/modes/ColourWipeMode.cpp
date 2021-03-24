@@ -10,6 +10,8 @@ ColourWipeMode::ColourWipeMode(
 
 void ColourWipeMode::setup()
 {
+    modeId = 21;
+    modeName = "wipe";
     restart();
 }
 

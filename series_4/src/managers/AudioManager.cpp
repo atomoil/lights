@@ -100,6 +100,7 @@ void AudioManager::getMaxLevel()
         }
     }
 
+    /*
     Serial.print("fft_max_band: ");
     Serial.print(updated);
     Serial.print(",");
@@ -111,7 +112,7 @@ void AudioManager::getMaxLevel()
     Serial.print(",");
     Serial.println(fft_mult);
     //Serial.print(">");
-
+    */
     
 }
 

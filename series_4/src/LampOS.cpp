@@ -30,11 +30,19 @@ LampOS::LampOS()
     colourWipeMode = new ColourWipeMode(leds, palette, animation);
     randomPixelMode = new RandomPixelMode(leds, palette, animation);
 
+    animationModes[0] = animationMode;
+    animationModes[1] = colourWipeMode;
+    animationModes[2] = randomPixelMode;
+    
+
 #ifdef SUPPORTS_FFT
 
     audio = new AudioManager();
     fftBarsMode = new FFTBarsMode(leds, palette, audio);
     fftPulseMode = new FFTPulseMode(leds, palette, audio);
+
+    fftModes[0] = fftBarsMode;
+    fftModes[1] = fftPulseMode;
 
 #endif
 
@@ -349,39 +357,37 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         }
 
         break;
-    case FFT_MODE:
-#ifdef SUPPORTS_FFT
+    case SET_MODE:
     {
-        int fft_mode = int(lampMsg.number);
-        Serial.print("FFT Mode: ");
-        Serial.println(fft_mode);
-        switch (fft_mode)
-        {
-        case 0:
-        {
-            lampState = ON;
-            mode = animationMode;
-            mode->restart();
+        BaseMode *checkMode;
+        BaseMode *foundMode;
+        bool found = false;
+        int i;
+        int requestedId = int(lampMsg.number);
+        for(i=0;i<COUNT_ANIMATION_MODES;i++) {
+            checkMode = animationModes[i];
+            if (checkMode->modeId == requestedId) {
+                found = true;
+                foundMode = checkMode;
+            }
         }
-        break;
-        case 1:
-        {
-            lampState = ON;
-            mode = fftBarsMode;
-            mode->restart();
+#ifdef SUPPORTS_FFT
+        for(i=0;i<COUNT_FFT_MODES;i++) {
+            checkMode = fftModes[i];
+            if (checkMode->modeId == requestedId) {
+                found = true;
+                foundMode = checkMode;
+            }
         }
-        break;
-        case 2:
-        {
-            lampState = ON;
-            mode = fftPulseMode;
-            mode->restart();
-        }
-        break;
-        }
-        Serial.println("FFT Mode set");
-    }
 #endif
+        if (found == true) {
+            Serial.print("found mode:");
+            Serial.println(foundMode->modeName);
+            lampState = ON;
+            mode = foundMode;
+            mode->restart();
+        }
+    }
     break;
     case CYCLE_FFT_MODE:
     {

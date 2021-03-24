@@ -9,7 +9,8 @@ FFTBarsMode::FFTBarsMode(
 
 
 void FFTBarsMode::setup() {
-    Serial.println("FFTBarsMode::setup");
+    modeId = 11;
+    modeName = "bars";
 }
 
 

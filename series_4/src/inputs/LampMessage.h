@@ -12,8 +12,8 @@ enum LampMessageType {
     SET_COLOUR, // string (hue:sat) hmm
     GET_VERSION, GET_LEVELS, // nothing
     DEBUG_SENSITIVITY,  // boolean
-    FFT_MODE, // number
-    ANIM_MODE, // number
+    SET_MODE, // number
+    ANIM_MODE, // number // not used :-/
     CYCLE_ANIM_MODE, // nothing
     CYCLE_FFT_MODE // nothing
 };

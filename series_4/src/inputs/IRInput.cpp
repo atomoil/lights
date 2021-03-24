@@ -37,7 +37,7 @@ LampMessage IRInput::loop()
         if (results.value == C)
         {
             Serial.println("C");
-            return {FFT_MODE, 2, 0, empty};
+            // return {FFT_MODE, 2, 0, empty};
         }
 #else
         if (results.value == A)

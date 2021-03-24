@@ -9,7 +9,8 @@ FFTPulseMode::FFTPulseMode(
 
 
 void FFTPulseMode::setup() {
-    Serial.println("FFTPulseMode::setup");
+    modeId = 12;
+    modeName = "pulse";
 }
 
 void FFTPulseMode::restart() {
