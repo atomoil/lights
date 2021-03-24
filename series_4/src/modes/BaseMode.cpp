@@ -4,8 +4,8 @@ BaseMode::BaseMode(
     LEDManager *ledAttach): 
         leds(ledAttach)
 {
-    modeId = 0;
-    modeName = "";
+    modeId = -1;
+    modeName = "?";
 };
 
 

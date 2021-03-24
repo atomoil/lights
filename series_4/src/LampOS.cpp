@@ -19,11 +19,20 @@ LampOS::LampOS()
     animationMode = new OriginalAnimationMode(leds, palette, animation);
 
     brightFadeInMode = new SetColourOnceMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
+    brightFadeInMode->modeId = 1;
+    brightFadeInMode->modeName = "bright";
 
     brightMode = new SetColourOnceMode(leds, 0, 255, 255, 255);
+    brightMode->modeId = 1;
+    brightMode->modeName = "bright";
 
     switchOffMode = new SetColourOnceMode(leds, 2000, 0, 0, 0);
+    switchOffMode->modeId = 0;
+    switchOffMode->modeName = "off";
+
     offMode = new SetColourOnceMode(leds, 0, 0, 0, 0);
+    offMode->modeId = 0;
+    offMode->modeName = "off";
 
     singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
 
