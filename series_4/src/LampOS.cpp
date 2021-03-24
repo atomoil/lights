@@ -369,7 +369,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     case GET_LEVELS:
     {
         char levels_message[80];
-        sprintf(levels_message, "<s=%.2f/><b=%.3f>", animation->getSpeed(), leds->getBrightness());
+        sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/>", animation->getSpeed(), leds->getBrightness(), mode->modeId, mode->modeName.c_str());
         bluetooth->sendMessage(levels_message);
     }
     break;
