@@ -330,11 +330,39 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case GET_VERSION:
     {
-        char version_message[80];
-        sprintf(version_message, "<v=%s/>%s", LAMP_HARDWARE_VERSION, LAMP_SUPPORTS);
-        //Serial.print("GET_VERSION - sending '");
-        //Serial.print(version_message);
-        //Serial.println("'");
+        BaseMode *checkMode;
+        char version_message[200];
+        sprintf(version_message, "<v=%s/>", LAMP_HARDWARE_VERSION); //, anim_message, fft_message);
+        
+        char anim_message[100];
+        for(int i=0;i<COUNT_ANIMATION_MODES;i++){
+            checkMode = animationModes[i];
+            if (i==0){
+                sprintf(anim_message, "%i:%s", checkMode->modeId,checkMode->modeName.c_str());
+            } else {
+                sprintf(anim_message, "%s,%i:%s", anim_message,checkMode->modeId,checkMode->modeName.c_str());
+            }
+        }
+        sprintf(version_message, "%s<anim=%s/>", version_message, anim_message);
+        
+#ifdef SUPPORTS_FFT
+        char fft_message[100];
+        for(int i=0;i<COUNT_FFT_MODES;i++){
+            checkMode = fftModes[i];
+            if (i==0){
+                sprintf(fft_message, "%i:%s", checkMode->modeId,checkMode->modeName.c_str());
+            } else {
+                sprintf(fft_message, "%s,%i:%s", fft_message,checkMode->modeId,checkMode->modeName.c_str());
+            }
+        }
+        sprintf(version_message, "%s<fft=%s/>", version_message, fft_message);
+#endif
+
+        //char version_message[80];
+        //sprintf(version_message, "<v=%s/><anim=%s>%s", LAMP_HARDWARE_VERSION, anim_message, fft_message);
+        Serial.print("GET_VERSION - sending '");
+        Serial.print(version_message);
+        Serial.println("'");
         bluetooth->sendMessage(version_message);
     }
     break;
