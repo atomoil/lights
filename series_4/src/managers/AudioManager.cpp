@@ -73,7 +73,7 @@ void AudioManager::getMaxLevel()
     {
         n = max(fftVals[i], n);
     }
-    // 1 / level to get value to multiply bands with
+    
     if (n > fft_max_band)
     {
         fft_max_band = n;
@@ -84,10 +84,9 @@ void AudioManager::getMaxLevel()
         fft_max_band = max(fft_max_band, BAND_MINIMUM); // stop value getting too small / mult getting too large
     }
 
-    int updated = 0;
-
+    //int debug_updated = 0;
     if (fft_max_band > BAND_MINIMUM) {
-        updated = 1;
+        // debug_updated = 1;
         ff_max_band_decayed = fft_max_band;
         fft_mult = 1 / fft_max_band;
     } else {
@@ -102,7 +101,7 @@ void AudioManager::getMaxLevel()
 
     /*
     Serial.print("fft_max_band: ");
-    Serial.print(updated);
+    Serial.print(debug_updated);
     Serial.print(",");
     Serial.print(fft_max_band);
     Serial.print(",");
