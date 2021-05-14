@@ -40,7 +40,8 @@ private:
 public:
     void setup();
     void loop();
-    int totalLEDs();
+    int xMax();
+    int yMax();
     void setRGB(int x, int y, int r, int g, int b, float timeInSeconds);
     void setHSV(int x, int y, int h, int s, int v, float timeInSeconds);
     void setBrightness(float level);

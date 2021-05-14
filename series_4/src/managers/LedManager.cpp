@@ -35,6 +35,17 @@ void LEDManager::setup()
     frameSize = 1000.0 / LED_FRAME_RATE;
 }
 
+
+int LEDManager::xMax()
+{
+    return NUM_COLUMNS;
+}
+
+int LEDManager::yMax()
+{
+    return NUM_LEDS;
+}
+
 void LEDManager::loop()
 {
     if (frameMs >= frameSize)

@@ -22,6 +22,7 @@
 #include "modes/anim/OriginalAnimationMode.h"
 #include "modes/anim/ColourWipeMode.h"
 #include "modes/anim/RandomPixelMode.h"
+#include "modes/anim/MovingDotsMode.h"
 
 #ifdef SUPPORTS_FFT
 
@@ -31,7 +32,7 @@
 #endif
 
 #define INITIAL_TOUCH_DOWN_TIME 1500
-#define COUNT_ANIMATION_MODES 3
+#define COUNT_ANIMATION_MODES 4
 #define COUNT_FFT_MODES 2
 
 enum LampState
@@ -61,6 +62,7 @@ private:
     SingleColourAnimatingMode *singleColourAnimatingMode;
     ColourWipeMode *colourWipeMode;
     RandomPixelMode *randomPixelMode;
+    MovingDotsMode *movingDotsMode;
 
     BaseAnimationMode *animationModes[COUNT_ANIMATION_MODES];
     BaseAnimationMode *lastActiveAnimationMode;

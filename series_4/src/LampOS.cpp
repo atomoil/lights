@@ -38,10 +38,12 @@ LampOS::LampOS()
 
     colourWipeMode = new ColourWipeMode(leds, palette, animation);
     randomPixelMode = new RandomPixelMode(leds, palette, animation);
+    movingDotsMode = new MovingDotsMode(leds, palette, animation);
 
     animationModes[0] = animationMode;
     animationModes[1] = colourWipeMode;
     animationModes[2] = randomPixelMode;
+    animationModes[3] = movingDotsMode;
 
     lastActiveAnimationMode = animationMode;
 
@@ -60,7 +62,8 @@ LampOS::LampOS()
     //mode = rgbMode;
     //mode = colourWipeMode;
     //mode = randomPixelMode;
-    mode = offMode;
+    mode = movingDotsMode;
+    //mode = offMode;
 };
 
 void LampOS::setup()
@@ -94,6 +97,7 @@ void LampOS::setup()
     Serial.println("colourWipeMode setup");
     randomPixelMode->setup();
     Serial.println("randomPixelMode setup");
+    movingDotsMode->setup();
 
 #ifdef SUPPORTS_FFT
 
