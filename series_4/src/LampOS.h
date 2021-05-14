@@ -63,6 +63,7 @@ private:
     RandomPixelMode *randomPixelMode;
 
     BaseAnimationMode *animationModes[COUNT_ANIMATION_MODES];
+    BaseAnimationMode *lastActiveAnimationMode;
 
 #ifdef SUPPORTS_FFT
     AudioManager *audio;

@@ -42,7 +42,8 @@ LampOS::LampOS()
     animationModes[0] = animationMode;
     animationModes[1] = colourWipeMode;
     animationModes[2] = randomPixelMode;
-    
+
+    lastActiveAnimationMode = animationMode;
 
 #ifdef SUPPORTS_FFT
 
@@ -216,7 +217,7 @@ void LampOS::processTouchData(std::tuple<TOUCH_STATE, float> val)
             else
             {
                 animation->setSpeed((touchValue-INITIAL_TOUCH_DOWN_TIME)/20.0);
-                mode = animationMode;
+                mode = lastActiveAnimationMode;
                 mode->restart();
             }
         }
@@ -266,13 +267,11 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case SET_ANIM_SPEED:
     {
-        // @TODO make a shared maanager for animation speed!
-        //animationMode->setAnimationSpeed(lampMsg.number);
         animation->setSpeed(lampMsg.number);
         if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode) // @TODO this is ugly, can we improve it?
         {
             lampState = ON;
-            mode = animationMode;
+            mode = lastActiveAnimationMode;
             mode->restart();
         }
     }
@@ -285,7 +284,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode)
         {
             lampState = ON;
-            mode = animationMode; // animationMode is the default animation - @TODO configure default animation!
+            mode = lastActiveAnimationMode;
             mode->restart();
         }
     }
@@ -399,12 +398,14 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         BaseMode *checkMode;
         BaseMode *foundMode;
         bool found = false;
+        bool isAnimation = false;
         int i;
         int requestedId = int(lampMsg.number);
         for(i=0;i<COUNT_ANIMATION_MODES;i++) {
             checkMode = animationModes[i];
             if (checkMode->modeId == requestedId) {
                 found = true;
+                isAnimation = true;
                 foundMode = checkMode;
             }
         }
@@ -422,63 +423,44 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             Serial.println(foundMode->modeName);
             lampState = ON;
             mode = foundMode;
+            if (isAnimation) lastActiveAnimationMode = (BaseAnimationMode*) foundMode;
             mode->restart();
         }
     }
     break;
     case CYCLE_FFT_MODE:
     {
-        if (mode == fftBarsMode)
-        {
-            lampState = ON;
-            mode = fftPulseMode;
-            mode->restart();
+        BaseMode *checkMode;
+        int currentModeId = -1;
+        int i;
+        for(i=0;i<COUNT_FFT_MODES;i++) {
+            checkMode = fftModes[i];
+            if (checkMode == mode) {
+                currentModeId = i;
+            }
         }
-        else
-        {
-            lampState = ON;
-            mode = fftBarsMode;
-            mode->restart();
-        }
-    }
-    break;
-    case ANIM_MODE:
-    {
-        int anim_mode = int(lampMsg.number);
-        if (anim_mode == 0)
-        {
-            lampState = ON;
-            mode = animationMode;
-            mode->restart();
-        }
-        else if (anim_mode == 1)
-        {
-            lampState = ON;
-            mode = colourWipeMode;
-            mode->restart();
-        }
-        else if (anim_mode == 2)
-        {
-            lampState = ON;
-            mode = randomPixelMode;
-            mode->restart();
-        }
+        currentModeId++;
+        if (currentModeId >= COUNT_FFT_MODES) currentModeId = 0;
+        mode = fftModes[currentModeId];
+        lampState = ON;
+        mode->restart();
     }
     break;
     case CYCLE_ANIM_MODE:
     {
-        if (mode == animationMode)
-        {
-            mode = colourWipeMode;
+        BaseMode *checkMode;
+        int currentModeId = -1;
+        int i;
+        for(i=0;i<COUNT_ANIMATION_MODES;i++) {
+            checkMode = animationModes[i];
+            if (checkMode == mode) {
+                currentModeId = i;
+            }
         }
-        else if (mode == colourWipeMode)
-        {
-            mode = randomPixelMode;
-        }
-        else
-        {
-            mode = animationMode;
-        }
+        currentModeId++;
+        if (currentModeId >= COUNT_ANIMATION_MODES) currentModeId = 0;
+        mode = animationModes[currentModeId];
+        lastActiveAnimationMode = (BaseAnimationMode*) mode;
         lampState = ON;
         mode->restart();
     }

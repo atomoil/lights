@@ -13,7 +13,6 @@ enum LampMessageType {
     GET_VERSION, GET_LEVELS, // nothing
     DEBUG_SENSITIVITY,  // boolean
     SET_MODE, // number
-    ANIM_MODE, // number // not used :-/
     CYCLE_ANIM_MODE, // nothing
     CYCLE_FFT_MODE // nothing
 };
