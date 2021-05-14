@@ -2,9 +2,9 @@
 #define BASE_ANIM_MODE_HPP_INCLUDED
 
 #include <Arduino.h>
-#include "BaseMode.h"
-#include "../managers/PaletteManager.h"
-#include "../managers/AnimationManager.h"
+#include "../BaseMode.h"
+#include "../../managers/PaletteManager.h"
+#include "../../managers/AnimationManager.h"
 
 class BaseAnimationMode : public BaseMode
 {

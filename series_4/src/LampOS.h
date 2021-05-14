@@ -16,12 +16,12 @@
 #include "inputs/BluetoothInput.h"
 #include "inputs/IRInput.h"
 
-#include "modes/OriginalAnimationMode.h"
 #include "modes/SetColourOnceMode.h"
 #include "modes/ColourCyclingRGBMode.h"
 #include "modes/SingleColourAnimatingMode.h"
-#include "modes/ColourWipeMode.h"
-#include "modes/RandomPixelMode.h"
+#include "modes/anim/OriginalAnimationMode.h"
+#include "modes/anim/ColourWipeMode.h"
+#include "modes/anim/RandomPixelMode.h"
 
 #ifdef SUPPORTS_FFT
 

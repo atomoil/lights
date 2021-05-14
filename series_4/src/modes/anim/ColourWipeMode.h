@@ -1,8 +1,8 @@
 #include <Arduino.h>
-#include "../init.h"
-#include "../managers/LedManager.h"
-#include "../managers/PaletteManager.h"
-#include "../managers/AnimationManager.h"
+#include "../../init.h"
+#include "../../managers/LedManager.h"
+#include "../../managers/PaletteManager.h"
+#include "../../managers/AnimationManager.h"
 #include "BaseAnimationMode.h"
 
 

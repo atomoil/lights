@@ -2,10 +2,10 @@
 #define ANIM_MODE_HPP_INCLUDED
 
 #include <Arduino.h>
-#include "../init.h"
-#include "../managers/LedManager.h"
-#include "../managers/PaletteManager.h"
-#include "../managers/AnimationManager.h"
+#include "../../init.h"
+#include "../../managers/LedManager.h"
+#include "../../managers/PaletteManager.h"
+#include "../../managers/AnimationManager.h"
 #include "BaseAnimationMode.h"
 
 #define ANIMATION_FRAME_RATE 60
