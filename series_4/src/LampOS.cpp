@@ -62,8 +62,8 @@ LampOS::LampOS()
     //mode = rgbMode;
     //mode = colourWipeMode;
     //mode = randomPixelMode;
-    mode = movingDotsMode;
-    //mode = offMode;
+    //mode = movingDotsMode;
+    mode = offMode;
 };
 
 void LampOS::setup()
@@ -291,7 +291,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         float speed = animation->getSpeed();
         speed *= lampMsg.number;
         animation->setSpeed(speed);
-        
+
         bool modeIsAnimation = false;
         int i;
         for(i=0;i<COUNT_ANIMATION_MODES;i++){
