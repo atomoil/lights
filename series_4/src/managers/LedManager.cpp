@@ -118,8 +118,10 @@ LedColourTween LEDManager::updateColour(float time, LedColourTween colour, boole
 
 // 1 second = 60 frames
 
-void LEDManager::setRGB(int x, int y, int r, int g, int b, float timeInMilliseconds)
+void LEDManager::setRGB(int xr, int y, int r, int g, int b, float timeInMilliseconds)
 {
+    int xmap[NUM_COLUMNS] = COLUMN_MAPPING;
+    int x = xmap[xr];
     //tweenMs = 0;
     if (x < NUM_COLUMNS && y < NUM_LEDS)
     {

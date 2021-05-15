@@ -2,6 +2,7 @@
 #define INIT_HPP_INCLUDED
 
 #define NUM_COLUMNS 6
+#define COLUMN_MAPPING {1,3,5,4,2,0}
 
 //-------LEDS-------
 
