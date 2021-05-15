@@ -60,12 +60,12 @@ LampMessage IRInput::loop()
         if (results.value == UP)
         {
             Serial.println("UP");
-            return {MULT_ANIM_SPEED, 1.25, 0, empty};
+            return {MULT_ANIM_SPEED, 0.75, 0, empty};
         }
         if (results.value == DOWN)
         {
             Serial.println("DOWN");
-            return {MULT_ANIM_SPEED, 0.75, 0, empty};
+            return {MULT_ANIM_SPEED, 1.25, 0, empty};
         }
         if (results.value == LEFT)
         {
