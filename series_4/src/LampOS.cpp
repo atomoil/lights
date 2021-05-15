@@ -272,8 +272,14 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     case SET_ANIM_SPEED:
     {
         animation->setSpeed(lampMsg.number);
-        if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode) // @TODO this is ugly, can we improve it?
-        {
+        bool modeIsAnimation = false;
+        int i;
+        for(i=0;i<COUNT_ANIMATION_MODES;i++){
+            if (mode == animationModes[i]) {
+                modeIsAnimation = true;
+            }
+        }
+        if (!modeIsAnimation){
             lampState = ON;
             mode = lastActiveAnimationMode;
             mode->restart();
@@ -285,8 +291,15 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         float speed = animation->getSpeed();
         speed *= lampMsg.number;
         animation->setSpeed(speed);
-        if (mode != animationMode && mode != colourWipeMode && mode != randomPixelMode)
-        {
+        
+        bool modeIsAnimation = false;
+        int i;
+        for(i=0;i<COUNT_ANIMATION_MODES;i++){
+            if (mode == animationModes[i]) {
+                modeIsAnimation = true;
+            }
+        }
+        if (!modeIsAnimation){
             lampState = ON;
             mode = lastActiveAnimationMode;
             mode->restart();
