@@ -6,7 +6,7 @@
 #include "BaseAnimationMode.h"
 #include "movingdots/MovingDot.h"
 
-#define MAX_DOTS 1
+#define MAX_DOTS 5
 
 class MovingDotsMode: public BaseAnimationMode
 {

@@ -56,7 +56,7 @@ void MovingDot::update(float animationTime)
   if (y > yMax) y = 0;
   if (y < 0) y = yMax;
 
-  radius += radiusInc;
+  radius += radiusInc/animationTime;
   if (radius > radiusMax){
     radius = radiusMax;
     radiusInc = -abs(radiusInc);

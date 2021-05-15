@@ -15,7 +15,7 @@ void MovingDotsMode::setup()
     int i;
     for(i=0;i<MAX_DOTS;i++) {
       dots[i] = new MovingDot();
-      dots[i]->setBounds(leds->xMax(), leds->yMax(), 1.0, 5.0);
+      dots[i]->setBounds(leds->xMax(), leds->yMax(), 1.0, 4.0);
       dots[i]->setPalette(i % 5);
     }
 
@@ -26,26 +26,33 @@ void MovingDotsMode::setup()
 
 void MovingDotsMode::restart()
 {
-  dots[0]->setPosition(NUM_COLUMNS/5,4);
-  dots[0]->setDirection(PI/5.0, 1.0);
-  dots[0]->setRadius(2.0, 0.0);
-
+  int i;
+  float segment = PI/3;
+  for(i=0;i<MAX_DOTS;i++) {
+    dots[i]->setPosition( (NUM_COLUMNS/5)*i, (NUM_LEDS/5)*i );
+    dots[i]->setDirection((PI/32)+(-segment/2)+((segment/5.0)*i), 1.0);
+    dots[i]->setRadius(1.0+(0.6*i), 0.05);
+  }
 }
 
 void MovingDotsMode::loop()
 {
-  if (timeSw > animation->getSpeed()) {
+  
+  int i;
+  // update dot positions
+  float frameSize = animation->getSpeed() / 6;
+  for(i=0;i<MAX_DOTS;i++) {
+    dots[i]->update(frameSize);
+  }
+
+  float frameRate = 1000.0 / 60.0;
+
+  if (timeSw > frameRate) {
     timeSw = 0;
-    
-    float frameSize = animation->getSpeed() / ANIMATION_FRAME_RATE;
 
-    dots[0]->update(frameSize);
-    //dots[1]->update();
-
-    // update grid
+    // render grid
     int ix;
     int iy;
-    int i;
     DotColour colour;
     MovingDot *dot;
     float perc = 0;
@@ -65,7 +72,7 @@ void MovingDotsMode::loop()
             colour.brightness = perc;
           }
         }
-        leds->setHSV(ix, iy, colour.hue, colour.saturation, int(colour.brightness*255), 0);
+        leds->setHSV(ix, iy, colour.hue, colour.saturation, int(colour.brightness*255), frameRate/2.0);
       }
     }
   }
