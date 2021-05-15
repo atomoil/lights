@@ -14,12 +14,20 @@ void MovingDot::setBounds(float _xMax, float _yMax, float _radiusMin, float _rad
   radiusMax = _radiusMax;
 }
 
-void MovingDot::setValues(float _x, float _y, float _xInc, float _yInc, float _radius, float _radiusInc)
+void MovingDot::setPosition(float _x, float _y)
 {
   x = _x;
   y = _y;
-  xInc = _xInc;
-  yInc = _yInc;
+}
+
+void MovingDot::setDirection(float _angle, float _speed)
+{
+  angle = _angle;
+  speed = _speed;
+}
+
+void MovingDot::setRadius(float _radius, float _radiusInc)
+{
   radius = _radius;
   radiusInc = _radiusInc;
 }
@@ -34,14 +42,17 @@ int MovingDot::getPalette()
   return paletteId;
 }
 
-void MovingDot::update()
+void MovingDot::update(float animationTime)
 {
+  float distance = speed / animationTime;
+  float xMove = sinf(angle) * distance;
+  float yMove = cosf(angle) * distance;
 
-  x += xInc;
+  x += xMove;
   if (x > xMax) x = 0;
   if (x < 0) x = xMax;
 
-  y += yInc;
+  y += yMove;
   if (y > yMax) y = 0;
   if (y < 0) y = yMax;
 
