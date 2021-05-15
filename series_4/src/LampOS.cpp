@@ -474,10 +474,14 @@ void LampOS::processLampMessage(LampMessage lampMsg)
                 currentModeId = i;
             }
         }
-        currentModeId++;
-        if (currentModeId >= COUNT_ANIMATION_MODES) currentModeId = 0;
-        mode = animationModes[currentModeId];
-        lastActiveAnimationMode = (BaseAnimationMode*) mode;
+        if (currentModeId == -1) {
+            mode = lastActiveAnimationMode;
+        } else {
+            currentModeId++;
+            if (currentModeId >= COUNT_ANIMATION_MODES) currentModeId = 0;
+            mode = animationModes[currentModeId];
+            lastActiveAnimationMode = (BaseAnimationMode*) mode;
+        }
         lampState = ON;
         mode->restart();
     }
