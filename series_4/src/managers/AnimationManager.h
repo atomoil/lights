@@ -3,8 +3,6 @@
 
 #include <Arduino.h>
 
-#define ANIMATION_FRAME_RATE 60.0
-
 class AnimationManager {
 
 private:

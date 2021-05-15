@@ -8,7 +8,7 @@
 #include "../../managers/AnimationManager.h"
 #include "BaseAnimationMode.h"
 
-
+#define ANIMATION_FRAME_RATE 60.0
 
 // -- Dot State
 struct LightDot {
@@ -20,7 +20,6 @@ struct LightDot {
   float maximumValue;
   int colourId;
 };
-
 
 class OriginalAnimationMode: public BaseAnimationMode
 {
