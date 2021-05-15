@@ -20,7 +20,7 @@ private:
 public:
     void setBounds(float _xMax, float _yMax, float _radiusMin, float _radiusMax);
     void setPalette(int _id);
-    void setValues(float _x, float _y, float _xInc, float _yInc, int _radius, int _radiusInc);
+    void setValues(float _x, float _y, float _xInc, float _yInc, float _radius, float _radiusInc);
 
     void update();
 

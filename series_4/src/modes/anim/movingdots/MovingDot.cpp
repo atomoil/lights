@@ -14,7 +14,7 @@ void MovingDot::setBounds(float _xMax, float _yMax, float _radiusMin, float _rad
   radiusMax = _radiusMax;
 }
 
-void MovingDot::setValues(float _x, float _y, float _xInc, float _yInc, int _radius, int _radiusInc)
+void MovingDot::setValues(float _x, float _y, float _xInc, float _yInc, float _radius, float _radiusInc)
 {
   x = _x;
   y = _y;
@@ -36,8 +36,7 @@ int MovingDot::getPalette()
 
 void MovingDot::update()
 {
-  Serial.println("MovingDot::update");
-  
+
   x += xInc;
   if (x > xMax) x = 0;
   if (x < 0) x = xMax;
@@ -47,15 +46,21 @@ void MovingDot::update()
   if (y < 0) y = yMax;
 
   radius += radiusInc;
-  if (radius > radiusMax) radius = radiusMin;
-  if (radius < radiusMin) radius = radiusMax;
-
-  Serial.println("MovingDot::update done");
+  if (radius > radiusMax){
+    radius = radiusMax;
+    radiusInc = -abs(radiusInc);
+  } 
+  if (radius < radiusMin){
+    radius = radiusMin;
+    radiusInc = abs(radiusInc);
+  } 
 }
 
 float MovingDot::getPercAt(float _x, float _y) {
+
+  float xOffset = (_x < xMax/2) ? -xMax : xMax;
   float xDistLeft = x-_x;
-  float xDistRight = x-_x+xMax;
+  float xDistRight = x-_x+xOffset;
   float xDist = 0;
   if (fabs(xDistLeft) < fabs(xDistRight)) {
     xDist = pow(xDistLeft, 2);
@@ -63,8 +68,9 @@ float MovingDot::getPercAt(float _x, float _y) {
     xDist = pow(xDistRight, 2);
   }
 
+  float yOffset = (_y < yMax/2) ? -yMax : yMax;
   float yDistLeft = y-_y;
-  float yDistRight = y-_y+yMax;
+  float yDistRight = y-_y+yOffset;
   float yDist = 0;
   if (fabs(yDistLeft) < fabs(yDistRight)) {
     yDist = pow(yDistLeft, 2);

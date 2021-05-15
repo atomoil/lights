@@ -11,24 +11,23 @@ void MovingDotsMode::setup()
 {
     modeId = 23;
     modeName = "lava";
-    dots[0] = new MovingDot();
-    dots[1] = new MovingDot();
-    
-    dots[0]->setBounds(leds->xMax(), leds->yMax(), 1.0, 3.0);
-    dots[1]->setBounds(leds->xMax(), leds->yMax(), 1.0, 3.0);
 
-    dots[0]->setPalette(0);
-    dots[1]->setPalette(1);
+    int i;
+    for(i=0;i<MAX_DOTS;i++) {
+      dots[i] = new MovingDot();
+      dots[i]->setBounds(leds->xMax(), leds->yMax(), 1.0, 5.0);
+      dots[i]->setPalette(i % 5);
+    }
 
     restart();
 
-    Serial.println("MovingDotsMode::setup");
+    //Serial.println("MovingDotsMode::setup");
 }
 
 void MovingDotsMode::restart()
 {
-  dots[0]->setValues(3.5, 4,  0.01, 0.002, 1, 0.002);
-  dots[1]->setValues(1,   1, -0.02, 0.001, 2, -0.001);
+  dots[0]->setValues(3.5, 4,  /* 0.01 */0.1, 0.002, 2.0, 0.0);
+  //dots[1]->setValues(1,   1, -0.02, 0.001, 2.0, -0.001);
 }
 
 void MovingDotsMode::loop()
@@ -37,7 +36,7 @@ void MovingDotsMode::loop()
       timeSw = 0;
       
       dots[0]->update();
-      dots[1]->update();
+      //dots[1]->update();
 
       // update grid
       int ix;
@@ -49,7 +48,6 @@ void MovingDotsMode::loop()
       int swatch;
       for(ix=0;ix<leds->xMax();ix++){
         for(iy=0;iy<leds->yMax();iy++){
-          Serial.print(iy);
           colour = {0,0,0};
 
           for(i=0;i<MAX_DOTS;i++) {
