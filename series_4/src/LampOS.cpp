@@ -243,6 +243,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     {
         mode = brightFadeInMode;
         mode->restart();
+        sendStateOverBluetooth();
         break;
     }
     case LAMP_TOGGLE_ON:
@@ -260,6 +261,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             mode = brightFadeInMode;
             mode->restart();
         }
+        sendStateOverBluetooth();
     }
     break;
     case LAMP_OFF:
@@ -267,6 +269,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         lampState = OFF;
         mode = switchOffMode; // nicer than just going off immediately
         mode->restart();
+        sendStateOverBluetooth();
     }
     break;
     case SET_ANIM_SPEED:
@@ -284,6 +287,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             mode = lastActiveAnimationMode;
             mode->restart();
         }
+        sendStateOverBluetooth();
     }
     break;
     case MULT_ANIM_SPEED:
@@ -304,6 +308,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             mode = lastActiveAnimationMode;
             mode->restart();
         }
+        sendStateOverBluetooth();
     }
     break;
     case INC_BRIGHTNESS:
@@ -319,11 +324,13 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             dotBrightness = 1.0;
         }
         leds->setBrightness(dotBrightness);
+        sendStateOverBluetooth();
     }
     break;
     case SET_BRIGHTNESS:
     {
         leds->setBrightness(lampMsg.number);
+        sendStateOverBluetooth();
     }
     break;
     case SET_PALETTE:
@@ -342,8 +349,10 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     case GET_PALETTE:
     {
         char palette_char[100];
+        char message[110];
         palette->getPaletteAsPlCode(palette_char);
-        bluetooth->sendMessage(palette_char);
+        sprintf(message, "<p=%s/>", palette_char);
+        bluetooth->sendMessage(message);
     }
     break;
     case SET_COLOUR:
@@ -393,9 +402,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
     break;
     case GET_LEVELS:
     {
-        char levels_message[80];
-        sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/>", animation->getSpeed(), leds->getBrightness(), mode->modeId, mode->modeName.c_str());
-        bluetooth->sendMessage(levels_message);
+        sendStateOverBluetooth();
     }
     break;
     case DEBUG_SENSITIVITY:
@@ -442,6 +449,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
             mode = foundMode;
             if (isAnimation) lastActiveAnimationMode = (BaseAnimationMode*) foundMode;
             mode->restart();
+            sendStateOverBluetooth();
         }
     }
     break;
@@ -461,6 +469,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         mode = fftModes[currentModeId];
         lampState = ON;
         mode->restart();
+        sendStateOverBluetooth();
     }
     break;
     case CYCLE_ANIM_MODE:
@@ -484,7 +493,14 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         }
         lampState = ON;
         mode->restart();
+        sendStateOverBluetooth();
     }
     break;
     }
+}
+
+void LampOS::sendStateOverBluetooth() {
+    char levels_message[180];
+    sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/>", animation->getSpeed(), leds->getBrightness(), mode->modeId, mode->modeName.c_str());
+    bluetooth->sendMessage(levels_message);
 }

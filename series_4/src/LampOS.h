@@ -85,6 +85,7 @@ private:
     
     void processTouchData(std::tuple<TOUCH_STATE, float> val);
     void processLampMessage(LampMessage);
+    void sendStateOverBluetooth();
 
 public:
     void setup();
