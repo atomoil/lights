@@ -132,7 +132,7 @@ LampMessage BluetoothInput::processMessage(String msg)
         return {SET_PALETTE, 0, 0, ssData};
     }
 
-    if (msg.startsWith("pg"))
+    if (msg.startsWith("v:pal"))
     {
         return {GET_PALETTE, 0, 0, empty};
     }
