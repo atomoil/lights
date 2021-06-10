@@ -10,11 +10,16 @@ LampOS::LampOS()
     bluetooth = new BluetoothInput();
     remoteControl = new IRInput();
 
-    int cols_1[30] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
+    int cols_1[9] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
     rgbMode = new ColourCyclingRGBMode(leds, 1500, float(1300), cols_1, 3);
 
-    int cols_2[30] = {40, 55, 45, /* */ 240, 250, 245, /* */ 10, 10, 10, /* */ 240, 245, 250};
-    touchdownCyclingMode = new ColourCyclingRGBMode(leds, 1000, float(2000), cols_2, 4);
+    int cols_2[18] = {10, 20, 12,
+                    180, 220, 180, 
+                    20, 10, 12, 
+                    220, 180, 180,
+                    10, 10, 20, 
+                    180, 180, 220 };
+    touchdownCyclingMode = new ColourCyclingRGBMode(leds, 1000, float(1000), cols_2, 6);
 
     animationMode = new OriginalAnimationMode(leds, palette, animation);
 
