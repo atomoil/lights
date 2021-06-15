@@ -1,7 +1,3 @@
-// serial data
-String ssData = "";         // a String to hold incoming data
-bool stringComplete = false;  // whether the string is complete
-
 //-- fastLED
 #include "FastLED.h"
 #include <stdio.h>
@@ -22,7 +18,7 @@ bool stringComplete = false;  // whether the string is complete
 #define LAMP_TEST 13
 
 
-#define LAMP_CURRENT LAMP_S5_02_BUTTERFLY
+#define LAMP_CURRENT LAMP_S5_03_TURQ_WHITE
 
 // -----------------------------------
 //---------LEDS----------------//
