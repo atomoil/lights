@@ -1,7 +1,7 @@
 
 
 #define TOUCH_ON 1200
-#define TOUCH_OFF 900
+#define TOUCH_OFF 500
 #define SUPPORTS_FFT 1
 
 
