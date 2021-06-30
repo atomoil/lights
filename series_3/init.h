@@ -130,7 +130,7 @@ char hardware_version[] = "4.1";
 
 #if LAMP_CURRENT == LAMP_S5_03_TURQ_WHITE
 const int touchTriggerOn = 525; // 700 // 1800
-const int touchTriggerOff = 400; // 500
+const int touchTriggerOff = 300; // 500
 const int NUM_LEDS = 12;
 #define NUM_COLUMNS 6
 #define SUPPORTS_FFT 1
