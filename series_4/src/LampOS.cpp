@@ -73,9 +73,9 @@ LampOS::LampOS()
 
 void LampOS::setup()
 {
-//#ifdef LAMP_OS_DEBUG
-    delay(2000); // wait for Serial to be ready so we can debug stuff
-//#endif
+#ifdef LAMP_OS_DEBUG
+    delay(1000); // wait for Serial to be ready so we can debug stuff
+#endif
     Serial.println("LampOS::setup start");
     frameSize = 1000.0 / 60;
     lampState = OFF;
@@ -506,6 +506,11 @@ void LampOS::processLampMessage(LampMessage lampMsg)
 
 void LampOS::sendStateOverBluetooth() {
     char levels_message[180];
-    sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/>", animation->getSpeed(), leds->getBrightness(), mode->modeId, mode->modeName.c_str());
+    sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/><tb=%.2f>", 
+                            animation->getSpeed(), 
+                            leds->getBrightness(), 
+                            mode->modeId, 
+                            mode->modeName.c_str(), 
+                            touch->getCurrentBias());
     bluetooth->sendMessage(levels_message);
 }

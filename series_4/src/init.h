@@ -1,12 +1,12 @@
 #ifndef INIT_HPP_INCLUDED
 #define INIT_HPP_INCLUDED
 
-#define NUM_COLUMNS 6
-#define COLUMN_MAPPING {1,3,5,4,2,0}
+
 
 //-------LEDS-------
 
-#define NUM_LEDS 15
+#define NUM_COLUMNS 6
+#define COLUMN_MAPPING {1,3,5,4,2,0}
 
 #define DATA_PIN1 6
 #define CLOCK_PIN1 7
