@@ -18,7 +18,7 @@
 #define LAMP_TEST 13
 
 
-#define LAMP_CURRENT LAMP_S5_03_TURQ_WHITE
+#define LAMP_CURRENT LAMP_S4_03_RAKU_TURQ
 
 // -----------------------------------
 //---------LEDS----------------//
