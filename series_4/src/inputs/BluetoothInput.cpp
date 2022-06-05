@@ -192,9 +192,19 @@ LampMessage BluetoothInput::processMessage(String msg)
 }
 
 void BluetoothInput::sendMessage(char* message) {
-    Serial.print("BluetoothInput::sendMessage >> ");
+    Serial.print("BluetoothInput::sendMessage >>> ");
     Serial.println(message);
-    //Serial.println(message);
-    BLE_Serial.write(message);
-    // BLE_Serial.flush();
+    // BLE_Serial.write(message);
+    // BLE_Serial.flush(); // didn't do anything useful :-/
+
+    size_t length = strlen(message);
+    size_t i = 0; 
+    for (; i < length; i++) {
+        uint8_t character = message[i];
+        Serial.print(character);
+        Serial.print(",");
+        // printf("%c\n", character);    /* Print each character of the string. */
+        BLE_Serial.write(character);
+    }
+    Serial.println(".");
 }

@@ -68,8 +68,8 @@ void loop() {
     writtenSerial = true;
     ch = Serial2.read();
     M5.dis.drawpix(0, 0x0000ff); //LED on
-    pCharacteristic->setValue((uint8_t*)&ch,1);
-    pCharacteristic->notify();
+    pCharacteristic->setValue((uint8_t*)&ch,1); // can we set the entire string, rather that one char at a time?
+    // pCharacteristic->notify();  // what is notify?
   }
   if (writtenSerial == true) {
     // pCharacteristic->notify();
