@@ -14,10 +14,15 @@
     Data from wireless (BLE receive) Handled by callback
     which then sends it to teensy via Serial2.
 */
-#include <M5Atom.h>
+
+/*
+base on BLE_Server_multiconnect
+*/
 #include <BLEDevice.h>
-#include <BLEUtils.h>
 #include <BLEServer.h>
+#include <BLEUtils.h>
+#include <M5Atom.h>
+#include <BLE2902.h>
 #include <elapsedMillis.h>
 
 // timer to blink LED if needed
@@ -25,26 +30,44 @@ elapsedMillis timeElapsed;
 unsigned int interval = 40;
 char ch;
 
-// --- BLE setup ----//
+BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
+bool deviceConnected = false;
+bool oldDeviceConnected = false;
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
-//
-// #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-// #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-// the first set of lamps used FFE0 and FFE1 as service and characteristic ID respectively (must work out what these _should_ be)
-#define SERVICE_UUID        "FFE0"
-#define CHARACTERISTIC_UUID "FFE1"
+// #define SERVICE_UUID        "FFE0"
+// #define CHARACTERISTIC_UUID "FFE1"
+#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
+#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
+// Callbacks for BLE 
+class serverCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer *pServer) {
+      deviceConnected = true;
+      BLEDevice::startAdvertising();
+    };
+
+    void onDisconnect(BLEServer *pServer) {
+      deviceConnected = false;
+    }
+};
+
+// data from BLE ESP serial -> Teensy
 class BTCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) 
     {std::string value = pCharacteristic->getValue();
       M5.dis.drawpix(0, 0x0000ff); //LED on
       if (value.length() > 0) {
         for (int i = 0; i < value.length(); i++)
+        {
           Serial2.print(value[i]);
+          Serial.print(value[i]);
+        }
       }
       //Serial2.println(); // if you want return new line
+      
     }
 };
