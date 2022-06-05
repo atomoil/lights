@@ -62,11 +62,16 @@ void loop() {
       oldDeviceConnected = deviceConnected;
   }
 
+  bool writtenSerial = false;
   // data from esp serial back to BT
   while (Serial2.available() != 0 ) {
+    writtenSerial = true;
     ch = Serial2.read();
     M5.dis.drawpix(0, 0x0000ff); //LED on
     pCharacteristic->setValue((uint8_t*)&ch,1);
+    // pCharacteristic->notify();
+  }
+  if (writtenSerial == true) {
     pCharacteristic->notify();
   }
     
