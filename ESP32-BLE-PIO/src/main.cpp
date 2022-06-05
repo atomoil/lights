@@ -5,7 +5,7 @@ void setup() {
   Serial.begin(57600); //usb not used for this
   Serial2.begin(57600, SERIAL_8N1, 22, 19); //serial to teensy
   // Create the BLE Device
-  BLEDevice::init("LAMP-07-89");
+  BLEDevice::init("LAMP-08-03");
  
 
   // Create the BLE Server
@@ -20,19 +20,20 @@ void setup() {
                       CHARACTERISTIC_UUID_TX,
                       BLECharacteristic::PROPERTY_NOTIFY
                     );
+  pCharacteristic->addDescriptor(new BLE2902());
 
-   
-    pCharacteristic->addDescriptor(new BLE2902());
-                    
-    pCharacteristic = pService->createCharacteristic(
-                                         CHARACTERISTIC_UUID_RX,
-                                         BLECharacteristic::PROPERTY_WRITE
-                                       );
-  
+  /*
+  pCharacteristic = pService->createCharacteristic(
+                                        CHARACTERISTIC_UUID_RX,
+                                        BLECharacteristic::PROPERTY_WRITE
+                                      );
+  */
+  pCharacteristic = pService->createCharacteristic(CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE_NR );
+
   pCharacteristic->setCallbacks(new BTCallbacks());
-  pCharacteristic->setValue("Hello from LAMP-99");
+  // pCharacteristic->setValue("Hello from LAMP-99");
 
-  
+
   // Start the service
   pService->start();
 
@@ -47,32 +48,32 @@ void setup() {
 
 void loop() {
 
-    // disconnecting
-    if (!deviceConnected && oldDeviceConnected) {
-        delay(500); // give the bluetooth stack the chance to get things ready
-        pServer->startAdvertising(); // restart advertising
-       // Serial.println("start advertising");
-        oldDeviceConnected = deviceConnected;
-    }
-    // connecting
-    if (deviceConnected && !oldDeviceConnected) {
-        // do stuff here on connecting
-        // Serial.println("connecting");
-        oldDeviceConnected = deviceConnected;
-    }
+  // disconnecting
+  if (!deviceConnected && oldDeviceConnected) {
+      delay(500); // give the bluetooth stack the chance to get things ready
+      pServer->startAdvertising(); // restart advertising
+      // Serial.println("start advertising");
+      oldDeviceConnected = deviceConnected;
+  }
+  // connecting
+  if (deviceConnected && !oldDeviceConnected) {
+      // do stuff here on connecting
+      // Serial.println("connecting");
+      oldDeviceConnected = deviceConnected;
+  }
 
-    // data from esp serial back to BT
-   while (Serial2.available() != 0 ) {
-   ch = Serial2.read();
-   M5.dis.drawpix(0, 0x0000ff); //LED on
-   pCharacteristic->setValue((uint8_t*)&ch,1);
-   pCharacteristic->notify();
- }
+  // data from esp serial back to BT
+  while (Serial2.available() != 0 ) {
+    ch = Serial2.read();
+    M5.dis.drawpix(0, 0x0000ff); //LED on
+    pCharacteristic->setValue((uint8_t*)&ch,1);
+    pCharacteristic->notify();
+  }
     
   if (timeElapsed > interval) //LED off
   {
    M5.dis.drawpix(0, 0x000000); 
    timeElapsed = 0; // reset counter to 0
   }
-   M5.update();
+  M5.update();
 }

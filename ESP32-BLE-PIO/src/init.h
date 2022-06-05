@@ -37,10 +37,10 @@ bool oldDeviceConnected = false;
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
-// #define SERVICE_UUID        "FFE0"
-// #define CHARACTERISTIC_UUID "FFE1"
-#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
-#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define SERVICE_UUID        "FFE0"
+#define CHARACTERISTIC_UUID "FFE1"
+// #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
+// #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 // Callbacks for BLE 
@@ -57,8 +57,8 @@ class serverCallbacks: public BLEServerCallbacks {
 
 // data from BLE ESP serial -> Teensy
 class BTCallbacks: public BLECharacteristicCallbacks {
-    void onWrite(BLECharacteristic *pCharacteristic) 
-    {std::string value = pCharacteristic->getValue();
+    void onWrite(BLECharacteristic *pCharacteristic) {
+      std::string value = pCharacteristic->getValue();
       M5.dis.drawpix(0, 0x0000ff); //LED on
       if (value.length() > 0) {
         for (int i = 0; i < value.length(); i++)
@@ -67,7 +67,6 @@ class BTCallbacks: public BLECharacteristicCallbacks {
           Serial.print(value[i]);
         }
       }
-      //Serial2.println(); // if you want return new line
-      
+      Serial.println(); // if you want return new line
     }
 };
