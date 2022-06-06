@@ -195,5 +195,5 @@ void BluetoothInput::sendMessage(char* message) {
     Serial.print("BluetoothInput::sendMessage >>> ");
     Serial.println(message);
     BLE_Serial.write(message);
-    
+    BLE_Serial.write("\n");
 }
