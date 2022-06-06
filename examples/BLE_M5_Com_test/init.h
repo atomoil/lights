@@ -19,8 +19,8 @@ bool deviceConnected = false;
 bool oldDeviceConnected = false;
 char ch;
 
-String buf;
-bool fullPkt;
+  String buf;
+  bool fullPkt;
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
