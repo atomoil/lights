@@ -5,8 +5,7 @@ void setup() {
   Serial.begin(57600); //usb not used for this
   Serial2.begin(57600, SERIAL_8N1, 22, 19); //serial to teensy
   // Create the BLE Device
-  BLEDevice::init("LAMP-08-03");
- 
+  BLEDevice::init("LAMP-08-02");
 
   // Create the BLE Server
   pServer = BLEDevice::createServer();
@@ -62,17 +61,34 @@ void loop() {
       oldDeviceConnected = deviceConnected;
   }
 
-  while (Serial2.available() != 0 ) {
-    ch = Serial2.read();
-    M5.dis.drawpix(0, 0x0000ff); //LED on
-    pCharacteristic->setValue((uint8_t*)&ch,1); // can we set the entire string, rather that one char at a time?
-    pCharacteristic->notify();  // what is notify?
+  while (serialTeensy.available() != 0 )
+  {
+    ch = serialTeensy.read();
+    if (ch != '\n')
+    {
+      buf += ch;
+    } else {
+      // buf += '\n';
+      fullPkt = true;
+    }
   }
-    
+
+  if (deviceConnected && fullPkt) {
+    M5.dis.drawpix(0, 0x0000ff); //LED on
+    char charBuf[128];
+    buf.toCharArray(charBuf, 128);
+    pCharacteristic->setValue(charBuf);
+    pCharacteristic->notify();
+    serialUSB.println(buf);
+    fullPkt = false;
+    buf = "";
+  }
+
   if (timeElapsed > interval) //LED off
   {
    M5.dis.drawpix(0, 0x000000); 
    timeElapsed = 0; // reset counter to 0
   }
+
   M5.update();
 }

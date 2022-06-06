@@ -30,10 +30,18 @@ elapsedMillis timeElapsed;
 unsigned int interval = 40;
 char ch;
 
+String buf;
+bool fullPkt;
+
 BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
+
+//serial ports
+#define serialTeensy Serial2 // hardware serial port to/from BLE chip
+#define serialUSB Serial // USB serial  to/from mac
+
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
