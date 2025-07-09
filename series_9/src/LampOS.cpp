@@ -62,11 +62,11 @@ LampOS::LampOS()
 #endif
 
     // set the first mode
-    //mode = rgbMode;
+    mode = rgbMode;
     //mode = colourWipeMode;
     //mode = randomPixelMode;
     //mode = movingDotsMode;
-    mode = offMode;
+    // mode = offMode;
 };
 
 void LampOS::setup()
