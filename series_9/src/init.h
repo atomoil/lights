@@ -5,8 +5,8 @@
 
 //-------LEDS-------
 
-#define NUM_COLUMNS 6
-#define COLUMN_MAPPING {1,3,5,4,2,0}
+#define NUM_COLUMNS 1 // TODO - should be 6
+#define COLUMN_MAPPING {0} // {1,3,5,4,2,0}
 
 #define CLOCK_PIN_1 23
 #define DATA_PIN_1 22

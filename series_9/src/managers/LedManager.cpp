@@ -4,25 +4,29 @@
 void LEDManager::setup()
 {
     Serial.println("LEDManager::setup() called");
+    brightness = 1.0;
+    
     /*
-    int pins[] = { DATA_PIN1, DATA_PIN2, DATA_PIN3, DATA_PIN4, DATA_PIN5, DATA_PIN6 };
+    int pins[] = { DATA_PIN_1, DATA_PIN_2, DATA_PIN_3, DATA_PIN_4, DATA_PIN_5, DATA_PIN_6 };
+    int clock_pins[] = { CLOCK_PIN_1, CLOCK_PIN_2, CLOCK_PIN_3, CLOCK_PIN_4, CLOCK_PIN_5, CLOCK_PIN_6 };
     for (int i = 0; i < NUM_COLUMNS; i++)
     {
         int pin_id = pins[i];
-        FastLED.addLeds<APA102, pin_id, CLOCK_PIN1, BGR, DATA_RATE_MHZ(5)>(leds[i], NUM_LEDS);
+        int clock_pin_id = clock_pins[i];
+        Serial.println("LEDManager::setup() addLeds next");
+        FastLED.addLeds<APA102, pin_id, clock_pin_id, BGR, DATA_RATE_MHZ(5)>(leds[i], NUM_LEDS);
     }
     */
-    brightness = 1.0;
 
-    Serial.println("LEDManager::setup() addLeds next");
-
+    
     FastLED.addLeds<APA102, DATA_PIN_1, CLOCK_PIN_1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
+    /*
     FastLED.addLeds<APA102, DATA_PIN_2, CLOCK_PIN_2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_3, CLOCK_PIN_3, BGR, DATA_RATE_MHZ(5)>(leds[2], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_4, CLOCK_PIN_4, BGR, DATA_RATE_MHZ(5)>(leds[3], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_5, CLOCK_PIN_5, BGR, DATA_RATE_MHZ(5)>(leds[4], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_6, CLOCK_PIN_6, BGR, DATA_RATE_MHZ(5)>(leds[5], NUM_LEDS);
-
+    */
 
     Serial.println("LEDManager::setup() addLeds complete");
 
