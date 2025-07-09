@@ -2,123 +2,104 @@
 
 LampOS::LampOS()
 {
+    // Initialize pointers to null first
+    leds = nullptr;
+    palette = nullptr;
+    animation = nullptr;
+    bluetooth = nullptr;
+    rgbMode = nullptr;
+    touchdownCyclingMode = nullptr;
+    animationMode = nullptr;
+    brightFadeInMode = nullptr;
+    brightMode = nullptr;
+    switchOffMode = nullptr;
+    offMode = nullptr;
+    singleColourAnimatingMode = nullptr;
+    colourWipeMode = nullptr;
+    randomPixelMode = nullptr;
+    movingDotsMode = nullptr;
+    
+    // Create only essential objects to avoid memory issues
     leds = new LEDManager();
     palette = new PaletteManager();
     animation = new AnimationManager();
-
-    bluetooth = new BluetoothInput();
-
-    int cols_1[9] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
-    rgbMode = new ColourCyclingRGBMode(leds, 1500, float(1300), cols_1, 3);
-
-    int cols_2[18] = {10, 20, 12,
-                    180, 220, 180, 
-                    20, 10, 12, 
-                    220, 180, 180,
-                    10, 10, 20, 
-                    180, 180, 220 };
-    touchdownCyclingMode = new ColourCyclingRGBMode(leds, 1000, float(1000), cols_2, 6);
-
-    animationMode = new OriginalAnimationMode(leds, palette, animation);
-
-    brightFadeInMode = new SetColourOnceMode(leds, INITIAL_TOUCH_DOWN_TIME, 200, 200, 200);
-    brightFadeInMode->modeId = 1;
-    brightFadeInMode->modeName = "bright";
-
-    brightMode = new SetColourOnceMode(leds, 0, 255, 255, 255);
-    brightMode->modeId = 1;
-    brightMode->modeName = "bright";
-
-    switchOffMode = new SetColourOnceMode(leds, 2000, 0, 0, 0);
-    switchOffMode->modeId = 0;
-    switchOffMode->modeName = "off";
-
+    
+    // Create only essential mode for now
     offMode = new SetColourOnceMode(leds, 0, 0, 0, 0);
-    offMode->modeId = 0;
-    offMode->modeName = "off";
-
-    singleColourAnimatingMode = new SingleColourAnimatingMode(leds, 3000, 255, 255);
-
-    colourWipeMode = new ColourWipeMode(leds, palette, animation);
-    randomPixelMode = new RandomPixelMode(leds, palette, animation);
-    movingDotsMode = new MovingDotsMode(leds, palette, animation);
-
-    animationModes[0] = animationMode;
-    animationModes[1] = colourWipeMode;
-    animationModes[2] = randomPixelMode;
-    animationModes[3] = movingDotsMode;
-
-    lastActiveAnimationMode = animationMode;
-
-#ifdef SUPPORTS_FFT
-
-    audio = new AudioManager();
-    fftBarsMode = new FFTBarsMode(leds, palette, audio);
-    fftPulseMode = new FFTPulseMode(leds, palette, audio);
-
-    fftModes[0] = fftBarsMode;
-    fftModes[1] = fftPulseMode;
-
-#endif
-
-    // set the first mode
-    //mode = rgbMode;
-    //mode = colourWipeMode;
-    //mode = randomPixelMode;
-    //mode = movingDotsMode;
+    if (offMode) {
+        offMode->modeId = 0;
+        offMode->modeName = "off";
+    }
+    
     mode = offMode;
-};
+}
 
 void LampOS::setup()
 {
-#ifdef LAMP_OS_DEBUG
-    delay(1000); // wait for Serial to be ready so we can debug stuff
-#endif
-    Serial.println("LampOS::setup start");
+    Serial.println("=== LampOS::setup START ===");
+    Serial.println("Constructor completed, checking objects...");
+    
+    if (leds) Serial.println("leds: OK");
+    else Serial.println("leds: NULL!");
+    
+    if (palette) Serial.println("palette: OK");
+    else Serial.println("palette: NULL!");
+    
+    if (animation) Serial.println("animation: OK");
+    else Serial.println("animation: NULL!");
+    
+    if (offMode) Serial.println("offMode: OK");
+    else Serial.println("offMode: NULL!");
+    
+    if (mode) Serial.println("mode: OK");
+    else Serial.println("mode: NULL!");
+    
+    Serial.print("Free heap: ");
+    Serial.println(ESP.getFreeHeap());
+    Serial.flush();
+    
     frameSize = 1000.0 / 60;
     lampState = OFF;
 
-    leds->setup();
-    palette->setup();
+    if (leds) {
+        Serial.println("Calling leds->setup()...");
+        delay(100); // Small delay to ensure serial output is flushed
+        Serial.flush();
+        leds->setup();
+        Serial.println("leds->setup() completed");
+    }
+    
+    if (palette) {
+        Serial.println("Calling palette->setup()...");
+        palette->setup();
+        Serial.println("palette->setup() completed");
+    }
 
-    bluetooth->setup();
+    // Skip bluetooth for now since it might be causing issues
+    // bluetooth->setup();
 
-    // @TODO - copy the setupAll from Arduino the object orientated way
-    rgbMode->setup();
-    touchdownCyclingMode->setup();
-    animationMode->setup();
-    brightFadeInMode->setup();
-    brightMode->setup();
-    switchOffMode->setup();
-    offMode->setup();
-    Serial.println("offMode setup");
-    singleColourAnimatingMode->setup();
-    Serial.println("singleColourAnimatingMode setup");
-    colourWipeMode->setup();
-    Serial.println("colourWipeMode setup");
-    randomPixelMode->setup();
-    Serial.println("randomPixelMode setup");
-    movingDotsMode->setup();
-
-#ifdef SUPPORTS_FFT
-
-    Serial.println("FFT is supported!!");
-    audio->setup();
-
-    fftBarsMode->setup();
-    fftPulseMode->setup();
-
-#else
-    Serial.println("FFT not supported");
-#endif
-
-    //debugTouchAmount = true;
-
-    Serial.println("LampOS::setup complete");
+    if (offMode) {
+        Serial.println("Calling offMode->setup()...");
+        offMode->setup();
+        Serial.println("offMode->setup() completed");
+    }
+    
+    Serial.println("=== LampOS::setup COMPLETED ===");
+    Serial.flush();
 }
 
 void LampOS::loop()
 {
+    static unsigned long lastHeartbeat = 0;
+    static int heartbeatCount = 0;
+    
+    // Simple heartbeat every 5 seconds
+    if (millis() - lastHeartbeat > 5000) {
+        Serial.print("Heartbeat #");
+        Serial.println(heartbeatCount++);
+        Serial.flush();
+        lastHeartbeat = millis();
+    }
 
     if (frameMs > frameSize)
     {

@@ -3,6 +3,7 @@
 
 void LEDManager::setup()
 {
+    Serial.println("LEDManager::setup() called");
     /*
     int pins[] = { DATA_PIN1, DATA_PIN2, DATA_PIN3, DATA_PIN4, DATA_PIN5, DATA_PIN6 };
     for (int i = 0; i < NUM_COLUMNS; i++)
@@ -13,12 +14,17 @@ void LEDManager::setup()
     */
     brightness = 1.0;
 
+    Serial.println("LEDManager::setup() addLeds next");
+
     FastLED.addLeds<APA102, DATA_PIN_1, CLOCK_PIN_1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_2, CLOCK_PIN_2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_3, CLOCK_PIN_3, BGR, DATA_RATE_MHZ(5)>(leds[2], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_4, CLOCK_PIN_4, BGR, DATA_RATE_MHZ(5)>(leds[3], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_5, CLOCK_PIN_5, BGR, DATA_RATE_MHZ(5)>(leds[4], NUM_LEDS);
     FastLED.addLeds<APA102, DATA_PIN_6, CLOCK_PIN_6, BGR, DATA_RATE_MHZ(5)>(leds[5], NUM_LEDS);
+
+
+    Serial.println("LEDManager::setup() addLeds complete");
 
     // set initial LED values
     for (int x = 0; x < NUM_COLUMNS; x++)
@@ -33,6 +39,7 @@ void LEDManager::setup()
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 3000);
 
     frameSize = 1000.0 / LED_FRAME_RATE;
+    Serial.println("LEDManager::setup() finished");
 }
 
 
