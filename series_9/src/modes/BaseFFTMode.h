@@ -1,3 +1,5 @@
+#ifdef SUPPORTS_FFT
+
 #ifndef BASE_FFT_MODE_HPP_INCLUDED
 #define BASE_FFT_MODE_HPP_INCLUDED
 
@@ -17,3 +19,5 @@ public:
 };
 
 #endif
+
+#endif // SUPPORTS_FFT

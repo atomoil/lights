@@ -119,7 +119,7 @@ void OriginalAnimationMode::loop()
                 // keep colour within bounds as dot can go higher and lower (to stay on or off for longer)
                 if (dot.currentValue > 0)
                 {
-                    int rawVal = min(255, dot.currentValue);
+                    int rawVal = min(255.0, dot.currentValue);
                     //int val = int(float(rawVal) * dotBrightness);
                     //CHSV colour = CHSV(dot.hue, dot.sat, val);
                     //CHSV colour = CHSV( 125, 255, val );

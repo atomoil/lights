@@ -1,3 +1,5 @@
+#ifdef SUPPORTS_FFT
+
 #include "BaseFFTMode.h"
 
 BaseFFTMode::BaseFFTMode(
@@ -9,3 +11,5 @@ BaseFFTMode::BaseFFTMode(
 {
 
 }
+
+#endif // SUPPORTS_FFT

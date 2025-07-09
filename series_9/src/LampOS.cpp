@@ -6,9 +6,7 @@ LampOS::LampOS()
     palette = new PaletteManager();
     animation = new AnimationManager();
 
-    touch = new TouchInput(TOUCH_ON, TOUCH_OFF);
     bluetooth = new BluetoothInput();
-    remoteControl = new IRInput();
 
     int cols_1[9] = {255, 0, 0, /* */ 0, 255, 0, /* */ 0, 0, 255};
     rgbMode = new ColourCyclingRGBMode(leds, 1500, float(1300), cols_1, 3);
@@ -83,9 +81,7 @@ void LampOS::setup()
     leds->setup();
     palette->setup();
 
-    touch->setup();
     bluetooth->setup();
-    remoteControl->setup();
 
     // @TODO - copy the setupAll from Arduino the object orientated way
     rgbMode->setup();
@@ -127,23 +123,11 @@ void LampOS::loop()
     if (frameMs > frameSize)
     {
         frameMs = 0;
-        // get inputs first
-        std::tuple<TOUCH_STATE, float> touchData = touch->loop();
-        processTouchData(touchData);
         //
         LampMessage bleData = bluetooth->loop();
         processLampMessage(bleData);
         //
-        LampMessage irData = remoteControl->loop();
-        processLampMessage(irData);
 
-        if (debugTouchAmount == true)
-        {
-            float touchAmount = touch->getCurrentTouchAmount();
-            char touch_message[80];
-            sprintf(touch_message, "<t=%0.0f/>", touchAmount);
-            bluetooth->sendMessage(touch_message);
-        }
 #ifdef LAMP_OS_DEBUG
         debugTick++;
         if (debugTick > 60)
@@ -156,85 +140,6 @@ void LampOS::loop()
 
     mode->loop(); // update the mode after input but before leds
     leds->loop(); // update leds last
-}
-
-// based on inputs, possibly change mode
-void LampOS::processTouchData(std::tuple<TOUCH_STATE, float> val)
-{
-    TOUCH_STATE touchState;
-    float touchValue;
-    std::tie(touchState, touchValue) = val; // get the output of this
-    switch (touchState)
-    {
-    case TOUCH_DOWN:
-    {
-        if (lampState == ON)
-        {
-            lampState = TURNING_OFF;
-            mode = switchOffMode;
-            mode->restart();
-        }
-        else
-        {
-            lampState = TURNING_ON;
-            mode = brightFadeInMode;
-            mode->restart();
-        }
-    }
-    break;
-    case TOUCH_ACTIVE:
-    {
-        if (lampState == TURNING_ON)
-        {
-
-            //Serial.print("TOUCH DOWN for ");
-            //Serial.println(touchValue);
-            // only set this if it's not already set
-            if (touchValue < INITIAL_TOUCH_DOWN_TIME && mode != brightFadeInMode)
-            {
-                Serial.println("TOUCH DOWN initial");
-                mode = brightFadeInMode;
-                mode->restart();
-            }
-            if (touchValue >= INITIAL_TOUCH_DOWN_TIME && mode != touchdownCyclingMode)
-            {
-                Serial.println("TOUCH DOWN cycling");
-                mode = touchdownCyclingMode;
-                mode->restart();
-            }
-        }
-    }
-    break;
-    case TOUCH_UP:
-    {
-        Serial.print("TOUCH ended and lasted ");
-        Serial.println(touchValue);
-        if (lampState == TURNING_OFF)
-        {
-            lampState = OFF;
-            mode = offMode;
-            mode->restart();
-        }
-        else if (lampState == TURNING_ON)
-        {
-            lampState = ON;
-            if (touchValue < INITIAL_TOUCH_DOWN_TIME)
-            {
-                mode = brightMode;
-                mode->restart();
-            }
-            else
-            {
-                animation->setSpeed((touchValue-INITIAL_TOUCH_DOWN_TIME)/20.0);
-                mode = lastActiveAnimationMode;
-                mode->restart();
-            }
-        }
-    }
-    break;
-    case NONE:
-        break;
-    }
 }
 
 void LampOS::processLampMessage(LampMessage lampMsg)
@@ -458,6 +363,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         }
     }
     break;
+#ifdef SUPPORTS_FFT
     case CYCLE_FFT_MODE:
     {
         BaseMode *checkMode;
@@ -477,6 +383,7 @@ void LampOS::processLampMessage(LampMessage lampMsg)
         sendStateOverBluetooth();
     }
     break;
+#endif // SUPPORTS_FFT
     case CYCLE_ANIM_MODE:
     {
         BaseMode *checkMode;
@@ -506,11 +413,10 @@ void LampOS::processLampMessage(LampMessage lampMsg)
 
 void LampOS::sendStateOverBluetooth() {
     char levels_message[180];
-    sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/><tb=%.2f>", 
+    sprintf(levels_message, "<s=%.2f/><b=%.3f/><md=%d:%s/>", 
                             animation->getSpeed(), 
                             leds->getBrightness(), 
                             mode->modeId, 
-                            mode->modeName.c_str(), 
-                            touch->getCurrentBias());
+                            mode->modeName.c_str());
     bluetooth->sendMessage(levels_message);
 }

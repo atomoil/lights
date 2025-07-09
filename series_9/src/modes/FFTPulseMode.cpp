@@ -1,3 +1,5 @@
+#ifdef SUPPORTS_FFT
+
 #include "FFTPulseMode.h"
 
 FFTPulseMode::FFTPulseMode(
@@ -36,3 +38,5 @@ void FFTPulseMode::loop()
         }
     }
 }
+
+#endif // SUPPORTS_FFT

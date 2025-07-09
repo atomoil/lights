@@ -4,8 +4,9 @@
 #define LAMP_S7_07_to_10_STARBURST 3
 #define LAMP_S8_01_to_02_STARBURST 4
 #define LAMP_S8_03_to_05_ARTDECO 5
+#define LAMP_S9 6
 
-#define LAMP_CURRENT LAMP_S8_03_to_05_ARTDECO
+#define LAMP_CURRENT LAMP_S9
 
 
 
@@ -51,6 +52,12 @@
 #define TOUCH_ON 1500
 #define TOUCH_OFF 1000
 #define SUPPORTS_FFT 1
+
+#endif
+
+#if LAMP_CURRENT == LAMP_S9
+    
+#define NUM_LEDS 10
 
 #endif
 

@@ -9,12 +9,9 @@
 #include "main.h"
 
 #include "managers/LedManager.h"
-#include "managers/AudioManager.h"
 #include "managers/AnimationManager.h"
 
-#include "inputs/TouchInput.h"
 #include "inputs/BluetoothInput.h"
-#include "inputs/IRInput.h"
 
 #include "modes/SetColourOnceMode.h"
 #include "modes/ColourCyclingRGBMode.h"
@@ -25,11 +22,14 @@
 #include "modes/anim/MovingDotsMode.h"
 
 #ifdef SUPPORTS_FFT
+// as at 2025-06 the series 9 hardware does not support FFT, but it's planned to be added in the future
 
+#include "managers/AudioManager.h"
 #include "modes/FFTBarsMode.h"
 #include "modes/FFTPulseMode.h"
 
 #endif
+
 
 #define INITIAL_TOUCH_DOWN_TIME 1500
 #define COUNT_ANIMATION_MODES 4
@@ -49,9 +49,7 @@ private:
     LEDManager *leds;
     PaletteManager *palette;
     AnimationManager *animation;
-    TouchInput *touch;
     BluetoothInput *bluetooth;
-    IRInput *remoteControl;
     ColourCyclingRGBMode *rgbMode;
     ColourCyclingRGBMode *touchdownCyclingMode;
     OriginalAnimationMode *animationMode;
@@ -83,7 +81,6 @@ private:
     int debugTick = 5000;
 #endif
     
-    void processTouchData(std::tuple<TOUCH_STATE, float> val);
     void processLampMessage(LampMessage);
     void sendStateOverBluetooth();
 

@@ -1,52 +1,88 @@
 #include "BluetoothInput.h"
 
+// Callbacks for BLE 
+class serverCallbacks: public BLEServerCallbacks {
+public:
+    serverCallbacks(BluetoothInput* parent) : parent(parent) {}
+
+    void onConnect(BLEServer *pServer) override {
+        parent->deviceConnected = true;
+        BLEDevice::startAdvertising();
+    }
+
+    void onDisconnect(BLEServer *pServer) override {
+        parent->deviceConnected = false;
+    }
+private:
+    BluetoothInput* parent;
+};
+
 BluetoothInput::BluetoothInput() {}
 
-void BluetoothInput::setup()
-{
-    //Serial.begin(57600);
-    BLE_Serial.begin(57600);
+void BluetoothInput::setup() {
 
-    ssData.reserve(200);
+  // Create the BLE Device
+  BLEDevice::init("LAMP-09-00");
+
+  // Create the BLE Server
+  pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new serverCallbacks(this));
+
+  // Create the BLE Service
+  BLEService *pService = pServer->createService(BLE_SERVICE_UUID);
+
+  // Create a BLE Characteristic
+  pCharacteristic = pService->createCharacteristic(
+                      BLE_CHARACTERISTIC_UUID_TX,
+                      BLECharacteristic::PROPERTY_NOTIFY
+                    );
+  pCharacteristic->addDescriptor(new BLE2902());
+
+  /*
+  pCharacteristic = pService->createCharacteristic(
+                                        CHARACTERISTIC_UUID_RX,
+                                        BLECharacteristic::PROPERTY_WRITE
+                                      );
+  */
+  pCharacteristic = pService->createCharacteristic(BLE_CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE_NR );
+
+  pCharacteristic->setCallbacks(new BTCallbacks(this));
+
+  // Start the service
+  pService->start();
+
+  // Start advertising
+  BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(BLE_SERVICE_UUID);
+  pAdvertising->setScanResponse(false);
+  pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
+  BLEDevice::startAdvertising();
+  //Serial.println("Waiting a client connection to notify...");
+}
+
+void BluetoothInput::onBLEWrite(const std::string& value) {
+    // Example: append to a buffer or process as needed
+    // For now, just print it
+    Serial.print("Received BLE write: ");
+    Serial.println(value.c_str());
+    messageQueue.push(value); // Store for processing in loop()
+}
+
+int BluetoothInput::getMessageCount() {
+    return messageQueue.size();
 }
 
 LampMessage BluetoothInput::loop()
 {
-    // process one message at a time, hope there isn't a massive backlog :-/
-    while (BLE_Serial.available() && stringComplete == false)
-    {
-        // get the new byte:
-        char inChar = (char)BLE_Serial.read();
-        // add it to the String:
-        if (inChar == '\n')
-        {
-            stringComplete = true;
-        }
-        else
-        {
-            ssData += inChar;
-        }
-        /*
-        Serial.print("BT: ");
-        Serial.print(inChar);
-        Serial.print(" > '");
-        Serial.print(ssData);
+    if (!messageQueue.empty()) {
+        std::string msgStr = messageQueue.front();
+        messageQueue.pop();
+        String msg = String(msgStr.c_str());
+        Serial.print("BLE received: '");
+        Serial.print(msg);
         Serial.println("'");
-        */
+        return processMessage(msg);
     }
-
-    if (stringComplete)
-    {
-        Serial.print("BLE recieved: '");
-        Serial.print(ssData);
-        Serial.println("'");
-        // clear the string:
-        LampMessage msg = processMessage(ssData);
-        ssData = "";
-        stringComplete = false;
-        return msg;
-    }
-    //char* empty = "";
     return {LAMP_NONE, 0, 0, ""};
 }
 
@@ -58,7 +94,6 @@ LampMessage BluetoothInput::processMessage(String msg)
     {
         Serial.println("LAMP_ON!");
         return {LAMP_ON, 0, 0, empty};
-        //allLightsOn();
     }
 
     if (msg == "st:off")
@@ -76,7 +111,7 @@ LampMessage BluetoothInput::processMessage(String msg)
     }
 
     else if (msg.startsWith("an"))
-    {
+    { // an:<int>
         char input[100];
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
@@ -134,11 +169,13 @@ LampMessage BluetoothInput::processMessage(String msg)
 
     if (msg.startsWith("v:pal"))
     {
+        // v:pal is for get palette
         return {GET_PALETTE, 0, 0, empty};
     }
 
     if (msg.startsWith("cs"))
     {
+        // cs is for set colour
         char input[100];
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
@@ -151,6 +188,7 @@ LampMessage BluetoothInput::processMessage(String msg)
 
     if (msg.startsWith("v:get"))
     {
+        // v:get is for get version
         Serial.println("v:get");
         return {GET_VERSION, 0, 0, empty};
         // sendVersionOverBluetooth();
@@ -158,9 +196,9 @@ LampMessage BluetoothInput::processMessage(String msg)
 
     if (msg.startsWith("v:lvl"))
     {
+        // v:lvl is for get levels
         Serial.println("v:lvl");
         return {GET_LEVELS, 0, 0, empty};
-        // sendLevelsOverBluetooth();
     }
 
     if (msg.startsWith("d:sendsens:1"))
@@ -175,6 +213,7 @@ LampMessage BluetoothInput::processMessage(String msg)
     }
 
     if (msg.startsWith("md")){
+        // md is for set mode
         char input[100];
         ssData.toCharArray(input, 99);
         char *text = strtok(input, ":");
@@ -194,6 +233,29 @@ LampMessage BluetoothInput::processMessage(String msg)
 void BluetoothInput::sendMessage(char* message) {
     Serial.print("BluetoothInput::sendMessage >>> ");
     Serial.println(message);
-    BLE_Serial.write(message);
-    BLE_Serial.write("\n");
+    
+    // BLE_Serial.write(message);
+    // BLE_Serial.write("\n");
+    /*
+    char charBuf[128];
+    buf.toCharArray(charBuf, 128);
+
+    // convert from message to charBuf
+    String buf = String(message);
+    if (buf.length() > 128) {
+        buf = buf.substring(0, 128); // truncate to fit
+    }
+    if (buf.length() == 0) {
+        Serial.println("BluetoothInput::sendMessage - empty message, not sending");
+        return; // don't send empty messages
+    }
+    static bool fullPkt = false; // flag to indicate if we are sending a full packet
+    if (buf.length() >= 128) {
+        fullPkt = true; // we are sending a full packet
+    }
+    */
+
+    pCharacteristic->setValue(message);
+    pCharacteristic->notify();
+    
 }

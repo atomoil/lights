@@ -1,7 +1,8 @@
 #ifndef LED_MANAGER_HPP_INCLUDED
 #define LED_MANAGER_HPP_INCLUDED
 
-#include "FastLED.h"
+#include <FastLED.h>
+#include <elapsedMillis.h>
 #include "../init.h"
 
 #define LED_FRAME_RATE 60.0

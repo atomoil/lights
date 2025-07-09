@@ -14,10 +14,10 @@
 struct LightDot {
   int column;
   int led;
-  float currentValue;
-  float increment;
-  float minimumValue;
-  float maximumValue;
+  double currentValue;
+  double increment;
+  double minimumValue;
+  double maximumValue;
   int colourId;
 };
 

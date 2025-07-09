@@ -1,3 +1,5 @@
+#ifdef SUPPORTS_FFT
+
 #ifndef AUDIO_MANAGER_HPP_INCLUDED
 #define AUDIO_MANAGER_HPP_INCLUDED
 
@@ -24,3 +26,5 @@ public:
 };
 
 #endif
+
+#endif // SUPPORTS_FFT

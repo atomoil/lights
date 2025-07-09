@@ -1,3 +1,4 @@
+#ifdef SUPPORTS_FFT
 #include "AudioManager.h"
 
 
@@ -147,3 +148,5 @@ float AudioManager::valueFor(int band)
 {
     return fftVals[band];
 }
+
+#endif // SUPPORTS_FFT

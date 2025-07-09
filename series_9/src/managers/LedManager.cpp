@@ -13,12 +13,12 @@ void LEDManager::setup()
     */
     brightness = 1.0;
 
-    FastLED.addLeds<APA102, DATA_PIN1, CLOCK_PIN1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
-    FastLED.addLeds<APA102, DATA_PIN2, CLOCK_PIN2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
-    FastLED.addLeds<APA102, DATA_PIN3, CLOCK_PIN3, BGR, DATA_RATE_MHZ(5)>(leds[2], NUM_LEDS);
-    FastLED.addLeds<APA102, DATA_PIN4, CLOCK_PIN4, BGR, DATA_RATE_MHZ(5)>(leds[3], NUM_LEDS);
-    FastLED.addLeds<APA102, DATA_PIN5, CLOCK_PIN5, BGR, DATA_RATE_MHZ(5)>(leds[4], NUM_LEDS);
-    FastLED.addLeds<APA102, DATA_PIN6, CLOCK_PIN6, BGR, DATA_RATE_MHZ(5)>(leds[5], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_1, CLOCK_PIN_1, BGR, DATA_RATE_MHZ(5)>(leds[0], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_2, CLOCK_PIN_2, BGR, DATA_RATE_MHZ(5)>(leds[1], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_3, CLOCK_PIN_3, BGR, DATA_RATE_MHZ(5)>(leds[2], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_4, CLOCK_PIN_4, BGR, DATA_RATE_MHZ(5)>(leds[3], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_5, CLOCK_PIN_5, BGR, DATA_RATE_MHZ(5)>(leds[4], NUM_LEDS);
+    FastLED.addLeds<APA102, DATA_PIN_6, CLOCK_PIN_6, BGR, DATA_RATE_MHZ(5)>(leds[5], NUM_LEDS);
 
     // set initial LED values
     for (int x = 0; x < NUM_COLUMNS; x++)

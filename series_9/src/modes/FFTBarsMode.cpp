@@ -1,3 +1,5 @@
+#ifdef SUPPORTS_FFT
+
 #include "FFTBarsMode.h"
 
 FFTBarsMode::FFTBarsMode(
@@ -33,3 +35,5 @@ void FFTBarsMode::loop()
         }
     }
 }
+
+#endif // SUPPORTS_FFT
